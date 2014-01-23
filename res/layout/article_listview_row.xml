@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:font_type="http://schemas.android.com/apk/res/com.rss_pion"
+    android:id="@+id/article_activity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="6dp" >
+
+    <com.rss_pion.ui.RSS_PionTextView
+        android:id="@+id/articleTitleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/linkColor"
+        android:textSize="25sp"
+        font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+    <requestFocus />
+
+    <RelativeLayout
+        android:id="@+id/articleAuthorAndPubDate"
+        android:layout_width="wrap_content"
+        android:paddingLeft="15dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/articleTitleView" >
+
+        <com.rss_pion.ui.RSS_PionTextView
+            android:id="@+id/articleAuthorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+        <requestFocus />
+
+        <com.rss_pion.ui.RSS_PionTextView
+            android:id="@+id/articlePubDateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/articleAuthorView"
+            font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+        <requestFocus />
+    </RelativeLayout>
+
+    <com.rss_pion.ui.RSS_PionTextView
+        android:id="@+id/articleCategoryView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="15dp"
+        android:layout_below="@+id/articleAuthorAndPubDate"
+        font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+    <requestFocus />
+
+    <com.rss_pion.ui.RSS_PionTextView
+        android:id="@+id/articleUserRateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/articleCategoryView"
+        font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+    <requestFocus />
+
+    <com.rss_pion.ui.RSS_PionTextView
+        android:id="@+id/articleDescriptionView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/articleUserRateView"
+        font_type:ttf_name="fonts/scriptmtb.ttf" />
+
+    <requestFocus />
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+com.rss_pion
+com.rss_pion.activities
+com.rss_pion.beans
+com.rss_pion.configuration
+com.rss_pion.database
+com.rss_pion.database.dao
+com.rss_pion.database.dao.abstracts
+com.rss_pion.tests
+com.rss_pion.ui
+com.rss_pion.ui.adapter

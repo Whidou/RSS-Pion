@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item    
+        android:id="@+id/help_article"
+        android:title="@string/menu_help"/>
+    <item    
+        android:id="@+id/exit_article"
+        android:title="@string/menu_exit"/>
+    
+</menu>
