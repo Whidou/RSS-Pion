@@ -135,51 +135,64 @@ public class RSSParser extends DefaultHandler {
         String value = this.text.toString().trim();
 
         // Fin de l'article
-        if (qName.equalsIgnoreCase("item"))
+        if (qName.equalsIgnoreCase("item")) {
             this.article = null;
+        }
 
         else if (qName.equalsIgnoreCase("title")) {
-            if (this.article != null)
+            if (this.article != null) {
                 this.article.setTitle(value);
-            else
+            }
+            else {
                 this.flux.setTitle(value);
+            }
         }
 
         else if (qName.equalsIgnoreCase("link")) {
-            if (this.article != null)
+            if (this.article != null) {
                 this.article.setLink(value);
-            else
+            }
+            else {
                 this.flux.setLink(value);
+            }
         }
 
         else if (qName.equalsIgnoreCase("description")) {
-            if (this.article != null)
+            if (this.article != null) {
                 this.article.setDescription(value);
-            else
+            }
+            else {
                 this.flux.setDescription(value);
+            }
         }
 
         else if (qName.equalsIgnoreCase("category")) {
-            if (this.article != null)
+            if (this.article != null) {
                 this.article.addCategory(value);
+            }
             this.flux.addCategory(value);
         }
 
-        else if (qName.equalsIgnoreCase("url"))
+        else if (qName.equalsIgnoreCase("url")) {
             this.flux.setUrlImage(value);
+        }
 
-        else if (qName.equalsIgnoreCase("language"))
+        else if (qName.equalsIgnoreCase("language")) {
             this.flux.setLanguage(value);
+        }
 
-        else if (qName.equalsIgnoreCase("generator"))
+        else if (qName.equalsIgnoreCase("generator")) {
             this.flux.setGenerator(value);
+        }
 
-        else if (qName.equalsIgnoreCase("copyright"))
+        else if (qName.equalsIgnoreCase("copyright")) {
             this.flux.setCopyright(value);
+        }
 
         else if (qName.equalsIgnoreCase("pubDate")) {
-            if (this.article != null)
+            if (this.article != null) {
                 this.article.setPubDate(value);
+            }
         }
 
         // Vidage du buffer

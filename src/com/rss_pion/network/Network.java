@@ -19,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.rss_pion.beans.Flux;
 import com.rss_pion.rss.RSSParser;
 
@@ -40,7 +43,9 @@ public class Network {
             HttpURLConnection urlConnection;
             InputStream inStr;
             RSSParser rssParser;
+            Bitmap image;
 
+            // Téléchargement du flux
             try {
                 url = new URL(feed);
             } catch (MalformedURLException e) {
@@ -56,12 +61,31 @@ public class Network {
                 urlConnection.disconnect();
             }
 
+            // Analyse du flux
             rssParser = new RSSParser(inStr);
             rssParser.parse();
 
             flux = rssParser.getFlux();
 
-            //TODO: Récupérer image
+            // Téléchargement de l'éventuelle image associée
+            try {
+                url = new URL(flux.getUrlImage());
+            } catch (MalformedURLException e) {
+                return flux;
+            }
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            try {
+                inStr = urlConnection.getInputStream();
+            } finally {
+                urlConnection.disconnect();
+            }
+
+            // Conversion de l'image en bitmap
+            image = BitmapFactory.decodeStream(inStr);
+            
+            flux.setImage(image);
 
             return flux;
         }
