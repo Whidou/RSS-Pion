@@ -11,9 +11,13 @@ package com.rss_pion.database.dao;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import android.database.Cursor;
+import android.util.Log;
 
+import com.rss_pion.beans.Article;
+import com.rss_pion.beans.CategoryArticle;
 import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
@@ -34,8 +38,6 @@ public class ArticleDAO extends SerializedObject {
 	static {
 		ArticleDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
 		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "author",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "category",
 				"TEXT NOT NULL" });
 		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "comments",
 				"TEXT NOT NULL" });
@@ -95,7 +97,7 @@ public class ArticleDAO extends SerializedObject {
 	private String author;
 
 	/** The category. */
-	private String category;
+	private List<CategoryArticle> categories;
 
 	/** The comments. */
 	private String comments;
@@ -150,12 +152,39 @@ public class ArticleDAO extends SerializedObject {
 	}
 
 	/**
-	 * Gets the category.
+	 * Gets the categories.
 	 * 
-	 * @return The category
+	 * @return The categories
 	 */
-	public String getCategory() {
-		return this.category;
+	public List<CategoryArticle> getCategories() {
+		return this.categories;
+	}
+
+	public ArrayList<CategoryArticleDAO> getCategoriesDAO() {
+		final String query = "SELECT * FROM "
+				+ CategoryArticleDAO.nameOfTheAssociatedTable
+				+ " WHERE idFather = " + this.getId() + " AND idGrandfather = "
+				+ this.getIdFather() + ";";
+		final Cursor c1 = Constants.sqlHandler.selectQuery(query);
+		final ArrayList<CategoryArticleDAO> categories = new ArrayList<CategoryArticleDAO>();
+		if ((c1 != null) && (c1.getCount() != 0)) {
+			if (c1.moveToFirst()) {
+				do {
+					final CategoryArticleDAO category = new CategoryArticleDAO();
+					category.setId(Long.parseLong(c1.getString(c1
+							.getColumnIndex("id"))));
+					category.setCategory(c1.getString(c1
+							.getColumnIndex("category")));
+					category.setIdFather(Long.parseLong(c1.getString(c1
+							.getColumnIndex("idFather"))));
+					category.setIdGrandfather(Long.parseLong(c1.getString(c1
+							.getColumnIndex("idGrandfather"))));
+					categories.add(category);
+				} while (c1.moveToNext());
+			}
+		}
+		c1.close();
+		return categories;
 	}
 
 	/**
@@ -318,8 +347,8 @@ public class ArticleDAO extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		String names = "";
 		final Iterator<String[]> it = ArticleDAO.fieldsOfTheAssociatedTable
 				.iterator();
@@ -328,14 +357,26 @@ public class ArticleDAO extends SerializedObject {
 		}
 		Constants.sqlHandler.executeQuery("INSERT INTO "
 				+ ArticleDAO.nameOfTheAssociatedTable + " (" + names
-				+ " VALUES ('" + this.getAuthor() + "', '" + this.getCategory()
-				+ "', '" + this.getComments() + "', '" + this.getDescription()
-				+ "', " + this.getIdEnclosure() + ", " + this.getIdFather()
-				+ ", " + this.getIdGuid() + ", " + this.getIsRead() + ", '"
+				+ " VALUES ('" + this.getAuthor() + "', '" + this.getComments()
+				+ "', '" + this.getDescription() + "', "
+				+ this.getIdEnclosure() + ", " + this.getIdFather() + ", "
+				+ this.getIdGuid() + ", " + this.getIsRead() + ", '"
 				+ this.getLink() + "', '" + this.getPubDate() + "', '"
 				+ this.getSource() + "', '" + this.getTitle() + "', "
 				+ this.getUserRate() + ");");
-		return SqlDbHelper.lastInsertId(ArticleDAO.nameOfTheAssociatedTable);
+		final Long id = SqlDbHelper
+				.lastInsertId(ArticleDAO.nameOfTheAssociatedTable);
+		final Iterator<CategoryArticle> itCategory = ((Article) objects[0])
+				.getCategories().iterator();
+		CategoryArticle category;
+		while (itCategory.hasNext()) {
+			category = itCategory.next();
+			final CategoryArticleDAO categoryDAO = (CategoryArticleDAO) category
+					.translateObjectToDao(id, this.getIdFather());
+			categoryDAO.insertInTheDataBase();
+		}
+		Log.d("ARTICLE ADDED", this.toString());
+		return id;
 	}
 
 	/**
@@ -348,12 +389,12 @@ public class ArticleDAO extends SerializedObject {
 	}
 
 	/**
-	 * Sets the category.
+	 * Sets the categories.
 	 * 
-	 * @param category : The new category
+	 * @param categories : The new categories
 	 */
-	public void setCategory(final String category) {
-		this.category = category;
+	public void setCategories(final List<CategoryArticle> categories) {
+		this.categories = categories;
 	}
 
 	/**
@@ -462,5 +503,20 @@ public class ArticleDAO extends SerializedObject {
 	 */
 	public void setUserRate(final Integer userRate) {
 		this.userRate = userRate;
+	}
+
+	/***************************************************************************
+	 * @see java.lang.Object#toString()
+	 ***************************************************************************/
+	@Override
+	public String toString() {
+		return "ArticleDAO [author=" + this.author + ", categories="
+				+ this.categories + ", comments=" + this.comments
+				+ ", description=" + this.description + ", idEnclosure="
+				+ this.idEnclosure + ", idGuid=" + this.idGuid + ", id="
+				+ this.id + ", idFather=" + this.idFather + ", isRead="
+				+ this.isRead + ", link=" + this.link + ", pubDate="
+				+ this.pubDate + ", source=" + this.source + ", title="
+				+ this.title + ", userRate=" + this.userRate + "]";
 	}
 }

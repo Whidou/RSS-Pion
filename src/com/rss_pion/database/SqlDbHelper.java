@@ -23,6 +23,8 @@ import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ArticleDAO;
+import com.rss_pion.database.dao.CategoryArticleDAO;
+import com.rss_pion.database.dao.CategoryFluxDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.database.dao.TextInputDAO;
@@ -115,7 +117,11 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 				Guid.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(TextInputDAO.nameOfTheAssociatedTable,
 				TextInputDAO.fieldsOfTheAssociatedTable));
-
+		db.execSQL(this.createTable(
+				CategoryArticleDAO.nameOfTheAssociatedTable,
+				CategoryArticleDAO.fieldsOfTheAssociatedTable));
+		db.execSQL(this.createTable(CategoryFluxDAO.nameOfTheAssociatedTable,
+				CategoryFluxDAO.fieldsOfTheAssociatedTable));
 	}
 
 	/***************************************************************************
@@ -132,6 +138,8 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 		db.execSQL(this.dropTable(Enclosure.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(Guid.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(TextInputDAO.nameOfTheAssociatedTable));
+		db.execSQL(this.dropTable(CategoryArticleDAO.nameOfTheAssociatedTable));
+		db.execSQL(this.dropTable(CategoryFluxDAO.nameOfTheAssociatedTable));
 		this.onCreate(db);
 	}
 }

@@ -12,6 +12,8 @@ package com.rss_pion.beans;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.util.Log;
+
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlDbHelper;
 import com.rss_pion.database.dao.abstracts.SerializedObject;
@@ -55,7 +57,7 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Instantiates a new enclosure.
-	 *
+	 * 
 	 * @param url : The url
 	 * @param length : The length
 	 * @param type : The type
@@ -69,7 +71,7 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Gets the length.
-	 *
+	 * 
 	 * @return The length
 	 */
 	public Long getLength() {
@@ -78,7 +80,7 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Gets the type.
-	 *
+	 * 
 	 * @return The type
 	 */
 	public String getType() {
@@ -87,7 +89,7 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Gets the url.
-	 *
+	 * 
 	 * @return The url
 	 */
 	public String getUrl() {
@@ -98,8 +100,8 @@ public class Enclosure extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		String names = "";
 		final Iterator<String[]> it = Enclosure.fieldsOfTheAssociatedTable
 				.iterator();
@@ -110,12 +112,13 @@ public class Enclosure extends SerializedObject {
 				+ Enclosure.nameOfTheAssociatedTable + " (" + names
 				+ " VALUES (" + this.getLength() + ", '" + this.getType()
 				+ "', '" + this.getUrl() + "');");
+		Log.d("ENCLOSURE ADDED", this.toString());
 		return SqlDbHelper.lastInsertId(Enclosure.nameOfTheAssociatedTable);
 	}
 
 	/**
 	 * Sets the length.
-	 *
+	 * 
 	 * @param length : The new length
 	 */
 	public void setLength(final Long length) {
@@ -124,7 +127,7 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Sets the type.
-	 *
+	 * 
 	 * @param type : The new type
 	 */
 	public void setType(final String type) {
@@ -133,10 +136,19 @@ public class Enclosure extends SerializedObject {
 
 	/**
 	 * Sets the url.
-	 *
+	 * 
 	 * @param url : The new url
 	 */
 	public void setUrl(final String url) {
 		this.url = url;
+	}
+
+	/***************************************************************************
+	 * @see java.lang.Object#toString()
+	 ***************************************************************************/
+	@Override
+	public String toString() {
+		return "Enclosure [url=" + this.url + ", length=" + this.length
+				+ ", type=" + this.type + "]";
 	}
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Guid;
@@ -60,7 +61,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Delete text input in the data base.
-	 *
+	 * 
 	 * @param id : The id
 	 */
 	public static void deleteTextInputInTheDataBase(final Long id) {
@@ -91,7 +92,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the flux dao.
-	 *
+	 * 
 	 * @return The flux dao
 	 */
 	public static ArrayList<FluxDAO> getFluxDAO() {
@@ -103,8 +104,6 @@ public class TextInputDAO extends SerializedObject {
 			if (c1.moveToFirst()) {
 				do {
 					final FluxDAO fluxDAO = new FluxDAO();
-					fluxDAO.setCategory(c1.getString(c1
-							.getColumnIndex("category")));
 					fluxDAO.setIdCloud(Long.parseLong(c1.getString(c1
 							.getColumnIndex("cloud"))));
 					fluxDAO.setCopyright(c1.getString(c1
@@ -194,7 +193,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the author.
-	 *
+	 * 
 	 * @return The author
 	 */
 	public String getAuthor() {
@@ -203,7 +202,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the category.
-	 *
+	 * 
 	 * @return The category
 	 */
 	public String getCategory() {
@@ -212,7 +211,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the comments.
-	 *
+	 * 
 	 * @return The comments
 	 */
 	public String getComments() {
@@ -221,7 +220,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the description.
-	 *
+	 * 
 	 * @return The description
 	 */
 	public String getDescription() {
@@ -230,7 +229,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the enclosure.
-	 *
+	 * 
 	 * @return The enclosure
 	 */
 	public Enclosure getEnclosure() {
@@ -255,7 +254,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the guid.
-	 *
+	 * 
 	 * @return The guid
 	 */
 	public Guid getGuid() {
@@ -278,7 +277,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the id enclosure.
-	 *
+	 * 
 	 * @return The id enclosure
 	 */
 	public Long getIdEnclosure() {
@@ -287,7 +286,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the id guid.
-	 *
+	 * 
 	 * @return The id guid
 	 */
 	public Long getIdGuid() {
@@ -296,7 +295,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the link.
-	 *
+	 * 
 	 * @return The link
 	 */
 	public String getLink() {
@@ -305,7 +304,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the pub date.
-	 *
+	 * 
 	 * @return The pub date
 	 */
 	public String getPubDate() {
@@ -314,7 +313,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the source.
-	 *
+	 * 
 	 * @return The source
 	 */
 	public String getSource() {
@@ -323,7 +322,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Gets the title.
-	 *
+	 * 
 	 * @return The title
 	 */
 	public String getTitle() {
@@ -334,8 +333,8 @@ public class TextInputDAO extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		String names = "";
 		final Iterator<String[]> it = TextInputDAO.fieldsOfTheAssociatedTable
 				.iterator();
@@ -349,12 +348,13 @@ public class TextInputDAO extends SerializedObject {
 				+ "', " + this.getIdEnclosure() + ", " + this.getIdGuid()
 				+ ", '" + this.getLink() + "', '" + this.getPubDate() + "', '"
 				+ this.getSource() + "', '" + this.getTitle() + "');");
+		Log.d("TEXT INPUT ADDED", this.toString());
 		return SqlDbHelper.lastInsertId(TextInputDAO.nameOfTheAssociatedTable);
 	}
 
 	/**
 	 * Sets the author.
-	 *
+	 * 
 	 * @param author : The new author
 	 */
 	public void setAuthor(final String author) {
@@ -363,7 +363,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the category.
-	 *
+	 * 
 	 * @param category : The new category
 	 */
 	public void setCategory(final String category) {
@@ -372,7 +372,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the comments.
-	 *
+	 * 
 	 * @param comments : The new comments
 	 */
 	public void setComments(final String comments) {
@@ -381,7 +381,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the description.
-	 *
+	 * 
 	 * @param description : The new description
 	 */
 	public void setDescription(final String description) {
@@ -390,7 +390,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the id enclosure.
-	 *
+	 * 
 	 * @param idEnclosure : The new id enclosure
 	 */
 	public void setIdEnclosure(final Long idEnclosure) {
@@ -399,7 +399,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the id guid.
-	 *
+	 * 
 	 * @param idGuid : The new id guid
 	 */
 	public void setIdGuid(final Long idGuid) {
@@ -408,7 +408,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the link.
-	 *
+	 * 
 	 * @param link : The new link
 	 */
 	public void setLink(final String link) {
@@ -417,7 +417,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the pub date.
-	 *
+	 * 
 	 * @param pubDate : The new pub date
 	 */
 	public void setPubDate(final String pubDate) {
@@ -426,7 +426,7 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the source.
-	 *
+	 * 
 	 * @param source : The new source
 	 */
 	public void setSource(final String source) {
@@ -435,10 +435,23 @@ public class TextInputDAO extends SerializedObject {
 
 	/**
 	 * Sets the title.
-	 *
+	 * 
 	 * @param title : The new title
 	 */
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+
+	/***************************************************************************
+	 * @see java.lang.Object#toString()
+	 ***************************************************************************/
+	@Override
+	public String toString() {
+		return "TextInputDAO [title=" + this.title + ", link=" + this.link
+				+ ", description=" + this.description + ", author="
+				+ this.author + ", category=" + this.category + ", comments="
+				+ this.comments + ", idEnclosure=" + this.idEnclosure
+				+ ", idGuid=" + this.idGuid + ", pubDate=" + this.pubDate
+				+ ", source=" + this.source + "]";
 	}
 }

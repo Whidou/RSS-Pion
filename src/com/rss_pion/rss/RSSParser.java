@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    RSSParser.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -24,191 +25,194 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.rss_pion.beans.Article;
+import com.rss_pion.beans.CategoryArticle;
+import com.rss_pion.beans.CategoryFlux;
 import com.rss_pion.beans.Flux;
 
 /*** MAIN CLASS ***************************************************************/
 
 public class RSSParser extends DefaultHandler {
 
-/*** ATTRIBUTES ***************************************************************/
+	/*** ATTRIBUTES ***************************************************************/
 
-    //! Flux d'entrée du code XML
-    private InputStream inStr;
+	// ! Flux d'entrée du code XML
+	private final InputStream inStr;
 
-    //! Flux RSS créé
-    private Flux flux;
+	// ! Flux RSS créé
+	private final Flux flux;
 
-    //! Variable temporaire pour la définition des articles
-    private Article article;
+	// ! Variable temporaire pour la définition des articles
+	private Article article;
 
-    //! Buffer de lecture
-    private StringBuilder text;
+	// ! Buffer de lecture
+	private final StringBuilder text;
 
-/*** METHODS ******************************************************************/
+	/*** METHODS ******************************************************************/
 
-/***************************************************************************//**
- * Constructeur
- * 
- * @param stream    Flux d'entrée du code XML (en provenance du net)
- ******************************************************************************/
-    public RSSParser(InputStream stream) {
-        this.inStr = stream;
-        this.flux = new Flux();
-        this.article = null;
-        this.text = new StringBuilder();
-    }
+	/***************************************************************************/
+	/**
+	 * Constructeur
+	 * 
+	 * @param stream Flux d'entrée du code XML (en provenance du net)
+	 ******************************************************************************/
+	public RSSParser(final InputStream stream) {
+		this.inStr = stream;
+		this.flux = new Flux();
+		this.article = null;
+		this.text = new StringBuilder();
+	}
 
-/***************************************************************************//**
- * Lance l'analyse du flux
- ******************************************************************************/
-    public void parse() throws IOException {
+	/***************************************************************************/
+	/**
+	 * Callback à l'arrivée de caractères par le flux
+	 * 
+	 * @param ch Données
+	 * @param start Position
+	 * @param length Longueur
+	 ******************************************************************************/
+	@Override
+	public void characters(final char[] ch, final int start, final int length) {
+		this.text.append(ch, start, length);
+	}
 
-        SAXParserFactory parserFactory;
-        SAXParser parser;
+	/***************************************************************************/
+	/**
+	 * Callback aux balises fermantes
+	 * 
+	 * @param uri
+	 * @param localName
+	 * @param qName Nom de la balise.
+	 ******************************************************************************/
+	@Override
+	public void endElement(final String uri, final String localName,
+			final String qName) {
 
-        // Création du créateur de parseur
-        parserFactory = SAXParserFactory.newInstance();
+		final String value = this.text.toString().trim();
 
-        // Création du parseur
-        try {
-            parser = parserFactory.newSAXParser();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return;
-        }
+		// Fin de l'article
+		if (qName.equalsIgnoreCase("item")) {
+			this.article = null;
+		}
 
-        // Analyse du flux
-        try {
-            parser.parse(this.inStr, this);
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-    }
+		else if (qName.equalsIgnoreCase("title")) {
+			if (this.article != null) {
+				this.article.setTitle(value);
+			} else {
+				this.flux.setTitle(value);
+			}
+		}
 
-/***************************************************************************//**
- * Retourne le flux obtenu.
- * 
- * @return  Flux obtenu
- ******************************************************************************/
-    public Flux getFlux() {
-        return (this.flux);
-    }
+		else if (qName.equalsIgnoreCase("link")) {
+			if (this.article != null) {
+				this.article.setLink(value);
+			} else {
+				this.flux.setLink(value);
+			}
+		}
 
-/***************************************************************************//**
- * Callback aux balises ouvrantes
- * 
- * @param uri           
- * @param localName     
- * @param qName         Nom de la balise.
- * @param attributes    Attributs associés.
- ******************************************************************************/
-    @Override
-    public void startElement(   String uri,
-                                String localName,
-                                String qName,
-                                Attributes attributes) {
+		else if (qName.equalsIgnoreCase("description")) {
+			if (this.article != null) {
+				this.article.setDescription(value);
+			} else {
+				this.flux.setDescription(value);
+			}
+		}
 
-        // À l'ouverture d'une balise d'article
-        if (qName.equalsIgnoreCase("item")) {
+		else if (qName.equalsIgnoreCase("category")) {
+			if (this.article != null) {
+				this.article.getCategories().add(new CategoryArticle(value));
+			}
+			this.flux.getCategories().add(new CategoryFlux(value));
+		}
 
-            // Création un nouvel article temporaire
-            this.article = new Article();
+		else if (qName.equalsIgnoreCase("url")) {
+			this.flux.setUrlImage(value);
+		}
 
-            // Ajout de l'article au flux
-            this.flux.addArticle(this.article);
-        }
-    }
+		else if (qName.equalsIgnoreCase("language")) {
+			this.flux.setLanguage(value);
+		}
 
-/***************************************************************************//**
- * Callback aux balises fermantes
- * 
- * @param uri           
- * @param localName     
- * @param qName         Nom de la balise.
- ******************************************************************************/
-    @Override
-    public void endElement(String uri, String localName, String qName) {
-        
-        String value = this.text.toString().trim();
+		else if (qName.equalsIgnoreCase("generator")) {
+			this.flux.setGenerator(value);
+		}
 
-        // Fin de l'article
-        if (qName.equalsIgnoreCase("item")) {
-            this.article = null;
-        }
+		else if (qName.equalsIgnoreCase("copyright")) {
+			this.flux.setCopyright(value);
+		}
 
-        else if (qName.equalsIgnoreCase("title")) {
-            if (this.article != null) {
-                this.article.setTitle(value);
-            }
-            else {
-                this.flux.setTitle(value);
-            }
-        }
+		else if (qName.equalsIgnoreCase("pubDate")) {
+			if (this.article != null) {
+				this.article.setPubDate(value);
+			}
+		}
 
-        else if (qName.equalsIgnoreCase("link")) {
-            if (this.article != null) {
-                this.article.setLink(value);
-            }
-            else {
-                this.flux.setLink(value);
-            }
-        }
+		// Vidage du buffer
+		this.text.setLength(0);
+	}
 
-        else if (qName.equalsIgnoreCase("description")) {
-            if (this.article != null) {
-                this.article.setDescription(value);
-            }
-            else {
-                this.flux.setDescription(value);
-            }
-        }
+	/***************************************************************************/
+	/**
+	 * Retourne le flux obtenu.
+	 * 
+	 * @return Flux obtenu
+	 ******************************************************************************/
+	public Flux getFlux() {
+		return (this.flux);
+	}
 
-        else if (qName.equalsIgnoreCase("category")) {
-            if (this.article != null) {
-                this.article.addCategory(value);
-            }
-            this.flux.addCategory(value);
-        }
+	/***************************************************************************/
+	/**
+	 * Lance l'analyse du flux
+	 ******************************************************************************/
+	public void parse() throws IOException {
 
-        else if (qName.equalsIgnoreCase("url")) {
-            this.flux.setUrlImage(value);
-        }
+		SAXParserFactory parserFactory;
+		SAXParser parser;
 
-        else if (qName.equalsIgnoreCase("language")) {
-            this.flux.setLanguage(value);
-        }
+		// Création du créateur de parseur
+		parserFactory = SAXParserFactory.newInstance();
 
-        else if (qName.equalsIgnoreCase("generator")) {
-            this.flux.setGenerator(value);
-        }
+		// Création du parseur
+		try {
+			parser = parserFactory.newSAXParser();
+		} catch (final ParserConfigurationException e) {
+			e.printStackTrace();
+			return;
+		} catch (final SAXException e) {
+			e.printStackTrace();
+			return;
+		}
 
-        else if (qName.equalsIgnoreCase("copyright")) {
-            this.flux.setCopyright(value);
-        }
+		// Analyse du flux
+		try {
+			parser.parse(this.inStr, this);
+		} catch (final SAXException e) {
+			e.printStackTrace();
+		}
+	}
 
-        else if (qName.equalsIgnoreCase("pubDate")) {
-            if (this.article != null) {
-                this.article.setPubDate(value);
-            }
-        }
+	/***************************************************************************/
+	/**
+	 * Callback aux balises ouvrantes
+	 * 
+	 * @param uri
+	 * @param localName
+	 * @param qName Nom de la balise.
+	 * @param attributes Attributs associés.
+	 ******************************************************************************/
+	@Override
+	public void startElement(final String uri, final String localName,
+			final String qName, final Attributes attributes) {
 
-        // Vidage du buffer
-        this.text.setLength(0);
-    }
+		// À l'ouverture d'une balise d'article
+		if (qName.equalsIgnoreCase("item")) {
 
+			// Création un nouvel article temporaire
+			this.article = new Article();
 
-/***************************************************************************//**
- * Callback à l'arrivée de caractères par le flux
- * 
- * @param ch        Données
- * @param start     Position
- * @param length    Longueur
- ******************************************************************************/
-    @Override
-    public void characters(char[] ch, int start, int length) {
-        this.text.append(ch, start, length);
-    }
+			// Ajout de l'article au flux
+			this.flux.getArticles().add(this.article);
+		}
+	}
 }

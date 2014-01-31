@@ -119,7 +119,7 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		holder.numberOfReadArticlesView.setText("Nombre d'article(s) lu(s) : "
 				+ flux.getNumberOfReadArticles().toString() + "/"
 				+ flux.getNumberOfArticles().toString());
-		holder.categoryView.setText(flux.getCategory());
+		holder.categoryView.setText(flux.getCategories().toString());
 		holder.lastBuildDateView.setText(flux.getLastBuildDate());
 		final SpannableString spanTitleView = new SpannableString(
 				flux.getTitle());

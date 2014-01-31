@@ -63,11 +63,7 @@ public class FluxActivity extends RSS_PionActivity {
 				.decodeResource(this.getApplicationContext().getResources(),
 						R.drawable.ic_launcher));
 		Tests.flux_1.setImage(flux_1_image_dao);
-		final ImageDAO flux_2_image_dao = new ImageDAO();
-		flux_2_image_dao.setImage(BitmapFactory
-				.decodeResource(this.getApplicationContext().getResources(),
-						R.drawable.ic_launcher));
-		Tests.flux_2.setImage(flux_2_image_dao);
+
 		// UI :
 		ActionBar actionBar;
 		EditText fluxLinkInput;
@@ -194,16 +190,9 @@ public class FluxActivity extends RSS_PionActivity {
 		case R.id.add_flux:
 			// Ajout manuel d'un nouveau flux :
 			try {
-				final FluxDAO fluxDAO = (FluxDAO) Tests.flux_1
-						.translateObjectToDao();
-				final Long idFather = fluxDAO.insertInTheDataBase();
-				final Iterator<Article> it = Tests.flux_1.getArticles()
-						.iterator();
-				while (it.hasNext()) {
-					final ArticleDAO articleDAO = (ArticleDAO) it.next()
-							.translateObjectToDao(idFather);
-					articleDAO.insertInTheDataBase();
-				}
+				final FluxDAO fluxDAO = (FluxDAO) (Tests.flux_1
+						.translateObjectToDao());
+				fluxDAO.insertInTheDataBase(Tests.flux_1);
 			} catch (final IllegalAccessException e) {
 				Log.d("onOptionsItemSelected, add_flux", e.getMessage());
 			} catch (final IllegalArgumentException e) {
