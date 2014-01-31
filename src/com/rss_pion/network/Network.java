@@ -36,57 +36,73 @@ public class Network {
  * 
  * @return      Flux obtenu
  ******************************************************************************/
-        public static Flux getFlux(String feed) throws IOException {
+    public static Flux getFlux(String feed) throws IOException {
 
-            Flux flux;
-            URL url;
-            HttpURLConnection urlConnection;
-            InputStream inStr;
-            RSSParser rssParser;
-            Bitmap image;
+        Flux flux;
+        URL url;
+        HttpURLConnection urlConnection;
+        InputStream inStr;
+        RSSParser rssParser;
+        Bitmap image;
 
-            // Téléchargement du flux
-            try {
-                url = new URL(feed);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            }
+        // Téléchargement du flux
+        try {
+            url = new URL(feed);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
-            urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection = (HttpURLConnection) url.openConnection();
 
-            try {
-                inStr = urlConnection.getInputStream();
-            } finally {
-                urlConnection.disconnect();
-            }
+        try {
+            inStr = urlConnection.getInputStream();
+        } finally {
+            urlConnection.disconnect();
+        }
 
-            // Analyse du flux
-            rssParser = new RSSParser(inStr);
-            rssParser.parse();
+        // Analyse du flux
+        rssParser = new RSSParser(inStr);
+        rssParser.parse();
 
-            flux = rssParser.getFlux();
+        flux = rssParser.getFlux();
 
-            // Téléchargement de l'éventuelle image associée
-            try {
-                url = new URL(flux.getUrlImage());
-            } catch (MalformedURLException e) {
-                return flux;
-            }
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            try {
-                inStr = urlConnection.getInputStream();
-            } finally {
-                urlConnection.disconnect();
-            }
-
-            // Conversion de l'image en bitmap
-            image = BitmapFactory.decodeStream(inStr);
-            
-            flux.setImage(image);
-
+        // Téléchargement de l'éventuelle image associée
+        try {
+            url = new URL(flux.getUrlImage());
+        } catch (MalformedURLException e) {
             return flux;
         }
+
+        urlConnection = (HttpURLConnection) url.openConnection();
+
+        try {
+            inStr = urlConnection.getInputStream();
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        // Conversion de l'image en bitmap
+        image = BitmapFactory.decodeStream(inStr);
+        
+        flux.setImage(image);
+
+        return flux;
+    }
+
+/***************************************************************************//**
+ * Mise à jour d'un flux depuis le réseau
+ * 
+ * @param flux  Object flux à mettre à jour
+ ******************************************************************************/
+    public static void updateFlux(Flux flux) throws IOException {
+
+        Flux update;
+
+        update = Network.getFlux(flux.getFeed());
+
+        if (update.getLastBuildDate() <= flux.getLastBuildDate()) {
+            return;
+        }
+    }
 }

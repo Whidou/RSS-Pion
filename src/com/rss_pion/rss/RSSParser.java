@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-01-26
- * @version 0.1
+ * @version 0.2
  *
  * Interpréteur pour flux RSS.
  ******************************************************************************/
@@ -12,19 +12,19 @@ package com.rss_pion.rss;
 
 /*** INCLUDES *****************************************************************/
 
+import com.rss_pion.beans.Article;
+import com.rss_pion.beans.Flux;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import com.rss_pion.beans.Article;
-import com.rss_pion.beans.Flux;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -119,6 +119,19 @@ public class RSSParser extends DefaultHandler {
 
             // Ajout de l'article au flux
             this.flux.addArticle(this.article);
+
+        // À l'ouverture d'une balise de GUID d'article
+        } else if (qName.equalsIgnoreCase("guid") && this.article != null) {
+
+            // Création du GUID
+            this.article.setGuid(new Guid());
+
+            // (In)Validation du statut de permalien
+            if (attributes.getValue("isPermaLink").equalsIgnoreCase("true")) {
+                this.article.getGuid().setIsPermaLink(true);
+            } else {
+                this.article.getGuid().setIsPermaLink(false);
+            }
         }
     }
 
@@ -134,71 +147,77 @@ public class RSSParser extends DefaultHandler {
         
         String value = this.text.toString().trim();
 
-        // Fin de l'article
-        if (qName.equalsIgnoreCase("item")) {
-            this.article = null;
-        }
+        if (this.article == null) {
 
-        else if (qName.equalsIgnoreCase("title")) {
-            if (this.article != null) {
-                this.article.setTitle(value);
-            }
-            else {
-                this.flux.setTitle(value);
-            }
-        }
-
-        else if (qName.equalsIgnoreCase("link")) {
-            if (this.article != null) {
-                this.article.setLink(value);
-            }
-            else {
-                this.flux.setLink(value);
-            }
-        }
-
-        else if (qName.equalsIgnoreCase("description")) {
-            if (this.article != null) {
-                this.article.setDescription(value);
-            }
-            else {
+            // Attributs du flux
+            if (qName.equalsIgnoreCase("category")) {
+                this.flux.addCategory(value);
+            } else if (qName.equalsIgnoreCase("copyright")) {
+                this.flux.setCopyright(value);
+            } else if (qName.equalsIgnoreCase("description")) {
                 this.flux.setDescription(value);
-            }
-        }
+            } else if (qName.equalsIgnoreCase("generator")) {
+                this.flux.setGenerator(value);
+            } else if (qName.equalsIgnoreCase("language")) {
+                this.flux.setLanguage(value);
+            } else if (qName.equalsIgnoreCase("lastbuilddate")) {
+                this.flux.setLastBuildDate(value);
+            } else if (qName.equalsIgnoreCase("link")) {
+                this.flux.setLink(value);
+            } else if (qName.equalsIgnoreCase("managingeditor")) {
+                this.flux.setManagingEditor(value);
+            } else if (qName.equalsIgnoreCase("pubdate")) {
+                this.flux.setPubDate(value);
+            } else if (qName.equalsIgnoreCase("rating")) {
+                this.flux.setRating(value);
+            } else if (qName.equalsIgnoreCase("skipdays")) {
+                this.flux.setSkipDays(value);
+            } else if (qName.equalsIgnoreCase("skiphours")) {
+                this.flux.setSkipHours(value);
+            } else if (qName.equalsIgnoreCase("textinput")) {
+                this.flux.setTextInput(value);
+            } else if (qName.equalsIgnoreCase("title")) {
+                this.flux.setTitle(value);
+            } else if (qName.equalsIgnoreCase("ttl")) {
+                this.flux.setTtl(value);
 
-        else if (qName.equalsIgnoreCase("category")) {
-            if (this.article != null) {
+            // Attributs de l'image
+            } else if (qName.equalsIgnoreCase("url")) {
+                this.flux.setUrlImage(value);
+            }
+        } else {
+
+            // Fin de l'article
+            if (qName.equalsIgnoreCase("item")) {
+                this.article = null;
+
+            // Attributs de l'article
+            } else if (qName.equalsIgnoreCase("author")) {
+                this.article.setAuthor(value);
+            } else if (qName.equalsIgnoreCase("category")) {
                 this.article.addCategory(value);
-            }
-            this.flux.addCategory(value);
-        }
-
-        else if (qName.equalsIgnoreCase("url")) {
-            this.flux.setUrlImage(value);
-        }
-
-        else if (qName.equalsIgnoreCase("language")) {
-            this.flux.setLanguage(value);
-        }
-
-        else if (qName.equalsIgnoreCase("generator")) {
-            this.flux.setGenerator(value);
-        }
-
-        else if (qName.equalsIgnoreCase("copyright")) {
-            this.flux.setCopyright(value);
-        }
-
-        else if (qName.equalsIgnoreCase("pubDate")) {
-            if (this.article != null) {
+            } else if (qName.equalsIgnoreCase("comments")) {
+                this.article.setComments(value);
+            } else if (qName.equalsIgnoreCase("description")) {
+                this.article.setDescription(value);
+            } else if (qName.equalsIgnoreCase("enclosure")) {
+                this.article.setDescription(value);
+            } else if (qName.equalsIgnoreCase("guid")) {
+                this.article.getGuid().setValue(value);
+            } else if (qName.equalsIgnoreCase("link")) {
+                this.article.setLink(value);
+            } else if (qName.equalsIgnoreCase("pubDate")) {
                 this.article.setPubDate(value);
+            } else if (qName.equalsIgnoreCase("source")) {
+                this.article.setSource(value);
+            } else if (qName.equalsIgnoreCase("title")) {
+                this.article.setTitle(value);
             }
         }
 
         // Vidage du buffer
         this.text.setLength(0);
     }
-
 
 /***************************************************************************//**
  * Callback à l'arrivée de caractères par le flux
