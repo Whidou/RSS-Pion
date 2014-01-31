@@ -23,12 +23,12 @@ public abstract class SerializedObject {
 
 	/**
 	 * Insert in the data base.
-	 *
+	 * 
 	 * @return The long
 	 * @throws IllegalAccessException : The illegal access exception
 	 * @throws IllegalArgumentException : The illegal argument exception
 	 */
-	public abstract Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException;
+	public abstract Long insertInTheDataBase(Object... objects)
+			throws IllegalAccessException, IllegalArgumentException;
 
 }

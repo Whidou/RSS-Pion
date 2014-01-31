@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.rss_pion.database.dao.ArticleDAO;
+import com.rss_pion.database.dao.CategoryFluxDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.database.dao.TextInputDAO;
@@ -59,8 +60,8 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	/** The last build date. */
 	private String lastBuildDate;
 
-	/** The category. */
-	private String category;
+	/** The articles. */
+	private List<CategoryFlux> categories = new ArrayList<CategoryFlux>();
 
 	/** The generator. */
 	private String generator;
@@ -97,6 +98,9 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 
 	/** The own rate. */
 	private Integer ownRate;
+
+	/** The url image. */
+	private String urlImage;
 
 	/** The articles. */
 	private List<Article> articles = new ArrayList<Article>();
@@ -140,13 +144,13 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			final String description, final String language,
 			final String copyright, final String managingEditor,
 			final String webMaster, final String pubDate,
-			final String lastBuildDate, final String category,
+			final String lastBuildDate, final List<CategoryFlux> categories,
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageDAO image, final String rating,
 			final TextInput textInput, final String[] skipHours,
 			final String[] skipDays, final Integer numberOfReadArticles,
 			final Integer numberOfArticles, final Integer ownRate,
-			final List<Article> articles) {
+			final List<Article> articles, final String urlImage) {
 		super();
 		this.feed = feed;
 		this.title = title;
@@ -158,7 +162,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		this.webMaster = webMaster;
 		this.pubDate = pubDate;
 		this.lastBuildDate = lastBuildDate;
-		this.category = category;
+		this.categories = categories;
 		this.generator = generator;
 		this.docs = docs;
 		this.cloud = cloud;
@@ -172,6 +176,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		this.numberOfArticles = numberOfArticles;
 		this.ownRate = ownRate;
 		this.articles = articles;
+		this.urlImage = urlImage;
 	}
 
 	/**
@@ -188,8 +193,8 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The category
 	 */
-	public String getCategory() {
-		return this.category;
+	public List<CategoryFlux> getCategories() {
+		return this.categories;
 	}
 
 	/**
@@ -390,6 +395,13 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		return this.ttl;
 	}
 
+	/***************************************************************************
+	 * @return The urlImage (String)
+	 ***************************************************************************/
+	public String getUrlImage() {
+		return this.urlImage;
+	}
+
 	/**
 	 * Gets the web master.
 	 * 
@@ -413,8 +425,8 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param category : The new category
 	 */
-	public void setCategory(final String category) {
-		this.category = category;
+	public void setCategories(final List<CategoryFlux> categories) {
+		this.categories = categories;
 	}
 
 	/**
@@ -616,6 +628,15 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	}
 
 	/**
+	 * Sets the url image.
+	 * 
+	 * @param ttl : The url image
+	 */
+	public void setUrlImage(final String urlImage) {
+		this.urlImage = urlImage;
+	}
+
+	/**
 	 * Sets the web master.
 	 * 
 	 * @param webMaster : The new web master
@@ -632,13 +653,20 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		final FluxDAO fluxDAO = object instanceof FluxDAO ? (FluxDAO) object
 				: null;
 		if (fluxDAO != null) {
-			final Iterator<ArticleDAO> it = fluxDAO.getArticlesDAO().iterator();
-			while (it.hasNext()) {
+			final Iterator<ArticleDAO> ita = fluxDAO.getArticlesDAO()
+					.iterator();
+			while (ita.hasNext()) {
 				final Article article = new Article();
-				article.translateDaoToObject(it.next());
+				article.translateDaoToObject(ita.next());
 				this.articles.add(article);
 			}
-			this.category = fluxDAO.getCategory();
+			final Iterator<CategoryFluxDAO> itc = fluxDAO.getCategoriesDAO()
+					.iterator();
+			while (itc.hasNext()) {
+				final CategoryFlux category = new CategoryFlux();
+				category.translateDaoToObject(itc.next());
+				this.categories.add(category);
+			}
 			this.cloud = fluxDAO.getCloud();
 			this.copyright = fluxDAO.getCopyright();
 			this.description = fluxDAO.getDescription();
@@ -664,6 +692,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.title = fluxDAO.getTitle();
 			this.ttl = fluxDAO.getTtl();
 			this.webMaster = fluxDAO.getWebMaster();
+			this.urlImage = fluxDAO.getUrlImage();
 		}
 	}
 
@@ -674,7 +703,6 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	public Object translateObjectToDao(final Long... ids)
 			throws IllegalAccessException, IllegalArgumentException {
 		final FluxDAO fluxDAO = new FluxDAO();
-		fluxDAO.setCategory(this.getCategory());
 		fluxDAO.setIdCloud(this.getCloud().insertInTheDataBase());
 		fluxDAO.setCopyright(this.getCopyright());
 		fluxDAO.setDescription(this.getDescription());
@@ -701,6 +729,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		fluxDAO.setTitle(this.getTitle());
 		fluxDAO.setTtl(this.getTtl());
 		fluxDAO.setWebMaster(this.getWebMaster());
+		fluxDAO.setUrlImage(this.getUrlImage());
 		return fluxDAO;
 	}
 }

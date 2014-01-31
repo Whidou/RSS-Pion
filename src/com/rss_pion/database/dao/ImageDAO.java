@@ -21,7 +21,7 @@ import com.rss_pion.database.dao.abstracts.SerializedObject;
  * The Class ImageDAO.
  */
 public class ImageDAO extends SerializedObject {
-	
+
 	/** The name of the associated table. */
 	public static String nameOfTheAssociatedTable = "IMAGE_IT";
 
@@ -40,8 +40,15 @@ public class ImageDAO extends SerializedObject {
 	}
 
 	/**
+	 * Instantiates a new image dao.
+	 */
+	public ImageDAO(final Bitmap image) {
+		this.bitmap = image;
+	}
+
+	/**
 	 * Gets the bitmap.
-	 *
+	 * 
 	 * @return The bitmap
 	 */
 	public Bitmap getBitmap() {
@@ -52,8 +59,8 @@ public class ImageDAO extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		final ContentValues cv = (new ContentValues());
 		cv.put(ImageDAO.fieldsOfTheAssociatedTable[0],
 				Tools.getBytes(this.getBitmap()));
@@ -63,7 +70,7 @@ public class ImageDAO extends SerializedObject {
 
 	/**
 	 * Sets the image.
-	 *
+	 * 
 	 * @param image : The new image
 	 */
 	public void setImage(final Bitmap image) {

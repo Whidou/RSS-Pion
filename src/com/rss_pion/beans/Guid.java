@@ -12,6 +12,8 @@ package com.rss_pion.beans;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.util.Log;
+
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlDbHelper;
 import com.rss_pion.database.dao.abstracts.SerializedObject;
@@ -50,7 +52,7 @@ public class Guid extends SerializedObject {
 
 	/**
 	 * Instantiates a new guid.
-	 *
+	 * 
 	 * @param isPermaLink : The is perma link
 	 * @param value : The value
 	 */
@@ -62,7 +64,7 @@ public class Guid extends SerializedObject {
 
 	/**
 	 * Gets the checks if is perma link.
-	 *
+	 * 
 	 * @return The checks if is perma link
 	 */
 	public Integer getIsPermaLink() {
@@ -71,7 +73,7 @@ public class Guid extends SerializedObject {
 
 	/**
 	 * Gets the value.
-	 *
+	 * 
 	 * @return The value
 	 */
 	public String getValue() {
@@ -82,8 +84,8 @@ public class Guid extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		String names = "";
 		final Iterator<String[]> it = Guid.fieldsOfTheAssociatedTable
 				.iterator();
@@ -93,12 +95,13 @@ public class Guid extends SerializedObject {
 		Constants.sqlHandler.executeQuery("INSERT INTO "
 				+ Guid.nameOfTheAssociatedTable + " (" + names + " VALUES ("
 				+ this.getIsPermaLink() + ", '" + this.getValue() + "');");
+		Log.d("GUID ADDED", this.toString());
 		return SqlDbHelper.lastInsertId(Guid.nameOfTheAssociatedTable);
 	}
 
 	/**
 	 * Sets the checks if is perma link.
-	 *
+	 * 
 	 * @param isPermaLink : The new checks if is perma link
 	 */
 	public void setIsPermaLink(final Integer isPermaLink) {
@@ -107,10 +110,19 @@ public class Guid extends SerializedObject {
 
 	/**
 	 * Sets the value.
-	 *
+	 * 
 	 * @param value : The new value
 	 */
 	public void setValue(final String value) {
 		this.value = value;
+	}
+
+	/***************************************************************************
+	 * @see java.lang.Object#toString()
+	 ***************************************************************************/
+	@Override
+	public String toString() {
+		return "Guid [isPermaLink=" + this.isPermaLink + ", value="
+				+ this.value + "]";
 	}
 }

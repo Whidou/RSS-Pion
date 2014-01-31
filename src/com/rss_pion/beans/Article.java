@@ -9,8 +9,13 @@
  ***************************************************************************/
 package com.rss_pion.beans;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.rss_pion.database.SqlDbHelper;
 import com.rss_pion.database.dao.ArticleDAO;
+import com.rss_pion.database.dao.CategoryArticleDAO;
 import com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject;
 
 // TODO: Auto-generated Javadoc
@@ -23,7 +28,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	private String author;
 
 	/** The category. */
-	private String category;
+	private List<CategoryArticle> categories;
 
 	/** The comments. */
 	private String comments;
@@ -70,7 +75,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Instantiates a new article.
-	 *
+	 * 
 	 * @param idFather : The id father
 	 * @param isRead : The is read
 	 * @param title : The title
@@ -87,9 +92,9 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 */
 	public Article(final Long idFather, final Boolean isRead,
 			final String title, final String link, final String description,
-			final String author, final String category, final String comments,
-			final Enclosure enclosure, final Guid guid, final String pubDate,
-			final String source, final Integer userRate) {
+			final String author, final List<CategoryArticle> categories,
+			final String comments, final Enclosure enclosure, final Guid guid,
+			final String pubDate, final String source, final Integer userRate) {
 		super();
 		this.idFather = idFather;
 		this.isRead = isRead;
@@ -97,7 +102,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 		this.link = link;
 		this.description = description;
 		this.author = author;
-		this.category = category;
+		this.categories = categories;
 		this.comments = comments;
 		this.enclosure = enclosure;
 		this.guid = guid;
@@ -108,7 +113,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the author.
-	 *
+	 * 
 	 * @return The author
 	 */
 	public String getAuthor() {
@@ -117,16 +122,16 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the category.
-	 *
+	 * 
 	 * @return The category
 	 */
-	public String getCategory() {
-		return this.category;
+	public List<CategoryArticle> getCategories() {
+		return this.categories;
 	}
 
 	/**
 	 * Gets the comments.
-	 *
+	 * 
 	 * @return The comments
 	 */
 	public String getComments() {
@@ -135,7 +140,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the description.
-	 *
+	 * 
 	 * @return The description
 	 */
 	public String getDescription() {
@@ -144,7 +149,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the enclosure.
-	 *
+	 * 
 	 * @return The enclosure
 	 */
 	public Enclosure getEnclosure() {
@@ -153,7 +158,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the guid.
-	 *
+	 * 
 	 * @return The guid
 	 */
 	public Guid getGuid() {
@@ -162,7 +167,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the id.
-	 *
+	 * 
 	 * @return The id
 	 */
 	public Long getId() {
@@ -171,7 +176,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the id father.
-	 *
+	 * 
 	 * @return The id father
 	 */
 	public Long getIdFather() {
@@ -180,7 +185,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the checks if is read.
-	 *
+	 * 
 	 * @return The checks if is read
 	 */
 	public Boolean getIsRead() {
@@ -189,7 +194,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the link.
-	 *
+	 * 
 	 * @return The link
 	 */
 	public String getLink() {
@@ -198,7 +203,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the pub date.
-	 *
+	 * 
 	 * @return The pub date
 	 */
 	public String getPubDate() {
@@ -207,7 +212,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the source.
-	 *
+	 * 
 	 * @return The source
 	 */
 	public String getSource() {
@@ -216,7 +221,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the title.
-	 *
+	 * 
 	 * @return The title
 	 */
 	public String getTitle() {
@@ -225,7 +230,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Gets the user rate.
-	 *
+	 * 
 	 * @return The user rate
 	 */
 	public Integer getUserRate() {
@@ -234,7 +239,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the author.
-	 *
+	 * 
 	 * @param author : The new author
 	 */
 	public void setAuthor(final String author) {
@@ -243,16 +248,16 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the category.
-	 *
+	 * 
 	 * @param category : The new category
 	 */
-	public void setCategory(final String category) {
-		this.category = category;
+	public void setCategories(final List<CategoryArticle> categories) {
+		this.categories = categories;
 	}
 
 	/**
 	 * Sets the comments.
-	 *
+	 * 
 	 * @param comments : The new comments
 	 */
 	public void setComments(final String comments) {
@@ -261,7 +266,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the description.
-	 *
+	 * 
 	 * @param description : The new description
 	 */
 	public void setDescription(final String description) {
@@ -270,7 +275,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the enclosure.
-	 *
+	 * 
 	 * @param enclosure : The new enclosure
 	 */
 	public void setEnclosure(final Enclosure enclosure) {
@@ -279,7 +284,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the guid.
-	 *
+	 * 
 	 * @param guid : The new guid
 	 */
 	public void setGuid(final Guid guid) {
@@ -288,7 +293,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the id.
-	 *
+	 * 
 	 * @param id : The new id
 	 */
 	public void setId(final Long id) {
@@ -297,7 +302,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the id father.
-	 *
+	 * 
 	 * @param idFather : The new id father
 	 */
 	public void setIdFather(final Long idFather) {
@@ -306,7 +311,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the checks if is read.
-	 *
+	 * 
 	 * @param isRead : The new checks if is read
 	 */
 	public void setIsRead(final Boolean isRead) {
@@ -315,7 +320,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the link.
-	 *
+	 * 
 	 * @param link : The new link
 	 */
 	public void setLink(final String link) {
@@ -324,7 +329,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the pub date.
-	 *
+	 * 
 	 * @param pubDate : The new pub date
 	 */
 	public void setPubDate(final String pubDate) {
@@ -333,7 +338,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the source.
-	 *
+	 * 
 	 * @param source : The new source
 	 */
 	public void setSource(final String source) {
@@ -342,7 +347,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the title.
-	 *
+	 * 
 	 * @param title : The new title
 	 */
 	public void setTitle(final String title) {
@@ -351,7 +356,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 
 	/**
 	 * Sets the user rate.
-	 *
+	 * 
 	 * @param userRate : The new user rate
 	 */
 	public void setUserRate(final Integer userRate) {
@@ -368,7 +373,6 @@ public class Article extends NeedTranslationToBeSerializedObject {
 		if (articleDAO != null) {
 			this.id = articleDAO.getId();
 			this.author = articleDAO.getAuthor();
-			this.category = articleDAO.getCategory();
 			this.comments = articleDAO.getComments();
 			this.description = articleDAO.getDescription();
 			this.enclosure = articleDAO.getEnclosure();
@@ -380,6 +384,14 @@ public class Article extends NeedTranslationToBeSerializedObject {
 			this.source = articleDAO.getSource();
 			this.title = articleDAO.getTitle();
 			this.userRate = articleDAO.getUserRate();
+			this.categories = new ArrayList<CategoryArticle>();
+			final Iterator<CategoryArticleDAO> itc = articleDAO
+					.getCategoriesDAO().iterator();
+			while (itc.hasNext()) {
+				final CategoryArticle category = new CategoryArticle();
+				category.translateDaoToObject(itc.next());
+				this.categories.add(category);
+			}
 		}
 	}
 
@@ -391,7 +403,6 @@ public class Article extends NeedTranslationToBeSerializedObject {
 			throws IllegalAccessException, IllegalArgumentException {
 		final ArticleDAO articleDAO = new ArticleDAO();
 		articleDAO.setAuthor(this.getAuthor());
-		articleDAO.setCategory(this.getCategory());
 		articleDAO.setComments(this.getComments());
 		articleDAO.setDescription(this.getDescription());
 		articleDAO.setIdEnclosure(this.getEnclosure().insertInTheDataBase());

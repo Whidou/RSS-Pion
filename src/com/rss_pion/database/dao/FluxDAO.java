@@ -11,12 +11,17 @@ package com.rss_pion.database.dao;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
+import com.rss_pion.beans.Article;
+import com.rss_pion.beans.CategoryFlux;
 import com.rss_pion.beans.Cloud;
 import com.rss_pion.beans.Enclosure;
+import com.rss_pion.beans.Flux;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlDbHelper;
@@ -35,8 +40,6 @@ public class FluxDAO extends SerializedObject {
 	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
 	static {
 		FluxDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "category",
-				"TEXT NOT NULL" });
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "copyright",
 				"TEXT NOT NULL" });
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "description",
@@ -80,6 +83,8 @@ public class FluxDAO extends SerializedObject {
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "ttl",
 				"INTEGER NOT NULL" });
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "webMaster",
+				"TEXT NOT NULL" });
+		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "urlImage",
 				"TEXT NOT NULL" });
 	}
 
@@ -179,6 +184,26 @@ public class FluxDAO extends SerializedObject {
 						}
 					}
 					cArticles.close();
+					final String queryCategories = "SELECT * FROM "
+							+ CategoryFluxDAO.nameOfTheAssociatedTable
+							+ " WHERE idFather = " + id;
+					final Cursor cCategories = Constants.sqlHandler
+							.selectQuery(queryCategories);
+					if ((cCategories != null) && (cCategories.getCount() != 0)) {
+						if (cCategories.moveToFirst()) {
+							do {
+								final CategoryFluxDAO category = new CategoryFluxDAO();
+								category.setId(Long.parseLong(cCategories
+										.getString(cCategories
+												.getColumnIndex("id"))));
+								Constants.sqlHandler
+										.deleteDAO(
+												CategoryFluxDAO.nameOfTheAssociatedTable,
+												category.getId());
+							} while (cCategories.moveToNext());
+						}
+					}
+					cCategories.close();
 					Constants.sqlHandler.deleteDAO(
 							FluxDAO.nameOfTheAssociatedTable, id);
 				} while (c1.moveToNext());
@@ -201,8 +226,6 @@ public class FluxDAO extends SerializedObject {
 			if (c1.moveToFirst()) {
 				do {
 					final FluxDAO fluxDAO = new FluxDAO();
-					fluxDAO.setCategory(c1.getString(c1
-							.getColumnIndex("category")));
 					fluxDAO.setIdCloud(Long.parseLong(c1.getString(c1
 							.getColumnIndex("idCloud"))));
 					fluxDAO.setCopyright(c1.getString(c1
@@ -245,6 +268,8 @@ public class FluxDAO extends SerializedObject {
 							.getColumnIndex("ttl"))));
 					fluxDAO.setWebMaster(c1.getString(c1
 							.getColumnIndex("webMaster")));
+					fluxDAO.setUrlImage(c1.getString(c1
+							.getColumnIndex("urlImage")));
 					flux_list.add(fluxDAO);
 				} while (c1.moveToNext());
 			}
@@ -267,8 +292,6 @@ public class FluxDAO extends SerializedObject {
 		if ((c1 != null) && (c1.getCount() != 0)) {
 			if (c1.moveToFirst()) {
 				do {
-					fluxDAO.setCategory(c1.getString(c1
-							.getColumnIndex("category")));
 					fluxDAO.setIdCloud(Long.parseLong(c1.getString(c1
 							.getColumnIndex("idCloud"))));
 					fluxDAO.setCopyright(c1.getString(c1
@@ -311,6 +334,8 @@ public class FluxDAO extends SerializedObject {
 							.getColumnIndex("ttl"))));
 					fluxDAO.setWebMaster(c1.getString(c1
 							.getColumnIndex("webMaster")));
+					fluxDAO.setUrlImage(c1.getString(c1
+							.getColumnIndex("urlImage")));
 				} while (c1.moveToNext());
 			}
 		}
@@ -352,7 +377,7 @@ public class FluxDAO extends SerializedObject {
 	private String lastBuildDate;
 
 	/** The category. */
-	private String category;
+	private List<CategoryFlux> categories;
 
 	/** The generator. */
 	private String generator;
@@ -389,6 +414,9 @@ public class FluxDAO extends SerializedObject {
 
 	/** The own rate. */
 	private Integer ownRate;
+
+	/** The url image. */
+	private String urlImage;
 
 	/**
 	 * Instantiates a new flux dao.
@@ -428,12 +456,13 @@ public class FluxDAO extends SerializedObject {
 			final String description, final String language,
 			final String copyright, final String managingEditor,
 			final String webMaster, final String pubDate,
-			final String lastBuildDate, final String category,
+			final String lastBuildDate, final List<CategoryFlux> categories,
 			final String generator, final String docs, final Long cloud,
 			final Integer ttl, final Long image, final String rating,
 			final Long textInput, final String skipHours,
 			final String skipDays, final Integer numberOfReadArticles,
-			final Integer numberOfArticles, final Integer ownRate) {
+			final Integer numberOfArticles, final Integer ownRate,
+			final String urlImage) {
 		super();
 		this.feed = feed;
 		this.title = title;
@@ -445,7 +474,7 @@ public class FluxDAO extends SerializedObject {
 		this.webMaster = webMaster;
 		this.pubDate = pubDate;
 		this.lastBuildDate = lastBuildDate;
-		this.category = category;
+		this.categories = categories;
 		this.generator = generator;
 		this.docs = docs;
 		this.idCoud = cloud;
@@ -458,6 +487,7 @@ public class FluxDAO extends SerializedObject {
 		this.numberOfReadArticles = numberOfReadArticles;
 		this.numberOfArticles = numberOfArticles;
 		this.ownRate = ownRate;
+		this.urlImage = urlImage;
 	}
 
 	/**
@@ -477,9 +507,6 @@ public class FluxDAO extends SerializedObject {
 					final ArticleDAO article = new ArticleDAO();
 					article.setId(Long.parseLong(c1.getString(c1
 							.getColumnIndex("id"))));
-					article.setAuthor(c1.getString(c1.getColumnIndex("author")));
-					article.setCategory(c1.getString(c1
-							.getColumnIndex("category")));
 					article.setComments(c1.getString(c1
 							.getColumnIndex("comments")));
 					article.setDescription(c1.getString(c1
@@ -508,12 +535,36 @@ public class FluxDAO extends SerializedObject {
 	}
 
 	/**
-	 * Gets the category.
+	 * Gets the categories.
 	 * 
 	 * @return The category
 	 */
-	public String getCategory() {
-		return this.category;
+	public List<CategoryFlux> getCategories() {
+		return this.categories;
+	}
+
+	public ArrayList<CategoryFluxDAO> getCategoriesDAO() {
+		final String query = "SELECT * FROM "
+				+ CategoryFluxDAO.nameOfTheAssociatedTable
+				+ " WHERE idFather = " + this.getId() + ";";
+		final Cursor c1 = Constants.sqlHandler.selectQuery(query);
+		final ArrayList<CategoryFluxDAO> categories = new ArrayList<CategoryFluxDAO>();
+		if ((c1 != null) && (c1.getCount() != 0)) {
+			if (c1.moveToFirst()) {
+				do {
+					final CategoryFluxDAO category = new CategoryFluxDAO();
+					category.setId(Long.parseLong(c1.getString(c1
+							.getColumnIndex("id"))));
+					category.setCategory(c1.getString(c1
+							.getColumnIndex("category")));
+					category.setIdFather(Long.parseLong(c1.getString(c1
+							.getColumnIndex("idFather"))));
+					categories.add(category);
+				} while (c1.moveToNext());
+			}
+		}
+		c1.close();
+		return categories;
 	}
 
 	/**
@@ -809,6 +860,15 @@ public class FluxDAO extends SerializedObject {
 	}
 
 	/**
+	 * Gets the url image.
+	 * 
+	 * @return The url image
+	 */
+	public String getUrlImage() {
+		return this.urlImage;
+	}
+
+	/**
 	 * Gets the web master.
 	 * 
 	 * @return The web master
@@ -821,8 +881,8 @@ public class FluxDAO extends SerializedObject {
 	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
 	 ***************************************************************************/
 	@Override
-	public Long insertInTheDataBase() throws IllegalAccessException,
-			IllegalArgumentException {
+	public Long insertInTheDataBase(final Object... objects)
+			throws IllegalAccessException, IllegalArgumentException {
 		String names = "";
 		final Iterator<String[]> it = FluxDAO.fieldsOfTheAssociatedTable
 				.iterator();
@@ -831,20 +891,39 @@ public class FluxDAO extends SerializedObject {
 		}
 		Constants.sqlHandler.executeQuery("INSERT INTO "
 				+ FluxDAO.nameOfTheAssociatedTable + " (" + names
-				+ " VALUES ('" + this.getCategory() + "', '"
-				+ this.getCopyright() + "', '" + this.getDescription() + "', '"
-				+ this.getDocs() + "', '" + this.getFeed() + "', '"
-				+ this.getGenerator() + "', " + this.getIdCloud() + ", "
-				+ this.getIdImage() + ", " + this.getIdTextInput() + ", '"
-				+ this.getLanguage() + "', '" + this.getLastBuildDate()
-				+ "', '" + this.getLink() + "', '" + this.getManagingEditor()
-				+ "', " + this.getNumberOfArticles() + ", "
-				+ this.getNumberOfReadArticles() + ", " + this.getOwnRate()
-				+ ", '" + this.getPubDate() + "', '" + this.getRating()
-				+ "', '" + this.getSkipDays() + "', '" + this.getSkipHours()
-				+ "', '" + this.getTitle() + "', '" + this.getTtl() + "', '"
-				+ this.getWebMaster() + "');");
-		return SqlDbHelper.lastInsertId(FluxDAO.nameOfTheAssociatedTable);
+				+ " VALUES ('" + this.getCopyright() + "', '"
+				+ this.getDescription() + "', '" + this.getDocs() + "', '"
+				+ this.getFeed() + "', '" + this.getGenerator() + "', "
+				+ this.getIdCloud() + ", " + this.getIdImage() + ", "
+				+ this.getIdTextInput() + ", '" + this.getLanguage() + "', '"
+				+ this.getLastBuildDate() + "', '" + this.getLink() + "', '"
+				+ this.getManagingEditor() + "', " + this.getNumberOfArticles()
+				+ ", " + this.getNumberOfReadArticles() + ", "
+				+ this.getOwnRate() + ", '" + this.getPubDate() + "', '"
+				+ this.getRating() + "', '" + this.getSkipDays() + "', '"
+				+ this.getSkipHours() + "', '" + this.getTitle() + "', '"
+				+ this.getTtl() + "', '" + this.getWebMaster() + "', '"
+				+ this.getUrlImage() + "');");
+		final Long id = SqlDbHelper
+				.lastInsertId(FluxDAO.nameOfTheAssociatedTable);
+		final Iterator<Article> itArticle = ((Flux) objects[0]).getArticles()
+				.iterator();
+		Article article;
+		while (itArticle.hasNext()) {
+			article = itArticle.next();
+			final ArticleDAO articleDAO = (ArticleDAO) article
+					.translateObjectToDao(id);
+			articleDAO.insertInTheDataBase(article);
+		}
+		final Iterator<CategoryFlux> itCategory = ((Flux) objects[0])
+				.getCategories().iterator();
+		while (itCategory.hasNext()) {
+			final CategoryFluxDAO categoryDAO = (CategoryFluxDAO) itCategory
+					.next().translateObjectToDao(id);
+			categoryDAO.insertInTheDataBase();
+		}
+		Log.d("FLUX ADDED", this.toString());
+		return id;
 	}
 
 	/**
@@ -852,8 +931,8 @@ public class FluxDAO extends SerializedObject {
 	 * 
 	 * @param category : The new category
 	 */
-	public void setCategory(final String category) {
-		this.category = category;
+	public void setCategories(final List<CategoryFlux> categories) {
+		this.categories = categories;
 	}
 
 	/**
@@ -1055,11 +1134,42 @@ public class FluxDAO extends SerializedObject {
 	}
 
 	/**
+	 * Sets the url image.
+	 * 
+	 * @param The url image
+	 */
+	public void setUrlImage(final String urlImage) {
+		this.urlImage = urlImage;
+	}
+
+	/**
 	 * Sets the web master.
 	 * 
 	 * @param webMaster : The new web master
 	 */
 	public void setWebMaster(final String webMaster) {
 		this.webMaster = webMaster;
+	}
+
+	/***************************************************************************
+	 * @see java.lang.Object#toString()
+	 ***************************************************************************/
+	@Override
+	public String toString() {
+		return "FluxDAO [id=" + this.id + ", feed=" + this.feed + ", title="
+				+ this.title + ", link=" + this.link + ", description="
+				+ this.description + ", language=" + this.language
+				+ ", copyright=" + this.copyright + ", managingEditor="
+				+ this.managingEditor + ", webMaster=" + this.webMaster
+				+ ", pubDate=" + this.pubDate + ", lastBuildDate="
+				+ this.lastBuildDate + ", categories=" + this.categories
+				+ ", generator=" + this.generator + ", docs=" + this.docs
+				+ ", idCoud=" + this.idCoud + ", ttl=" + this.ttl
+				+ ", idImage=" + this.idImage + ", rating=" + this.rating
+				+ ", idTextInput=" + this.idTextInput + ", skipHours="
+				+ this.skipHours + ", skipDays=" + this.skipDays
+				+ ", numberOfReadArticles=" + this.numberOfReadArticles
+				+ ", numberOfArticles=" + this.numberOfArticles + ", ownRate="
+				+ this.ownRate + ", urlImage=" + this.urlImage + "]";
 	}
 }

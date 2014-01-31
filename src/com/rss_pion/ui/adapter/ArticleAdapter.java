@@ -69,7 +69,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
 	/**
 	 * Instantiates a new article adapter.
-	 *
+	 * 
 	 * @param context : The context
 	 * @param layoutResourceId : The layout resource id
 	 * @param data : The data
@@ -127,8 +127,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		holder.titleView.setText(spanTitleView);
 		holder.authorView.setText(article.getAuthor() + ", publié le ");
 		holder.pubDateView.setText(article.getPubDate());
-		holder.categoryView.setText(article.getCategory());
-		holder.descriptionView.setText(article.getDescription().toString());
+		holder.categoryView.setText(article.getCategories().toString());
+		holder.descriptionView.setText(article.getDescription());
 		return row;
 	}
 }
