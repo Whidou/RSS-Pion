@@ -18,6 +18,7 @@
  ******************************************************************************/
 package com.rss_pion.ui.adapter;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 import android.app.Activity;
@@ -120,7 +121,8 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 				+ flux.getNumberOfReadArticles().toString() + "/"
 				+ flux.getNumberOfArticles().toString());
 		holder.categoryView.setText(flux.getCategories().toString());
-		holder.lastBuildDateView.setText(flux.getLastBuildDate());
+		holder.lastBuildDateView.setText((new Date(flux.getLastBuildDate()))
+		        .toString());
 		final SpannableString spanTitleView = new SpannableString(
 				flux.getTitle());
 		if (flux.getNumberOfReadArticles() < flux.getNumberOfArticles()) {

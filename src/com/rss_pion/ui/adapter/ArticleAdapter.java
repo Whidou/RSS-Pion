@@ -9,6 +9,7 @@
  ***************************************************************************/
 package com.rss_pion.ui.adapter;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 import android.app.Activity;
@@ -126,7 +127,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 				.setSpan(new UnderlineSpan(), 0, spanTitleView.length(), 0);
 		holder.titleView.setText(spanTitleView);
 		holder.authorView.setText(article.getAuthor() + ", publié le ");
-		holder.pubDateView.setText(article.getPubDate());
+		holder.pubDateView.setText((new Date(article.getPubDate()))
+		        .toString());
 		holder.categoryView.setText(article.getCategories().toString());
 		holder.descriptionView.setText(article.getDescription());
 		return row;

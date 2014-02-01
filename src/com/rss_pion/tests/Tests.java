@@ -37,7 +37,7 @@ public class Tests extends Application {
 			"flux_1_article_3_enclosure_type");
 
 	/** The Constant flux_1_article_3_guid. */
-	public static final Guid flux_1_article_3_guid = new Guid(1,
+	public static final Guid flux_1_article_3_guid = new Guid(true,
 			"flux_1_article_3_guid_value");
 
 	public static final CategoryArticle flux_1_article_3_categorie_1 = new CategoryArticle(
@@ -53,7 +53,7 @@ public class Tests extends Application {
 					Tests.flux_1_article_3_categorie_1,
 					Tests.flux_1_article_3_categorie_2 }),
 			"flux_1_article_3_comments", Tests.flux_1_article_3_enclosure,
-			Tests.flux_1_article_3_guid, "flux_1_article_3_pubDate",
+			Tests.flux_1_article_3_guid, Long.valueOf(0),
 			"flux_1_article_3_source", 1);
 
 	/** The Constant flux_1_article_2_enclosure. */
@@ -62,7 +62,7 @@ public class Tests extends Application {
 			"flux_1_article_2_enclosure_type");
 
 	/** The Constant flux_1_article_2_guid. */
-	public static final Guid flux_1_article_2_guid = new Guid(1,
+	public static final Guid flux_1_article_2_guid = new Guid(true,
 			"flux_1_article_2_guid_value");
 
 	public static final CategoryArticle flux_1_article_2_categorie_1 = new CategoryArticle(
@@ -78,7 +78,7 @@ public class Tests extends Application {
 					Tests.flux_1_article_2_categorie_1,
 					Tests.flux_1_article_2_categorie_2 }),
 			"flux_1_article_2_comments", Tests.flux_1_article_2_enclosure,
-			Tests.flux_1_article_2_guid, "flux_1_article_2_pubDate",
+			Tests.flux_1_article_2_guid, Long.valueOf(1000),
 			"flux_1_article_2_source", 1);
 
 	/** The Constant flux_1_article_1_enclosure. */
@@ -87,7 +87,7 @@ public class Tests extends Application {
 			"flux_1_article_1_enclosure_type");
 
 	/** The Constant flux_1_article_1_guid. */
-	public static final Guid flux_1_article_1_guid = new Guid(1,
+	public static final Guid flux_1_article_1_guid = new Guid(false,
 			"flux_1_article_1_guid_value");
 
 	public static final CategoryArticle flux_1_article_1_categorie_1 = new CategoryArticle(
@@ -103,7 +103,7 @@ public class Tests extends Application {
 					Tests.flux_1_article_1_categorie_1,
 					Tests.flux_1_article_1_categorie_2 }),
 			"flux_1_article_1_comments", Tests.flux_1_article_1_enclosure,
-			Tests.flux_1_article_1_guid, "flux_1_article_1_pubDate",
+			Tests.flux_1_article_1_guid, Long.valueOf(2000),
 			"flux_1_article_1_source", 1);
 
 	/** The Constant flux_1_skipDays. */
@@ -118,7 +118,7 @@ public class Tests extends Application {
 			"flux_1_textInput_enclosure_type");
 
 	/** The Constant flux_1_textInput_guid. */
-	public static final Guid flux_1_textInput_guid = new Guid(1,
+	public static final Guid flux_1_textInput_guid = new Guid(false,
 			"flux_1_textInput_guid_value");
 
 	/** The Constant flux_1_textInput. */
@@ -148,7 +148,7 @@ public class Tests extends Application {
 	public static final Flux flux_1 = new Flux("flux_1_feed", "flux_1_title",
 			"flux_1_link", "flux_1_description", "flux_1_language",
 			"flux_1_copyright", "flux_1_managingEditor", "flux_1_webMaster",
-			"flux_1_pubDate", "flux_1_lastBuildDate",
+			Long.valueOf(3000), Long.valueOf(3500),
 			Arrays.asList(new CategoryFlux[] { Tests.flux_1_categorie_1,
 					Tests.flux_1_categorie_2 }), "flux_1_generator",
 			"flux_1_docs", Tests.flux_1_cloud, 1, Tests.flux_1_image,
