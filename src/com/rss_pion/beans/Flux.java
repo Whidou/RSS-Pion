@@ -55,10 +55,10 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	private String webMaster;
 
 	/** The pub date. */
-	private String pubDate;
+	private Long pubDate;
 
 	/** The last build date. */
-	private String lastBuildDate;
+	private Long lastBuildDate;
 
 	/** The articles. */
 	private List<CategoryFlux> categories = new ArrayList<CategoryFlux>();
@@ -143,8 +143,8 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	public Flux(final String feed, final String title, final String link,
 			final String description, final String language,
 			final String copyright, final String managingEditor,
-			final String webMaster, final String pubDate,
-			final String lastBuildDate, final List<CategoryFlux> categories,
+			final String webMaster, final Long pubDate,
+			final Long lastBuildDate, final List<CategoryFlux> categories,
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageDAO image, final String rating,
 			final TextInput textInput, final List<Integer> skipHours,
@@ -283,7 +283,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The last build date
 	 */
-	public String getLastBuildDate() {
+	public Long getLastBuildDate() {
 		return this.lastBuildDate;
 	}
 
@@ -337,7 +337,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The pub date
 	 */
-	public String getPubDate() {
+	public Long getPubDate() {
 		return this.pubDate;
 	}
 
@@ -515,7 +515,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param lastBuildDate : The new last build date
 	 */
-	public void setLastBuildDate(final String lastBuildDate) {
+	public void setLastBuildDate(final Long lastBuildDate) {
 		this.lastBuildDate = lastBuildDate;
 	}
 
@@ -569,7 +569,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param pubDate : The new pub date
 	 */
-	public void setPubDate(final String pubDate) {
+	public void setPubDate(final Long pubDate) {
 		this.pubDate = pubDate;
 	}
 
@@ -677,13 +677,13 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.id = fluxDAO.getId();
 			this.image = fluxDAO.getImage();
 			this.language = fluxDAO.getLanguage();
-			this.lastBuildDate = fluxDAO.getLastBuildDate();
+			this.lastBuildDate = Long.decode(fluxDAO.getLastBuildDate());
 			this.link = fluxDAO.getLink();
 			this.managingEditor = fluxDAO.getManagingEditor();
 			this.numberOfArticles = fluxDAO.getNumberOfArticles();
 			this.numberOfReadArticles = fluxDAO.getNumberOfReadArticles();
 			this.ownRate = fluxDAO.getOwnRate();
-			this.pubDate = fluxDAO.getPubDate();
+			this.pubDate = Long.decode(fluxDAO.getPubDate());
 			this.rating = fluxDAO.getRating();
 			this.skipDays = Arrays.asList(fluxDAO.getSkipDays().split("/"));
 			for (String strHour : fluxDAO.getSkipHours().split("/")) {
@@ -715,13 +715,13 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		fluxDAO.setGenerator(this.getGenerator());
 		fluxDAO.setIdImage(this.getImage().insertInTheDataBase());
 		fluxDAO.setLanguage(this.getLanguage());
-		fluxDAO.setLastBuildDate(this.getLastBuildDate());
+		fluxDAO.setLastBuildDate(Long.toString(this.getLastBuildDate()));
 		fluxDAO.setLink(this.getLink());
 		fluxDAO.setManagingEditor(this.getManagingEditor());
 		fluxDAO.setNumberOfArticles(this.getNumberOfArticles());
 		fluxDAO.setNumberOfReadArticles(this.getNumberOfReadArticles());
 		fluxDAO.setOwnRate(this.getOwnRate());
-		fluxDAO.setPubDate(this.getPubDate());
+		fluxDAO.setPubDate(Long.toString(this.getPubDate()));
 		fluxDAO.setRating(this.getRating());
 		fluxDAO.setSkipDays(this.getSkipDays().toString()
 				.replace("[", "").replace("]", "").replace(", ", "/"));

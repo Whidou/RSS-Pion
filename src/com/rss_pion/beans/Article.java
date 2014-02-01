@@ -55,7 +55,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	private String link;
 
 	/** The pub date. */
-	private String pubDate;
+	private Long pubDate;
 
 	/** The source. */
 	private String source;
@@ -94,7 +94,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 			final String title, final String link, final String description,
 			final String author, final List<CategoryArticle> categories,
 			final String comments, final Enclosure enclosure, final Guid guid,
-			final String pubDate, final String source, final Integer userRate) {
+			final Long pubDate, final String source, final Integer userRate) {
 		super();
 		this.idFather = idFather;
 		this.isRead = isRead;
@@ -206,7 +206,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The pub date
 	 */
-	public String getPubDate() {
+	public Long getPubDate() {
 		return this.pubDate;
 	}
 
@@ -332,7 +332,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param pubDate : The new pub date
 	 */
-	public void setPubDate(final String pubDate) {
+	public void setPubDate(final Long pubDate) {
 		this.pubDate = pubDate;
 	}
 
@@ -380,7 +380,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 			this.idFather = articleDAO.getIdFather();
 			this.isRead = articleDAO.getIsRead() == 1;
 			this.link = articleDAO.getLink();
-			this.pubDate = articleDAO.getPubDate();
+			this.pubDate = Long.decode(articleDAO.getPubDate());
 			this.source = articleDAO.getSource();
 			this.title = articleDAO.getTitle();
 			this.userRate = articleDAO.getUserRate();
@@ -412,7 +412,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 		articleDAO.setIdFather(ids[0]);
 		articleDAO.setIsRead(this.getIsRead() ? 1 : 0);
 		articleDAO.setLink(this.getLink());
-		articleDAO.setPubDate(this.getPubDate());
+		articleDAO.setPubDate(Long.toString(this.getPubDate()));
 		articleDAO.setSource(this.getSource());
 		articleDAO.setTitle(this.getTitle());
 		articleDAO.setUserRate(this.getUserRate());
