@@ -9,7 +9,9 @@
  ***************************************************************************/
 package com.rss_pion.tests;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.app.Application;
 
@@ -105,12 +107,10 @@ public class Tests extends Application {
 			"flux_1_article_1_source", 1);
 
 	/** The Constant flux_1_skipDays. */
-	public static final String[] flux_1_skipDays = { "flux_1_skipDays_1",
-			"flux_1_skipDays_2", "flux_1_skipDays_3" };
+	public static final List<String> flux_1_skipDays = new ArrayList<String>();
 
 	/** The Constant flux_1_skipHours. */
-	public static final String[] flux_1_skipHours = { "flux_1_skipHours_1",
-			"flux_1_skipHours_2", "flux_1_skipHours_3" };
+	public static final List<Integer> flux_1_skipHours = new ArrayList<Integer>();
 
 	/** The Constant flux_1_textInput_enclosure. */
 	public static final Enclosure flux_1_textInput_enclosure = new Enclosure(

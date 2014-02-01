@@ -85,10 +85,10 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	private TextInput textInput;
 
 	/** The skip hours. */
-	private String[] skipHours;
+	private List<Integer> skipHours;
 
 	/** The skip days. */
-	private String[] skipDays;
+	private List<String> skipDays;
 
 	/** The number of read articles. */
 	private Integer numberOfReadArticles;
@@ -147,8 +147,8 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			final String lastBuildDate, final List<CategoryFlux> categories,
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageDAO image, final String rating,
-			final TextInput textInput, final String[] skipHours,
-			final String[] skipDays, final Integer numberOfReadArticles,
+			final TextInput textInput, final List<Integer> skipHours,
+			final List<String> skipDays, final Integer numberOfReadArticles,
 			final Integer numberOfArticles, final Integer ownRate,
 			final List<Article> articles, final String urlImage) {
 		super();
@@ -355,7 +355,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The skip days
 	 */
-	public String[] getSkipDays() {
+	public List<String> getSkipDays() {
 		return this.skipDays;
 	}
 
@@ -364,7 +364,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The skip hours
 	 */
-	public String[] getSkipHours() {
+	public List<Integer> getSkipHours() {
 		return this.skipHours;
 	}
 
@@ -587,7 +587,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param skipDays : The new skip days
 	 */
-	public void setSkipDays(final String[] skipDays) {
+	public void setSkipDays(final List<String> skipDays) {
 		this.skipDays = skipDays;
 	}
 
@@ -596,7 +596,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param skipHours : The new skip hours
 	 */
-	public void setSkipHours(final String[] skipHours) {
+	public void setSkipHours(final List<Integer> skipHours) {
 		this.skipHours = skipHours;
 	}
 
@@ -650,6 +650,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	 ***************************************************************************/
 	@Override
 	public void translateDaoToObject(final Object object) {
+	    List<Integer> hoursList = new ArrayList<Integer>();
 		final FluxDAO fluxDAO = object instanceof FluxDAO ? (FluxDAO) object
 				: null;
 		if (fluxDAO != null) {
@@ -684,8 +685,11 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.ownRate = fluxDAO.getOwnRate();
 			this.pubDate = fluxDAO.getPubDate();
 			this.rating = fluxDAO.getRating();
-			this.skipDays = fluxDAO.getSkipDays().split("/");
-			this.skipHours = fluxDAO.getSkipHours().split("/");
+			this.skipDays = Arrays.asList(fluxDAO.getSkipDays().split("/"));
+			for (String strHour : fluxDAO.getSkipHours().split("/")) {
+			    hoursList.add(Integer.parseInt(strHour));
+			}
+			this.skipHours = hoursList;
 			final TextInput textInput = new TextInput();
 			textInput.translateDaoToObject(fluxDAO.getTextInputDAO());
 			this.textInput = textInput;
@@ -719,9 +723,9 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		fluxDAO.setOwnRate(this.getOwnRate());
 		fluxDAO.setPubDate(this.getPubDate());
 		fluxDAO.setRating(this.getRating());
-		fluxDAO.setSkipDays(Arrays.toString(this.getSkipDays())
+		fluxDAO.setSkipDays(this.getSkipDays().toString()
 				.replace("[", "").replace("]", "").replace(", ", "/"));
-		fluxDAO.setSkipHours(Arrays.toString(this.getSkipHours())
+		fluxDAO.setSkipHours(this.getSkipHours().toString()
 				.replace("[", "").replace("]", "").replace(", ", "/"));
 		final TextInputDAO textInputDAO = (TextInputDAO) this.getTextInput()
 				.translateObjectToDao();
@@ -739,5 +743,14 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 
     public void addCategory(CategoryFlux category) {
         this.categories.add(category);
+    }
+
+    public void addSkipDay(String day) {
+        this.skipDays.add(day);
+    }
+
+    public void addSkipHour(int hour) {
+        this.skipHours.add(hour);
+        
     }
 }
