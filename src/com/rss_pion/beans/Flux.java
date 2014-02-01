@@ -732,4 +732,12 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		fluxDAO.setUrlImage(this.getUrlImage());
 		return fluxDAO;
 	}
+
+    public void addArticle(Article article) {
+        this.articles.add(article);
+    }
+
+    public void addCategory(CategoryFlux category) {
+        this.categories.add(category);
+    }
 }

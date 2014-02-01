@@ -418,4 +418,8 @@ public class Article extends NeedTranslationToBeSerializedObject {
 		articleDAO.setUserRate(this.getUserRate());
 		return articleDAO;
 	}
+
+    public void addCategory(CategoryArticle category) {
+        this.categories.add(category);
+    }
 }
