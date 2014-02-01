@@ -38,7 +38,7 @@ public class Guid extends SerializedObject {
 	}
 
 	/** The is perma link. */
-	private Integer isPermaLink;
+	private boolean isPermaLink;
 
 	/** The value. */
 	private String value;
@@ -56,7 +56,7 @@ public class Guid extends SerializedObject {
 	 * @param isPermaLink : The is perma link
 	 * @param value : The value
 	 */
-	public Guid(final Integer isPermaLink, final String value) {
+	public Guid(final boolean isPermaLink, final String value) {
 		super();
 		this.isPermaLink = isPermaLink;
 		this.value = value;
@@ -67,7 +67,7 @@ public class Guid extends SerializedObject {
 	 * 
 	 * @return The checks if is perma link
 	 */
-	public Integer getIsPermaLink() {
+	public boolean getIsPermaLink() {
 		return this.isPermaLink;
 	}
 
@@ -104,7 +104,7 @@ public class Guid extends SerializedObject {
 	 * 
 	 * @param isPermaLink : The new checks if is perma link
 	 */
-	public void setIsPermaLink(final Integer isPermaLink) {
+	public void setIsPermaLink(final boolean isPermaLink) {
 		this.isPermaLink = isPermaLink;
 	}
 

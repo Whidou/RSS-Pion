@@ -243,8 +243,13 @@ public class ArticleDAO extends SerializedObject {
 		if ((c1 != null) && (c1.getCount() != 0)) {
 			if (c1.moveToFirst()) {
 				do {
-					guid.setIsPermaLink(Integer.parseInt(c1.getString(c1
-							.getColumnIndex("isPermaLink"))));
+		            if (c1.getString(c1
+                            .getColumnIndex("isPermaLink"))
+                            .equalsIgnoreCase("true")) {
+		                guid.setIsPermaLink(true);
+		            } else {
+		                guid.setIsPermaLink(false);
+		            }
 					guid.setValue(c1.getString(c1.getColumnIndex("value")));
 				} while (c1.moveToNext());
 			}
