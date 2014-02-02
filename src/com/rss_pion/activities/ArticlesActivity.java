@@ -147,8 +147,8 @@ public class ArticlesActivity extends RSS_PionActivity {
 	 * Update list de articles.
 	 */
 	private void updateListDeArticles() {
-		final Iterator<ArticleDAO> it = Constants.focusedFluxDAO
-				.getArticlesDAO().iterator();
+		final Iterator<Article> it = Constants.focusedFlux
+				.getArticles().iterator();
 		Constants.listOfArticles.clear();
 		while (it.hasNext()) {
 			final Article article = new Article();

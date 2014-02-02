@@ -75,6 +75,49 @@ public class SqlHandler {
 		}
 	}
 
+    public Long insert(String table,
+            String nullColumnHack,
+            ContentValues values) {
+        if (this.sqlDatabase.isOpen()) {
+            this.sqlDatabase.close();
+        }
+        this.sqlDatabase = this.dbHelper.getWritableDatabase();
+        return this.sqlDatabase.insert(table, nullColumnHack, values);
+    }
+
+    public Integer update(String table,
+            ContentValues values,
+            String whereClause,
+            String[] whereArgs) {
+        if (this.sqlDatabase.isOpen()) {
+            this.sqlDatabase.close();
+        }
+        this.sqlDatabase = this.dbHelper.getWritableDatabase();
+        return this.sqlDatabase.update(table, values, whereClause, whereArgs);
+    }
+
+    public Cursor query(String table,
+            String[] columns,
+            String selection,
+            String[] selectionArgs,
+            String groupBy,
+            String having,
+            String orderBy,
+            String limit) {
+        if (this.sqlDatabase.isOpen()) {
+            this.sqlDatabase.close();
+        }
+        this.sqlDatabase = this.dbHelper.getWritableDatabase();
+        return this.sqlDatabase.query(table,
+                columns,
+                selection,
+                selectionArgs,
+                groupBy,
+                having,
+                orderBy,
+                limit);
+    }
+
 	/**
 	 * Insert dao.
 	 * 

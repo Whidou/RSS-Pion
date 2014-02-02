@@ -21,15 +21,17 @@ import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
+import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.rss.RSSParser;
 
 /*** MAIN CLASS ***************************************************************/
 
-public class Network {
+public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
 /***************************************************************************//**
  * Obtention d'un flux depuis le réseau
@@ -38,7 +40,7 @@ public class Network {
  * 
  * @return      Flux obtenu
  ******************************************************************************/
-    public static Flux getFlux(String feed) throws IOException {
+    private Flux getFlux(String feed) throws IOException {
 
         Flux flux;
         URL url;
@@ -89,6 +91,9 @@ public class Network {
         
         flux.setImage(new ImageDAO(image));
 
+        flux.setNumberOfArticles(flux.getArticles().size());
+        flux.setNumberOfReadArticles(0);
+
         return flux;
     }
 
@@ -97,13 +102,13 @@ public class Network {
  * 
  * @param flux  Object flux à mettre à jour
  ******************************************************************************/
-    public static void updateFlux(Flux flux) throws IOException {
+    private void updateFlux(Flux flux) throws IOException {
 
         Flux update;
         Long lastUpdateTimestamp = flux.getLastBuildDate();
 
         // Obtention de la dernière version du flux
-        update = Network.getFlux(flux.getFeed());
+        update = this.getFlux(flux.getFeed());
 
         // Vérification de la date de dernière mise à jour
         if (update.getLastBuildDate() <= lastUpdateTimestamp) {
@@ -139,5 +144,25 @@ public class Network {
                 flux.addArticle(article);
             }
         }
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
+
+        int i, nFlux;
+
+        i = 0;
+        nFlux = Constants.listOfFlux.size();
+
+        for (Flux flux : Constants.listOfFlux) {
+            try {
+                this.updateFlux(flux);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            publishProgress((int) ((i / (float) nFlux) * 100));
+        }
+
+        return null;
     }
 }

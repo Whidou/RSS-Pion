@@ -9,8 +9,15 @@
     <string name="permission_label">rss_pion_permissions</string>
     <string name="permission_description"> <!-- La gestion et la sauvegarde de vos flux RSS necessitent votre approbation. RSS_Pion s'engage a respecter la confidentialite et l'integrite de vos donnees. -->
     </string>
-    <string name="menu_add_flux">Add a flux to the DB</string>
+    <string name="menu_add_flux">Add a feed</string>
+    <string name="menu_maj">Update feeds</string>
     <string name="menu_help">Help</string>
     <string name="menu_exit">Exit</string>
+    <string name="add_flux">Ajouter un flux</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="url_flux">URL du flux</string>
+    <string name="invalid_url">URL invalide.</string>
+    <string name="canceled_add">Ajout annulé.</string>
     
 </resources>

@@ -17,7 +17,6 @@ import android.widget.ListView;
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.database.SqlHandler;
-import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.ui.adapter.ArticleAdapter;
 import com.rss_pion.ui.adapter.FluxAdapter;
 
@@ -28,7 +27,7 @@ import com.rss_pion.ui.adapter.FluxAdapter;
 public class Constants extends Application {
 
 	/** The focused flux dao. */
-	public static FluxDAO focusedFluxDAO = null;
+	public static Flux focusedFlux = null;
 
 	/** The list of flux. */
 	public static LinkedList<Flux> listOfFlux = new LinkedList<Flux>();

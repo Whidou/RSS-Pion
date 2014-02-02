@@ -147,7 +147,7 @@ public class TextInputDAO extends SerializedObject {
 							.getColumnIndex("image"))));
 					fluxDAO.setLanguage(c1.getString(c1
 							.getColumnIndex("language")));
-					fluxDAO.setLastBuildDate(c1.getString(c1
+					fluxDAO.setLastBuildDate(c1.getLong(c1
 							.getColumnIndex("lastBuildDate")));
 					fluxDAO.setLink(c1.getString(c1.getColumnIndex("link")));
 					fluxDAO.setManagingEditor(c1.getString(c1
@@ -159,7 +159,7 @@ public class TextInputDAO extends SerializedObject {
 									.getColumnIndex("numberOfReadArticles"))));
 					fluxDAO.setOwnRate(Integer.parseInt(c1.getString(c1
 							.getColumnIndex("ownRate"))));
-					fluxDAO.setPubDate(c1.getString(c1
+					fluxDAO.setPubDate(c1.getLong(c1
 							.getColumnIndex("pubDate")));
 					fluxDAO.setRating(c1.getString(c1.getColumnIndex("rating")));
 					fluxDAO.setSkipDays(c1.getString(c1

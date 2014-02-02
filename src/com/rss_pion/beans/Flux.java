@@ -10,22 +10,19 @@
 package com.rss_pion.beans;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-import com.rss_pion.database.dao.ArticleDAO;
-import com.rss_pion.database.dao.CategoryFluxDAO;
+import android.content.ContentValues;
+
+import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.ImageDAO;
-import com.rss_pion.database.dao.TextInputDAO;
-import com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Flux.
  */
-public class Flux extends NeedTranslationToBeSerializedObject {
+public class Flux {
 
 	/** The id. */
 	private Long id;
@@ -61,7 +58,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	private Long lastBuildDate;
 
 	/** The articles. */
-	private List<CategoryFlux> categories = new ArrayList<CategoryFlux>();
+	private List<String> categories = new ArrayList<String>();
 
 	/** The generator. */
 	private String generator;
@@ -144,7 +141,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			final String description, final String language,
 			final String copyright, final String managingEditor,
 			final String webMaster, final Long pubDate,
-			final Long lastBuildDate, final List<CategoryFlux> categories,
+			final Long lastBuildDate, final List<String> categories,
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageDAO image, final String rating,
 			final TextInput textInput, final List<Integer> skipHours,
@@ -179,468 +176,330 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 		this.urlImage = urlImage;
 	}
 
-	/**
-	 * Gets the articles.
-	 * 
-	 * @return The articles
-	 */
+	public Flux(String feed) {
+
+        super();
+
+        this.feed = feed;
+        this.lastBuildDate = Long.valueOf(0);
+
+        this.title = "";
+        this.link = "";
+        this.description = "";
+        this.language = "";
+        this.copyright = "";
+        this.managingEditor = "";
+        this.webMaster = "";
+        this.pubDate = Long.valueOf(0);
+        this.categories = new ArrayList<String>();
+        this.generator = "";
+        this.docs = "";
+        this.cloud =null;
+        this.ttl = 0;
+        this.image = null;
+        this.rating = "";
+        this.textInput = null;
+        this.skipHours = new ArrayList<Integer>();
+        this.skipDays = new ArrayList<String>();
+        this.numberOfReadArticles = 0;
+        this.numberOfArticles = 0;
+        this.ownRate = 0;
+        this.articles = null;
+        this.urlImage = "";
+    }
+	
+	public Long insertIntoDB() {
+
+	    ContentValues valuesMap;
+	    Long idLinkedObject;
+	    String strValue;
+
+	    // Si le flux n'existe pas dans la BDD
+	    if (this.id == null) {
+
+	        // Préparation des champs du flux
+	        valuesMap = new ContentValues();
+	        valuesMap.put("feed", this.feed);
+
+            // Insertion du flux
+	        this.id = Constants.sqlHandler.insert(
+	                FluxDAO.nameOfTheAssociatedTable,
+	                null,
+	                valuesMap);
+	    }
+
+        // Préparation des champs du flux
+	    valuesMap = new ContentValues();
+        valuesMap.put("copyright", this.copyright);
+        valuesMap.put("description", this.description);
+        valuesMap.put("docs", this.docs);
+        valuesMap.put("generator", this.generator);
+        valuesMap.put("language", this.language);
+        valuesMap.put("lastBuildDate", this.lastBuildDate);
+        valuesMap.put("link", this.link);
+        valuesMap.put("managingEditor", this.managingEditor);
+        valuesMap.put("numberOfArticles", this.numberOfArticles);
+        valuesMap.put("numberOfReadArticles", this.numberOfReadArticles);
+        valuesMap.put("ownRate", this.ownRate);
+        valuesMap.put("pubDate", this.pubDate);
+        valuesMap.put("rating", this.rating);
+        valuesMap.put("title", this.title);
+        valuesMap.put("ttl", this.ttl);
+        valuesMap.put("webMaster", this.webMaster);
+        valuesMap.put("urlImage", this.urlImage);
+
+        // Concaténation des jours
+        if (this.skipDays != null) {
+            strValue = new String();
+            for (String day : this.skipDays){
+                strValue.concat(day);
+            }
+            valuesMap.put("skipDays", strValue);
+        }
+
+        // Concaténation des heures
+        if (this.skipHours != null) {
+            strValue = new String();
+            for (Integer hour : this.skipHours){
+                strValue.concat(hour.toString());
+            }
+            valuesMap.put("skipHours", strValue);
+        }
+
+        if (this.cloud != null) {
+            idLinkedObject = this.cloud.insertIntoDB();
+            valuesMap.put("idCloud", idLinkedObject);
+        } else {
+            valuesMap.put("idCloud", (Long) null);
+        }
+/*
+        if (this.image != null) {
+            idLinkedObject = this.image.insertIntoDB();
+            valuesMap.put("idImage", idLinkedObject);
+        } else {
+            valuesMap.put("idImage", (Long) null);
+        }
+
+        if (this.image != null) {
+            idLinkedObject = this.textInput.insertIntoDB();
+            valuesMap.put("idTextInput", idLinkedObject);
+        } else {
+            valuesMap.put("idTextInput", (Long) null);
+        }
+*/
+        // Update du flux
+        Constants.sqlHandler.update(FluxDAO.nameOfTheAssociatedTable,
+                valuesMap, 
+                "id=?",
+                new String[] {this.id.toString()});
+
+        return this.id;
+	}
+
 	public List<Article> getArticles() {
 		return this.articles;
 	}
 
-	/**
-	 * Gets the category.
-	 * 
-	 * @return The category
-	 */
-	public List<CategoryFlux> getCategories() {
+	public List<String> getCategories() {
 		return this.categories;
 	}
 
-	/**
-	 * Gets the cloud.
-	 * 
-	 * @return The cloud
-	 */
 	public Cloud getCloud() {
 		return this.cloud;
 	}
 
-	/**
-	 * Gets the copyright.
-	 * 
-	 * @return The copyright
-	 */
 	public String getCopyright() {
 		return this.copyright;
 	}
 
-	/**
-	 * Gets the description.
-	 * 
-	 * @return The description
-	 */
 	public String getDescription() {
 		return this.description;
 	}
 
-	/**
-	 * Gets the docs.
-	 * 
-	 * @return The docs
-	 */
 	public String getDocs() {
 		return this.docs;
 	}
 
-	/**
-	 * Gets the feed.
-	 * 
-	 * @return The feed
-	 */
 	public String getFeed() {
 		return this.feed;
 	}
 
-	/**
-	 * Gets the generator.
-	 * 
-	 * @return The generator
-	 */
 	public String getGenerator() {
 		return this.generator;
 	}
 
-	/**
-	 * Gets the id.
-	 * 
-	 * @return The id
-	 */
 	public Long getId() {
 		return this.id;
 	}
 
-	/**
-	 * Gets the image.
-	 * 
-	 * @return The image
-	 */
 	public ImageDAO getImage() {
 		return this.image;
 	}
 
-	/**
-	 * Gets the language.
-	 * 
-	 * @return The language
-	 */
 	public String getLanguage() {
 		return this.language;
 	}
 
-	/**
-	 * Gets the last build date.
-	 * 
-	 * @return The last build date
-	 */
 	public Long getLastBuildDate() {
 		return this.lastBuildDate;
 	}
 
-	/**
-	 * Gets the link.
-	 * 
-	 * @return The link
-	 */
 	public String getLink() {
 		return this.link;
 	}
 
-	/**
-	 * Gets the managing editor.
-	 * 
-	 * @return The managing editor
-	 */
 	public String getManagingEditor() {
 		return this.managingEditor;
 	}
 
-	/**
-	 * Gets the number of articles.
-	 * 
-	 * @return The number of articles
-	 */
 	public Integer getNumberOfArticles() {
 		return this.numberOfArticles;
 	}
 
-	/**
-	 * Gets the number of read articles.
-	 * 
-	 * @return The number of read articles
-	 */
 	public Integer getNumberOfReadArticles() {
 		return this.numberOfReadArticles;
 	}
 
-	/**
-	 * Gets the own rate.
-	 * 
-	 * @return The own rate
-	 */
 	public Integer getOwnRate() {
 		return this.ownRate;
 	}
 
-	/**
-	 * Gets the pub date.
-	 * 
-	 * @return The pub date
-	 */
 	public Long getPubDate() {
 		return this.pubDate;
 	}
 
-	/**
-	 * Gets the rating.
-	 * 
-	 * @return The rating
-	 */
 	public String getRating() {
 		return this.rating;
 	}
 
-	/**
-	 * Gets the skip days.
-	 * 
-	 * @return The skip days
-	 */
 	public List<String> getSkipDays() {
 		return this.skipDays;
 	}
 
-	/**
-	 * Gets the skip hours.
-	 * 
-	 * @return The skip hours
-	 */
 	public List<Integer> getSkipHours() {
 		return this.skipHours;
 	}
 
-	/**
-	 * Gets the text input.
-	 * 
-	 * @return The text input
-	 */
 	public TextInput getTextInput() {
 		return this.textInput;
 	}
 
-	/**
-	 * Gets the title.
-	 * 
-	 * @return The title
-	 */
 	public String getTitle() {
 		return this.title;
 	}
 
-	/**
-	 * Gets the ttl.
-	 * 
-	 * @return The ttl
-	 */
 	public Integer getTtl() {
 		return this.ttl;
 	}
 
-	/***************************************************************************
-	 * @return The urlImage (String)
-	 ***************************************************************************/
 	public String getUrlImage() {
 		return this.urlImage;
 	}
 
-	/**
-	 * Gets the web master.
-	 * 
-	 * @return The web master
-	 */
 	public String getWebMaster() {
 		return this.webMaster;
 	}
 
-	/**
-	 * Sets the articles.
-	 * 
-	 * @param articles : The new articles
-	 */
 	public void setArticles(final List<Article> articles) {
 		this.articles = articles;
 	}
 
-	/**
-	 * Sets the category.
-	 * 
-	 * @param category : The new category
-	 */
-	public void setCategories(final List<CategoryFlux> categories) {
+	public void setCategories(final List<String> categories) {
 		this.categories = categories;
 	}
 
-	/**
-	 * Sets the cloud.
-	 * 
-	 * @param cloud : The new cloud
-	 */
 	public void setCloud(final Cloud cloud) {
 		this.cloud = cloud;
 	}
 
-	/**
-	 * Sets the copyright.
-	 * 
-	 * @param copyright : The new copyright
-	 */
 	public void setCopyright(final String copyright) {
 		this.copyright = copyright;
 	}
 
-	/**
-	 * Sets the description.
-	 * 
-	 * @param description : The new description
-	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
 
-	/**
-	 * Sets the docs.
-	 * 
-	 * @param docs : The new docs
-	 */
 	public void setDocs(final String docs) {
 		this.docs = docs;
 	}
 
-	/**
-	 * Sets the feed.
-	 * 
-	 * @param feed : The new feed
-	 */
 	public void setFeed(final String feed) {
 		this.feed = feed;
 	}
 
-	/**
-	 * Sets the generator.
-	 * 
-	 * @param generator : The new generator
-	 */
 	public void setGenerator(final String generator) {
 		this.generator = generator;
 	}
 
-	/**
-	 * Sets the id.
-	 * 
-	 * @param id : The new id
-	 */
 	public void setId(final Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * Sets the image.
-	 * 
-	 * @param image : The new image
-	 */
 	public void setImage(final ImageDAO image) {
 		this.image = image;
 	}
 
-	/**
-	 * Sets the language.
-	 * 
-	 * @param language : The new language
-	 */
 	public void setLanguage(final String language) {
 		this.language = language;
 	}
 
-	/**
-	 * Sets the last build date.
-	 * 
-	 * @param lastBuildDate : The new last build date
-	 */
 	public void setLastBuildDate(final Long lastBuildDate) {
 		this.lastBuildDate = lastBuildDate;
 	}
 
-	/**
-	 * Sets the link.
-	 * 
-	 * @param link : The new link
-	 */
 	public void setLink(final String link) {
 		this.link = link;
 	}
 
-	/**
-	 * Sets the managing editor.
-	 * 
-	 * @param managingEditor : The new managing editor
-	 */
 	public void setManagingEditor(final String managingEditor) {
 		this.managingEditor = managingEditor;
 	}
 
-	/**
-	 * Sets the number of articles.
-	 * 
-	 * @param numberOfArticles : The new number of articles
-	 */
 	public void setNumberOfArticles(final Integer numberOfArticles) {
 		this.numberOfArticles = numberOfArticles;
 	}
 
-	/**
-	 * Sets the number of read articles.
-	 * 
-	 * @param numberOfReadArticles : The new number of read articles
-	 */
 	public void setNumberOfReadArticles(final Integer numberOfReadArticles) {
 		this.numberOfReadArticles = numberOfReadArticles;
 	}
 
-	/**
-	 * Sets the own rate.
-	 * 
-	 * @param ownRate : The new own rate
-	 */
 	public void setOwnRate(final Integer ownRate) {
 		this.ownRate = ownRate;
 	}
 
-	/**
-	 * Sets the pub date.
-	 * 
-	 * @param pubDate : The new pub date
-	 */
 	public void setPubDate(final Long pubDate) {
 		this.pubDate = pubDate;
 	}
 
-	/**
-	 * Sets the rating.
-	 * 
-	 * @param rating : The new rating
-	 */
 	public void setRating(final String rating) {
 		this.rating = rating;
 	}
 
-	/**
-	 * Sets the skip days.
-	 * 
-	 * @param skipDays : The new skip days
-	 */
 	public void setSkipDays(final List<String> skipDays) {
 		this.skipDays = skipDays;
 	}
 
-	/**
-	 * Sets the skip hours.
-	 * 
-	 * @param skipHours : The new skip hours
-	 */
 	public void setSkipHours(final List<Integer> skipHours) {
 		this.skipHours = skipHours;
 	}
 
-	/**
-	 * Sets the text input.
-	 * 
-	 * @param textInput : The new text input
-	 */
 	public void setTextInput(final TextInput textInput) {
 		this.textInput = textInput;
 	}
 
-	/**
-	 * Sets the title.
-	 * 
-	 * @param title : The new title
-	 */
 	public void setTitle(final String title) {
 		this.title = title;
 	}
 
-	/**
-	 * Sets the ttl.
-	 * 
-	 * @param ttl : The new ttl
-	 */
 	public void setTtl(final Integer ttl) {
 		this.ttl = ttl;
 	}
 
-	/**
-	 * Sets the url image.
-	 * 
-	 * @param ttl : The url image
-	 */
 	public void setUrlImage(final String urlImage) {
 		this.urlImage = urlImage;
 	}
 
-	/**
-	 * Sets the web master.
-	 * 
-	 * @param webMaster : The new web master
-	 */
 	public void setWebMaster(final String webMaster) {
 		this.webMaster = webMaster;
 	}
@@ -648,6 +507,7 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 	/***************************************************************************
 	 * @see com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject#translateDaoToObject(java.lang.Object)
 	 ***************************************************************************/
+/*
 	@Override
 	public void translateDaoToObject(final Object object) {
 	    List<Integer> hoursList = new ArrayList<Integer>();
@@ -677,13 +537,13 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.id = fluxDAO.getId();
 			this.image = fluxDAO.getImage();
 			this.language = fluxDAO.getLanguage();
-			this.lastBuildDate = Long.decode(fluxDAO.getLastBuildDate());
+			this.lastBuildDate = fluxDAO.getLastBuildDate();
 			this.link = fluxDAO.getLink();
 			this.managingEditor = fluxDAO.getManagingEditor();
 			this.numberOfArticles = fluxDAO.getNumberOfArticles();
 			this.numberOfReadArticles = fluxDAO.getNumberOfReadArticles();
 			this.ownRate = fluxDAO.getOwnRate();
-			this.pubDate = Long.decode(fluxDAO.getPubDate());
+			this.pubDate = fluxDAO.getPubDate();
 			this.rating = fluxDAO.getRating();
 			this.skipDays = Arrays.asList(fluxDAO.getSkipDays().split("/"));
 			for (String strHour : fluxDAO.getSkipHours().split("/")) {
@@ -703,49 +563,67 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.urlImage = fluxDAO.getUrlImage();
 		}
 	}
-
+*/
 	/***************************************************************************
 	 * @see com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject#translateObjectToDao(java.lang.Long[])
 	 ***************************************************************************/
+/*
 	@Override
 	public Object translateObjectToDao(final Long... ids)
 			throws IllegalAccessException, IllegalArgumentException {
+
 		final FluxDAO fluxDAO = new FluxDAO();
-		fluxDAO.setIdCloud(this.getCloud().insertInTheDataBase());
-		fluxDAO.setCopyright(this.getCopyright());
-		fluxDAO.setDescription(this.getDescription());
-		fluxDAO.setDocs(this.getDocs());
-		fluxDAO.setFeed(this.getFeed());
-		fluxDAO.setGenerator(this.getGenerator());
-		fluxDAO.setIdImage(this.getImage().insertInTheDataBase());
+
+		if (this.cloud != null) {
+		    fluxDAO.setIdCloud(this.cloud.insertInTheDataBase());
+		}
+        fluxDAO.setCopyright(this.copyright);
+        fluxDAO.setDescription(this.description);
+		fluxDAO.setDocs(this.docs);
+		fluxDAO.setFeed(this.feed);
+		fluxDAO.setGenerator(this.generator);
+        if (this.image != null) {
+            fluxDAO.setIdImage(this.image.insertInTheDataBase());
+        }
 		fluxDAO.setLanguage(this.getLanguage());
-		fluxDAO.setLastBuildDate(Long.toString(this.getLastBuildDate()));
-		fluxDAO.setLink(this.getLink());
-		fluxDAO.setManagingEditor(this.getManagingEditor());
-		fluxDAO.setNumberOfArticles(this.getNumberOfArticles());
-		fluxDAO.setNumberOfReadArticles(this.getNumberOfReadArticles());
-		fluxDAO.setOwnRate(this.getOwnRate());
-		fluxDAO.setPubDate(Long.toString(this.getPubDate()));
-		fluxDAO.setRating(this.getRating());
-		fluxDAO.setSkipDays(this.getSkipDays().toString()
+        if (this.lastBuildDate != null) {
+            fluxDAO.setLastBuildDate(this.lastBuildDate);
+        }
+		fluxDAO.setLink(this.link);
+		fluxDAO.setManagingEditor(this.managingEditor);
+		fluxDAO.setNumberOfArticles(this.numberOfArticles);
+		fluxDAO.setNumberOfReadArticles(this.numberOfReadArticles);
+		fluxDAO.setOwnRate(this.ownRate);
+        if (this.pubDate != null) {
+            fluxDAO.setPubDate(this.pubDate);
+        }
+		fluxDAO.setRating(this.rating);
+        if (this.skipDays != null) {
+    		fluxDAO.setSkipDays(this.skipDays.toString()
+    				.replace("[", "").replace("]", "").replace(", ", "/"));
+        }
+        if (this.skipHours != null) {
+            fluxDAO.setSkipHours(this.skipHours.toString()
 				.replace("[", "").replace("]", "").replace(", ", "/"));
-		fluxDAO.setSkipHours(this.getSkipHours().toString()
-				.replace("[", "").replace("]", "").replace(", ", "/"));
-		final TextInputDAO textInputDAO = (TextInputDAO) this.getTextInput()
-				.translateObjectToDao();
-		fluxDAO.setIdTextInput(textInputDAO.insertInTheDataBase());
-		fluxDAO.setTitle(this.getTitle());
-		fluxDAO.setTtl(this.getTtl());
-		fluxDAO.setWebMaster(this.getWebMaster());
-		fluxDAO.setUrlImage(this.getUrlImage());
+        }
+        if (this.textInput != null) {
+    		final TextInputDAO textInputDAO = (TextInputDAO) this.getTextInput()
+    				.translateObjectToDao();
+    		fluxDAO.setIdTextInput(textInputDAO.insertInTheDataBase());
+        }
+		fluxDAO.setTitle(this.title);
+		fluxDAO.setTtl(this.ttl);
+		fluxDAO.setWebMaster(this.webMaster);
+		fluxDAO.setUrlImage(this.urlImage);
+
 		return fluxDAO;
 	}
-
+*/
     public void addArticle(Article article) {
         this.articles.add(article);
     }
 
-    public void addCategory(CategoryFlux category) {
+    public void addCategory(String category) {
         this.categories.add(category);
     }
 

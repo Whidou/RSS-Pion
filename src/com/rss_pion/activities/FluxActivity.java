@@ -15,7 +15,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,9 +34,10 @@ import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlHandler;
-import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.ImageDAO;
+import com.rss_pion.dialogs.AddFluxDialogFragment;
+import com.rss_pion.network.NetworkUpdateTask;
 import com.rss_pion.tests.Tests;
 import com.rss_pion.ui.adapter.FluxAdapter;
 
@@ -111,13 +111,13 @@ public class FluxActivity extends RSS_PionActivity {
 					public void onItemClick(final AdapterView<?> arg0,
 							final View arg1, final int arg2, final long arg3) {
 						// Mémorisation du flux à l'origine du click :
-						Constants.focusedFluxDAO = FluxDAO
-								.getFluxDAO(Constants.listOfFlux.get(arg2)
+						Constants.focusedFlux = FluxDAO
+								.getFluxFromDB(Constants.listOfFlux.get(arg2)
 										.getId());
 
 						// Chargement des articles du flux :
-						final Iterator<ArticleDAO> it = Constants.focusedFluxDAO
-								.getArticlesDAO().iterator();
+						final Iterator<Article> it = Constants.focusedFlux
+								.getArticles().iterator();
 						Constants.listOfArticles.clear();
 						while (it.hasNext()) {
 							final Article article = new Article();
@@ -139,12 +139,12 @@ public class FluxActivity extends RSS_PionActivity {
 					public boolean onItemLongClick(final AdapterView<?> arg0,
 							final View arg1, final int arg2, final long arg3) {
 						// Mémorisation du flux à l'origine du click :
-						Constants.focusedFluxDAO = FluxDAO
-								.getFluxDAO(Constants.listOfFlux.get(arg2)
+						Constants.focusedFlux = FluxDAO
+								.getFluxFromDB(Constants.listOfFlux.get(arg2)
 										.getId());
 
 						// Suppression du flux à l'origine du click :
-						FluxDAO.deleteFluxInTheDataBase(Constants.focusedFluxDAO
+						FluxDAO.deleteFluxInTheDataBase(Constants.focusedFlux
 								.getId());
 
 						// Rafraichissement de l'affichage :
@@ -188,7 +188,9 @@ public class FluxActivity extends RSS_PionActivity {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.add_flux:
-			// Ajout manuel d'un nouveau flux :
+		    (new AddFluxDialogFragment()).show(getFragmentManager(), "addFlux");
+		    /*
+			// Ajout d'un nouveau flux de test :
 			try {
 				final FluxDAO fluxDAO = (FluxDAO) (Tests.flux_1
 						.translateObjectToDao());
@@ -198,8 +200,12 @@ public class FluxActivity extends RSS_PionActivity {
 			} catch (final IllegalArgumentException e) {
 				Log.d("onOptionsItemSelected, add_flux", e.getMessage());
 			}
+            */
 			this.updateListDeFlux();
 			return true;
+        case R.id.maj_flux:
+            (new NetworkUpdateTask()).execute();
+            return true;
 		case R.id.help_flux:
 			return true;
 		case R.id.exit_flux:
@@ -235,10 +241,7 @@ public class FluxActivity extends RSS_PionActivity {
 	 */
 	private void updateListDeFlux() {
 		Constants.listOfFlux.clear();
-		final Iterator<FluxDAO> it = FluxDAO.getFluxDAO().iterator();
-		while (it.hasNext()) {
-			final Flux flux = new Flux();
-			flux.translateDaoToObject(it.next());
+		for (Flux flux : FluxDAO.getFluxFromDB()) {
 			Constants.listOfFlux.add(flux);
 		}
 		Constants.adapterOfFlux.notifyDataSetChanged();

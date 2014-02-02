@@ -146,8 +146,8 @@ public class Tests extends Application {
 			"flux_1_link", "flux_1_description", "flux_1_language",
 			"flux_1_copyright", "flux_1_managingEditor", "flux_1_webMaster",
 			Long.valueOf(3000), Long.valueOf(3500),
-			Arrays.asList(new CategoryFlux[] { Tests.flux_1_categorie_1,
-					Tests.flux_1_categorie_2 }), "flux_1_generator",
+			Arrays.asList(new String[] { "Tests.flux_1_categorie_1",
+					"Tests.flux_1_categorie_2" }), "flux_1_generator",
 			"flux_1_docs", Tests.flux_1_cloud, 1, Tests.flux_1_image,
 			"flux_1_rating", Tests.flux_1_textInput, Tests.flux_1_skipHours,
 			Tests.flux_1_skipDays, 1, 1, 1, Arrays.asList(new Article[] {

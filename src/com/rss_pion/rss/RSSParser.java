@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-02
- * @version 1.2
+ * @version 1.3
  *
  * Interpréteur pour flux RSS.
  ******************************************************************************/
@@ -14,7 +14,6 @@ package com.rss_pion.rss;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.CategoryArticle;
-import com.rss_pion.beans.CategoryFlux;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.beans.TextInput;
@@ -225,7 +224,7 @@ public class RSSParser extends DefaultHandler {
 
             // Attributs du flux
             if (qName.equalsIgnoreCase("category")) {
-                this.flux.addCategory(new CategoryFlux(value));
+                this.flux.addCategory(value);
             } else if (qName.equalsIgnoreCase("copyright")) {
                 this.flux.setCopyright(value);
             } else if (qName.equalsIgnoreCase("day")) {

@@ -12,10 +12,13 @@ package com.rss_pion.beans;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.util.Log;
 
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlDbHelper;
+import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.abstracts.SerializedObject;
 
 // TODO: Auto-generated Javadoc
@@ -32,16 +35,18 @@ public class Cloud extends SerializedObject {
 	static {
 		Cloud.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
 		Cloud.fieldsOfTheAssociatedTable.add(new String[] { "domain",
-				"TEXT NOT NULL" });
+				"TEXT" });
 		Cloud.fieldsOfTheAssociatedTable.add(new String[] { "path",
-				"TEXT NOT NULL" });
+				"TEXT" });
 		Cloud.fieldsOfTheAssociatedTable.add(new String[] { "port",
-				"INTEGER NOT NULL" });
+				"INTEGER" });
 		Cloud.fieldsOfTheAssociatedTable.add(new String[] { "protocol",
-				"TEXT NOT NULL" });
+				"TEXT" });
 		Cloud.fieldsOfTheAssociatedTable.add(new String[] {
-				"registerProcedure", "TEXT NOT NULL" });
+				"registerProcedure", "TEXT" });
 	}
+
+    private Long id;
 
 	/** The domain. */
 	private String domain;
@@ -83,48 +88,49 @@ public class Cloud extends SerializedObject {
 		this.registerProcedure = registerProcedure;
 		this.protocol = protocol;
 	}
+    public Cloud(final Long id) {
 
-	/**
-	 * Gets the domain.
-	 * 
-	 * @return The domain
-	 */
+        super();
+
+        final Cursor c = Constants.sqlHandler.query(
+                FluxDAO.nameOfTheAssociatedTable,
+                null,
+                "id=?",
+                new String[] {id.toString()},
+                null,
+                null,
+                null,
+                null);
+
+            if ((c == null) || (c.getCount() == 0)) {
+                return;
+            }
+            c.moveToFirst();
+    
+            this.domain = c.getString(c.getColumnIndex("domain"));
+            this.port = c.getInt(c.getColumnIndex("port"));
+            this.path = c.getString(c.getColumnIndex("path"));
+            this.registerProcedure = c.getString(
+                    c.getColumnIndex("registerProcedure"));
+            this.protocol = c.getString(c.getColumnIndex("protocol"));
+    }
+
 	public String getDomain() {
 		return this.domain;
 	}
 
-	/**
-	 * Gets the path.
-	 * 
-	 * @return The path
-	 */
 	public String getPath() {
 		return this.path;
 	}
 
-	/**
-	 * Gets the port.
-	 * 
-	 * @return The port
-	 */
 	public Integer getPort() {
 		return this.port;
 	}
 
-	/**
-	 * Gets the protocol.
-	 * 
-	 * @return The protocol
-	 */
 	public String getProtocol() {
 		return this.protocol;
 	}
 
-	/**
-	 * Gets the register procedure.
-	 * 
-	 * @return The register procedure
-	 */
 	public String getRegisterProcedure() {
 		return this.registerProcedure;
 	}
@@ -150,47 +156,56 @@ public class Cloud extends SerializedObject {
 		return SqlDbHelper.lastInsertId(Cloud.nameOfTheAssociatedTable);
 	}
 
-	/**
-	 * Sets the domain.
-	 * 
-	 * @param domain : The new domain
-	 */
+    public Long insertIntoDB() {
+
+        ContentValues valuesMap;
+
+        // Si le cloud n'existe pas dans la BDD
+        if (this.id == null) {
+
+            // Préparation des champs
+            valuesMap = new ContentValues();
+
+            // Insertion
+            this.id = Constants.sqlHandler.insert(
+                    FluxDAO.nameOfTheAssociatedTable,
+                    "domain",
+                    valuesMap);
+        }
+
+        // Préparation des champs
+        valuesMap = new ContentValues();
+        valuesMap.put("domain", this.domain);
+        valuesMap.put("port", this.port);
+        valuesMap.put("path", this.path);
+        valuesMap.put("protocol", this.protocol);
+        valuesMap.put("registerProcedure", this.registerProcedure);
+
+        // Update
+        Constants.sqlHandler.update(FluxDAO.nameOfTheAssociatedTable,
+                valuesMap, 
+                "id=?",
+                new String[] {this.id.toString()});
+
+        return this.id;
+    }
+
 	public void setDomain(final String domain) {
 		this.domain = domain;
 	}
 
-	/**
-	 * Sets the path.
-	 * 
-	 * @param path : The new path
-	 */
 	public void setPath(final String path) {
 		this.path = path;
 	}
 
-	/**
-	 * Sets the port.
-	 * 
-	 * @param port : The new port
-	 */
 	public void setPort(final Integer port) {
 		this.port = port;
 	}
 
-	/**
-	 * Sets the protocol.
-	 * 
-	 * @param protocol : The new protocol
-	 */
 	public void setProtocol(final String protocol) {
 		this.protocol = protocol;
 	}
 
-	/**
-	 * Sets the register procedure.
-	 * 
-	 * @param registerProcedure : The new register procedure
-	 */
 	public void setRegisterProcedure(final String registerProcedure) {
 		this.registerProcedure = registerProcedure;
 	}
