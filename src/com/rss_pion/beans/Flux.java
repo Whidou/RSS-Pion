@@ -687,7 +687,11 @@ public class Flux extends NeedTranslationToBeSerializedObject {
 			this.rating = fluxDAO.getRating();
 			this.skipDays = Arrays.asList(fluxDAO.getSkipDays().split("/"));
 			for (String strHour : fluxDAO.getSkipHours().split("/")) {
-			    hoursList.add(Integer.parseInt(strHour));
+			    try {
+			        hoursList.add(Integer.parseInt(strHour));
+			    } catch (NumberFormatException e) {
+			        // Si le string n'est pas un nombre, il est ignoré.
+			    }
 			}
 			this.skipHours = hoursList;
 			final TextInput textInput = new TextInput();
