@@ -21,32 +21,14 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	/** The title. */
 	private String title;
 
-	/** The link. */
-	private String link;
-
 	/** The description. */
 	private String description;
 
 	/** The author. */
-	private String author;
+	private String name;
 
-	/** The category. */
-	private String category;
-
-	/** The comments. */
-	private String comments;
-
-	/** The enclosure. */
-	private Enclosure enclosure;
-
-	/** The guid. */
-	private Guid guid;
-
-	/** The pub date. */
-	private String pubDate;
-
-	/** The source. */
-	private String source;
+	/** The link. */
+	private String link;
 
 	/**
 	 * Instantiates a new text input.
@@ -71,21 +53,12 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	 * @param source : The source
 	 */
 	public TextInput(final String title, final String link,
-			final String description, final String author,
-			final String category, final String comments,
-			final Enclosure enclosure, final Guid guid, final String pubDate,
-			final String source) {
+			final String description, final String name) {
 		super();
 		this.title = title;
 		this.link = link;
 		this.description = description;
-		this.author = author;
-		this.category = category;
-		this.comments = comments;
-		this.enclosure = enclosure;
-		this.guid = guid;
-		this.pubDate = pubDate;
-		this.source = source;
+		this.name = name;
 	}
 
 	/**
@@ -93,26 +66,8 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	 *
 	 * @return The author
 	 */
-	public String getAuthor() {
-		return this.author;
-	}
-
-	/**
-	 * Gets the category.
-	 *
-	 * @return The category
-	 */
-	public String getCategory() {
-		return this.category;
-	}
-
-	/**
-	 * Gets the comments.
-	 *
-	 * @return The comments
-	 */
-	public String getComments() {
-		return this.comments;
+	public String getName() {
+		return this.name;
 	}
 
 	/**
@@ -125,48 +80,12 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	}
 
 	/**
-	 * Gets the enclosure.
-	 *
-	 * @return The enclosure
-	 */
-	public Enclosure getEnclosure() {
-		return this.enclosure;
-	}
-
-	/**
-	 * Gets the guid.
-	 *
-	 * @return The guid
-	 */
-	public Guid getGuid() {
-		return this.guid;
-	}
-
-	/**
 	 * Gets the link.
 	 *
 	 * @return The link
 	 */
 	public String getLink() {
 		return this.link;
-	}
-
-	/**
-	 * Gets the pub date.
-	 *
-	 * @return The pub date
-	 */
-	public String getPubDate() {
-		return this.pubDate;
-	}
-
-	/**
-	 * Gets the source.
-	 *
-	 * @return The source
-	 */
-	public String getSource() {
-		return this.source;
 	}
 
 	/**
@@ -183,26 +102,8 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	 *
 	 * @param author : The new author
 	 */
-	public void setAuthor(final String author) {
-		this.author = author;
-	}
-
-	/**
-	 * Sets the category.
-	 *
-	 * @param category : The new category
-	 */
-	public void setCategory(final String category) {
-		this.category = category;
-	}
-
-	/**
-	 * Sets the comments.
-	 *
-	 * @param comments : The new comments
-	 */
-	public void setComments(final String comments) {
-		this.comments = comments;
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	/**
@@ -215,48 +116,12 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	}
 
 	/**
-	 * Sets the enclosure.
-	 *
-	 * @param enclosure : The new enclosure
-	 */
-	public void setEnclosure(final Enclosure enclosure) {
-		this.enclosure = enclosure;
-	}
-
-	/**
-	 * Sets the guid.
-	 *
-	 * @param guid : The new guid
-	 */
-	public void setGuid(final Guid guid) {
-		this.guid = guid;
-	}
-
-	/**
 	 * Sets the link.
 	 *
 	 * @param link : The new link
 	 */
 	public void setLink(final String link) {
 		this.link = link;
-	}
-
-	/**
-	 * Sets the pub date.
-	 *
-	 * @param pubDate : The new pub date
-	 */
-	public void setPubDate(final String pubDate) {
-		this.pubDate = pubDate;
-	}
-
-	/**
-	 * Sets the source.
-	 *
-	 * @param source : The new source
-	 */
-	public void setSource(final String source) {
-		this.source = source;
 	}
 
 	/**
@@ -276,15 +141,9 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 		final TextInputDAO textInputDAO = object instanceof TextInputDAO ? (TextInputDAO) object
 				: null;
 		if (textInputDAO != null) {
-			this.author = textInputDAO.getAuthor();
-			this.category = textInputDAO.getCategory();
-			this.comments = textInputDAO.getComments();
+			this.name = textInputDAO.getName();
 			this.description = textInputDAO.getDescription();
-			this.enclosure = textInputDAO.getEnclosure();
-			this.guid = textInputDAO.getGuid();
 			this.link = textInputDAO.getLink();
-			this.pubDate = textInputDAO.getPubDate();
-			this.source = textInputDAO.getSource();
 			this.title = textInputDAO.getTitle();
 		}
 	}
@@ -296,15 +155,9 @@ public class TextInput extends NeedTranslationToBeSerializedObject {
 	public Object translateObjectToDao(final Long... ids)
 			throws IllegalAccessException, IllegalArgumentException {
 		final TextInputDAO textInputDAO = new TextInputDAO();
-		textInputDAO.setAuthor(this.getAuthor());
-		textInputDAO.setCategory(this.getCategory());
-		textInputDAO.setComments(this.getComments());
+		textInputDAO.setName(this.getName());
 		textInputDAO.setDescription(this.getDescription());
-		textInputDAO.setIdEnclosure(this.getEnclosure().insertInTheDataBase());
-		textInputDAO.setIdGuid(this.getGuid().insertInTheDataBase());
 		textInputDAO.setLink(this.getLink());
-		textInputDAO.setPubDate(this.getPubDate());
-		textInputDAO.setSource(this.getSource());
 		textInputDAO.setTitle(this.getTitle());
 		return textInputDAO;
 	}

@@ -815,23 +815,11 @@ public class FluxDAO extends SerializedObject {
 		if ((c1 != null) && (c1.getCount() != 0)) {
 			if (c1.moveToFirst()) {
 				do {
-					textInput.setAuthor(c1.getString(c1
-							.getColumnIndex("author")));
-					textInput.setCategory(c1.getString(c1
-							.getColumnIndex("category")));
-					textInput.setComments(c1.getString(c1
-							.getColumnIndex("comments")));
+					textInput.setName(c1.getString(c1
+							.getColumnIndex("name")));
 					textInput.setDescription(c1.getString(c1
 							.getColumnIndex("description")));
-					textInput.setIdEnclosure(Long.parseLong(c1.getString(c1
-							.getColumnIndex("idEnclosure"))));
-					textInput.setIdGuid(Long.parseLong(c1.getString(c1
-							.getColumnIndex("idGuid"))));
 					textInput.setLink(c1.getString(c1.getColumnIndex("link")));
-					textInput.setPubDate(c1.getString(c1
-							.getColumnIndex("pubDate")));
-					textInput.setSource(c1.getString(c1
-							.getColumnIndex("source")));
 					textInput
 							.setTitle(c1.getString(c1.getColumnIndex("title")));
 				} while (c1.moveToNext());

@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-02
- * @version 1.1
+ * @version 1.2
  *
  * Interpréteur pour flux RSS.
  ******************************************************************************/
@@ -26,7 +26,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -193,7 +195,11 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("link")) {
                 this.article.setLink(value);
             } else if (qName.equalsIgnoreCase("pubDate")) {
-                this.article.setPubDate(dateFormat.parse(value).getTime());
+                try {
+                    this.article.setPubDate(dateFormat.parse(value).getTime());
+                } catch (ParseException e) {
+                    this.article.setPubDate((new Date()).getTime());
+                }
             } else if (qName.equalsIgnoreCase("source")) {
                 this.article.setSource(value);
             } else if (qName.equalsIgnoreCase("title")) {
@@ -235,13 +241,21 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("language")) {
                 this.flux.setLanguage(value);
             } else if (qName.equalsIgnoreCase("lastbuilddate")) {
-                this.flux.setLastBuildDate(dateFormat.parse(value).getTime());
+                try {
+                    this.flux.setLastBuildDate(dateFormat.parse(value).getTime());
+                } catch (ParseException e) {
+                    this.flux.setLastBuildDate((new Date()).getTime());
+                }
             } else if (qName.equalsIgnoreCase("link")) {
                 this.flux.setLink(value);
             } else if (qName.equalsIgnoreCase("managingeditor")) {
                 this.flux.setManagingEditor(value);
             } else if (qName.equalsIgnoreCase("pubdate")) {
-                this.flux.setPubDate(dateFormat.parse(value).getTime());
+                try {
+                    this.flux.setPubDate(dateFormat.parse(value).getTime());
+                } catch (ParseException e) {
+                    this.flux.setPubDate((new Date()).getTime());
+                }
             } else if (qName.equalsIgnoreCase("rating")) {
                 this.flux.setRating(value);
             } else if (qName.equalsIgnoreCase("title")) {

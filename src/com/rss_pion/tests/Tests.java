@@ -124,10 +124,7 @@ public class Tests extends Application {
 	/** The Constant flux_1_textInput. */
 	public static final TextInput flux_1_textInput = new TextInput(
 			"flux_1_textInput_title", "flux_1_textInput_link",
-			"flux_1_textInput_description", "flux_1_textInput_author",
-			"flux_1_textInput_category", "flux_1_textInput_comments",
-			Tests.flux_1_textInput_enclosure, Tests.flux_1_textInput_guid,
-			"flux_1_textInput_pubDate", "flux_1_textInput_source");
+			"flux_1_textInput_description", "flux_1_textInput_name");
 
 	/** The flux_1_image. */
 	public static ImageDAO flux_1_image = null;
