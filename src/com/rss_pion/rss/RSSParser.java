@@ -2,8 +2,8 @@
  * @file    RSSParser.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
- * @date    2014-02-01
- * @version 1.0
+ * @date    2014-02-02
+ * @version 1.1
  *
  * Interpréteur pour flux RSS.
  ******************************************************************************/
@@ -224,6 +224,8 @@ public class RSSParser extends DefaultHandler {
                 this.flux.setCopyright(value);
             } else if (qName.equalsIgnoreCase("day")) {
                 this.flux.addSkipDay(value);
+            } else if (qName.equalsIgnoreCase("docs")) {
+                this.flux.setDocs(value);
             } else if (qName.equalsIgnoreCase("description")) {
                 this.flux.setDescription(value);
             } else if (qName.equalsIgnoreCase("generator")) {

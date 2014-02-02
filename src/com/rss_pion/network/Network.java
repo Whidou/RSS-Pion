@@ -2,8 +2,8 @@
  * @file    FluxActivity.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
- * @date    2014-01-23
- * @version 0.4
+ * @date    2014-02-02
+ * @version 1.0
  *
  * Activité d'affichage des flux.
  ******************************************************************************/
@@ -22,7 +22,9 @@ import java.net.URL;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
+import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.rss.RSSParser;
 
 /*** MAIN CLASS ***************************************************************/
@@ -85,7 +87,7 @@ public class Network {
         // Conversion de l'image en bitmap
         image = BitmapFactory.decodeStream(inStr);
         
-        flux.setImage(image);
+        flux.setImage(new ImageDAO(image));
 
         return flux;
     }
@@ -98,11 +100,44 @@ public class Network {
     public static void updateFlux(Flux flux) throws IOException {
 
         Flux update;
+        Long lastUpdateTimestamp = flux.getLastBuildDate();
 
+        // Obtention de la dernière version du flux
         update = Network.getFlux(flux.getFeed());
 
-        if (update.getLastBuildDate() <= flux.getLastBuildDate()) {
+        // Vérification de la date de dernière mise à jour
+        if (update.getLastBuildDate() <= lastUpdateTimestamp) {
             return;
+        }
+
+        // Mise à jour des attributs du flux
+        flux.setCategories(update.getCategories());
+        flux.setCloud(update.getCloud());
+        flux.setCopyright(update.getCopyright());
+        flux.setDescription(update.getDescription());
+        flux.setDocs(update.getDocs());
+        flux.setGenerator(update.getGenerator());
+        flux.setId(update.getId());
+        flux.setImage(update.getImage());
+        flux.setLanguage(update.getLanguage());
+        flux.setLastBuildDate(lastUpdateTimestamp);
+        flux.setLink(update.getLink());
+        flux.setManagingEditor(update.getManagingEditor());
+        flux.setPubDate(update.getPubDate());
+        flux.setRating(update.getRating());
+        flux.setSkipDays(update.getSkipDays());
+        flux.setSkipHours(update.getSkipHours());
+        flux.setTextInput(update.getTextInput());
+        flux.setTitle(update.getTitle());
+        flux.setTtl(update.getTtl());
+        flux.setUrlImage(update.getUrlImage());
+        flux.setWebMaster(update.getWebMaster());
+
+        // Ajout des nouveaux articles
+        for (Article article : update.getArticles()) {
+            if (article.getPubDate() > lastUpdateTimestamp) {
+                flux.addArticle(article);
+            }
         }
     }
 }
