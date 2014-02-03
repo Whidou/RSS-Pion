@@ -13,7 +13,6 @@ package com.rss_pion.rss;
 /*** INCLUDES *****************************************************************/
 
 import com.rss_pion.beans.Article;
-import com.rss_pion.beans.CategoryArticle;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.beans.TextInput;
@@ -182,7 +181,7 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("author")) {
                 this.article.setAuthor(value);
             } else if (qName.equalsIgnoreCase("category")) {
-                this.article.addCategory(new CategoryArticle(value));
+                this.article.addCategory(value);
             } else if (qName.equalsIgnoreCase("comments")) {
                 this.article.setComments(value);
             } else if (qName.equalsIgnoreCase("description")) {

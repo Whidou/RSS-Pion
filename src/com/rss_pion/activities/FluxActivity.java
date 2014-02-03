@@ -13,7 +13,6 @@ import java.util.Iterator;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -35,10 +34,8 @@ import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlHandler;
 import com.rss_pion.database.dao.FluxDAO;
-import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.dialogs.AddFluxDialogFragment;
 import com.rss_pion.network.NetworkUpdateTask;
-import com.rss_pion.tests.Tests;
 import com.rss_pion.ui.adapter.FluxAdapter;
 
 // TODO: Auto-generated Javadoc
@@ -56,13 +53,6 @@ public class FluxActivity extends RSS_PionActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
-		// Initialisation des Bitmap pour les objets de test :
-		final ImageDAO flux_1_image_dao = new ImageDAO();
-		flux_1_image_dao.setImage(BitmapFactory
-				.decodeResource(this.getApplicationContext().getResources(),
-						R.drawable.ic_launcher));
-		Tests.flux_1.setImage(flux_1_image_dao);
 
 		// UI :
 		ActionBar actionBar;
@@ -189,19 +179,6 @@ public class FluxActivity extends RSS_PionActivity {
 		switch (item.getItemId()) {
 		case R.id.add_flux:
 		    (new AddFluxDialogFragment()).show(getFragmentManager(), "addFlux");
-		    /*
-			// Ajout d'un nouveau flux de test :
-			try {
-				final FluxDAO fluxDAO = (FluxDAO) (Tests.flux_1
-						.translateObjectToDao());
-				fluxDAO.insertInTheDataBase(Tests.flux_1);
-			} catch (final IllegalAccessException e) {
-				Log.d("onOptionsItemSelected, add_flux", e.getMessage());
-			} catch (final IllegalArgumentException e) {
-				Log.d("onOptionsItemSelected, add_flux", e.getMessage());
-			}
-            */
-			this.updateListDeFlux();
 			return true;
         case R.id.maj_flux:
             (new NetworkUpdateTask()).execute();

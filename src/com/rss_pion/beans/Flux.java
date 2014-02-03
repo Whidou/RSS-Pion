@@ -194,7 +194,7 @@ public class Flux {
         this.categories = new ArrayList<String>();
         this.generator = "";
         this.docs = "";
-        this.cloud =null;
+        this.cloud = null;
         this.ttl = 0;
         this.image = null;
         this.rating = "";
@@ -204,7 +204,7 @@ public class Flux {
         this.numberOfReadArticles = 0;
         this.numberOfArticles = 0;
         this.ownRate = 0;
-        this.articles = null;
+        this.articles = new ArrayList<Article>();
         this.urlImage = "";
     }
 	

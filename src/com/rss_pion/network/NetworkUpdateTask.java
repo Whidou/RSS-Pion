@@ -22,6 +22,7 @@ import java.net.URL;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
@@ -48,6 +49,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         InputStream inStr;
         RSSParser rssParser;
         Bitmap image;
+        
+        Log.e("URL flux", feed);
 
         // Téléchargement du flux
         try {
@@ -56,20 +59,20 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
             e.printStackTrace();
             return null;
         }
+        
+        Log.e("URL flux", url.toString());
 
         urlConnection = (HttpURLConnection) url.openConnection();
 
-        try {
-            inStr = urlConnection.getInputStream();
-        } finally {
-            urlConnection.disconnect();
-        }
+        inStr = urlConnection.getInputStream();
 
         // Analyse du flux
         rssParser = new RSSParser(inStr);
         rssParser.parse();
 
         flux = rssParser.getFlux();
+
+        urlConnection.disconnect();
 
         // Téléchargement de l'éventuelle image associée
         try {
@@ -107,13 +110,25 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         Flux update;
         Long lastUpdateTimestamp = flux.getLastBuildDate();
 
+        Log.e("NetworkUpdateTask", "Récupération du flux.");
+
         // Obtention de la dernière version du flux
         update = this.getFlux(flux.getFeed());
+
+        Log.e("NetworkUpdateTask", "Fin de récupération du flux.");
+
+        if (update == null) {
+            return;
+        }
+
+        Log.e("NetworkUpdateTask", "Vérification des dates.");
 
         // Vérification de la date de dernière mise à jour
         if (update.getLastBuildDate() <= lastUpdateTimestamp) {
             return;
         }
+
+        Log.e("NetworkUpdateTask", "Mise à jour.");
 
         // Mise à jour des attributs du flux
         flux.setCategories(update.getCategories());
@@ -138,6 +153,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setUrlImage(update.getUrlImage());
         flux.setWebMaster(update.getWebMaster());
 
+        Log.e("NetworkUpdateTask", "Ajout des articles.");
+
         // Ajout des nouveaux articles
         for (Article article : update.getArticles()) {
             if (article.getPubDate() > lastUpdateTimestamp) {
@@ -154,6 +171,9 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         i = 0;
         nFlux = Constants.listOfFlux.size();
 
+        Log.e("NetworkUpdateTask", "Starting update.");
+        Log.e("NetworkUpdateTask", Constants.listOfFlux.toString());
+
         for (Flux flux : Constants.listOfFlux) {
             try {
                 this.updateFlux(flux);
@@ -162,6 +182,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
             }
             publishProgress((int) ((i / (float) nFlux) * 100));
         }
+
+        Log.e("NetworkUpdateTask", "Ending update.");
 
         return null;
     }

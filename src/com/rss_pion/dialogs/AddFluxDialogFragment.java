@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-02
- * @version 0.1
+ * @version 1.0
  *
  * Dialogue d'ajour d'un nouveau flux RSS.
  ******************************************************************************/
@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -58,11 +59,20 @@ public class AddFluxDialogFragment extends DialogFragment {
 
             champUrl = (EditText) view.findViewById(R.id.url_flux);
 
+            Log.e("AddFluxDialogFragment", "Création du flux.");
+
             flux = new Flux(champUrl.getText().toString());
+
+            Log.e("AddFluxDialogFragment", "Ajout à la BDD.");
 
             flux.insertIntoDB();
 
+            Log.e("AddFluxDialogFragment", "Ajout à la liste.");
+
             Constants.listOfFlux.add(flux);
+
+            Log.e("AddFluxDialogFragment", Constants.listOfFlux.toString());
+
             Constants.adapterOfFlux.notifyDataSetChanged();
         }
     }

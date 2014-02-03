@@ -118,11 +118,11 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		final Flux flux = this.data.get(position);
 		if (flux.getImage() != null) {
 		    holder.imageView.setImageBitmap(flux.getImage().getBitmap());
-		}/*
+		}
 		holder.numberOfReadArticlesView.setText("Nombre d'article(s) lu(s) : "
 				+ flux.getNumberOfReadArticles().toString() + "/"
 				+ flux.getNumberOfArticles().toString());
-		holder.categoryView.setText(flux.getCategories().toString());*/
+		holder.categoryView.setText(flux.getCategories().toString());
 		holder.lastBuildDateView.setText((new Date(flux.getLastBuildDate()))
 		        .toString());
 		final SpannableString spanTitleView = new SpannableString(

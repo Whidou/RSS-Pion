@@ -15,7 +15,6 @@ import java.util.List;
 
 import com.rss_pion.database.SqlDbHelper;
 import com.rss_pion.database.dao.ArticleDAO;
-import com.rss_pion.database.dao.CategoryArticleDAO;
 import com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject;
 
 // TODO: Auto-generated Javadoc
@@ -28,7 +27,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	private String author;
 
 	/** The category. */
-	private List<CategoryArticle> categories;
+	private List<String> categories;
 
 	/** The comments. */
 	private String comments;
@@ -71,6 +70,19 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 */
 	public Article() {
 		super();
+        this.idFather = null;
+        this.isRead = false;
+        this.title = "";
+        this.link = "";
+        this.description = "";
+        this.author = "";
+        this.categories = new ArrayList<String>();
+        this.comments = "";
+        this.enclosure = null;
+        this.guid = null;
+        this.pubDate = Long.valueOf(0);
+        this.source = "";
+        this.userRate = null;
 	}
 
 	/**
@@ -92,7 +104,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 */
 	public Article(final Long idFather, final Boolean isRead,
 			final String title, final String link, final String description,
-			final String author, final List<CategoryArticle> categories,
+			final String author, final List<String> categories,
 			final String comments, final Enclosure enclosure, final Guid guid,
 			final Long pubDate, final String source, final Integer userRate) {
 		super();
@@ -125,7 +137,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @return The category
 	 */
-	public List<CategoryArticle> getCategories() {
+	public List<String> getCategories() {
 		return this.categories;
 	}
 
@@ -251,7 +263,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 	 * 
 	 * @param category : The new category
 	 */
-	public void setCategories(final List<CategoryArticle> categories) {
+	public void setCategories(final List<String> categories) {
 		this.categories = categories;
 	}
 
@@ -384,13 +396,11 @@ public class Article extends NeedTranslationToBeSerializedObject {
 			this.source = articleDAO.getSource();
 			this.title = articleDAO.getTitle();
 			this.userRate = articleDAO.getUserRate();
-			this.categories = new ArrayList<CategoryArticle>();
-			final Iterator<CategoryArticleDAO> itc = articleDAO
-					.getCategoriesDAO().iterator();
+			this.categories = new ArrayList<String>();
+			final Iterator<String> itc = this
+					.getCategories().iterator();
 			while (itc.hasNext()) {
-				final CategoryArticle category = new CategoryArticle();
-				category.translateDaoToObject(itc.next());
-				this.categories.add(category);
+				this.categories.add(itc.next());
 			}
 		}
 	}
@@ -419,7 +429,7 @@ public class Article extends NeedTranslationToBeSerializedObject {
 		return articleDAO;
 	}
 
-    public void addCategory(CategoryArticle category) {
+    public void addCategory(String category) {
         this.categories.add(category);
     }
 }

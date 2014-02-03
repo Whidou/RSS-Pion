@@ -156,12 +156,12 @@ public class FluxDAO extends SerializedObject {
 
 					final FluxDAO fluxDAO = new FluxDAO();
 
-					fluxDAO.setIdCloud(Long.parseLong(c1.getString(c1
-							.getColumnIndex("idCloud"))));
-					fluxDAO.setIdImage(Long.parseLong(c1.getString(c1
-							.getColumnIndex("idImage"))));
-					fluxDAO.setIdTextInput(Long.parseLong(c1.getString(c1
-							.getColumnIndex("idTextInput"))));
+					fluxDAO.setIdCloud(c1.getLong(c1
+							.getColumnIndex("idCloud")));
+					fluxDAO.setIdImage(c1.getLong(c1
+							.getColumnIndex("idImage")));
+					fluxDAO.setIdTextInput(c1.getLong(c1
+							.getColumnIndex("idTextInput")));
 
 					// Suppression du cloud
 					Constants.sqlHandler.deleteDAO(

@@ -16,7 +16,6 @@ import java.util.List;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.rss_pion.beans.Article;
 import com.rss_pion.beans.CategoryArticle;
 import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Guid;
@@ -371,15 +370,16 @@ public class ArticleDAO extends SerializedObject {
 				+ this.getUserRate() + ");");
 		final Long id = SqlDbHelper
 				.lastInsertId(ArticleDAO.nameOfTheAssociatedTable);
-		final Iterator<CategoryArticle> itCategory = ((Article) objects[0])
+		/*
+		final Iterator<String> itCategory = ((Article) objects[0])
 				.getCategories().iterator();
-		CategoryArticle category;
+		String category;
 		while (itCategory.hasNext()) {
 			category = itCategory.next();
 			final CategoryArticleDAO categoryDAO = (CategoryArticleDAO) category
 					.translateObjectToDao(id, this.getIdFather());
 			categoryDAO.insertInTheDataBase();
-		}
+		}*/
 		Log.d("ARTICLE ADDED", this.toString());
 		return id;
 	}
