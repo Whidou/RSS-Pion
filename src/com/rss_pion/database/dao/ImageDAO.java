@@ -32,8 +32,8 @@ public class ImageDAO {
 	//! Champs
 	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
     static {
-        ArticleDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        ImageDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
+        ImageDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "bitmap", "BLOB"});
     }
 
@@ -128,7 +128,6 @@ public class ImageDAO {
         Constants.sqlHandler.delete(
                 ImageDAO.nameOfTheAssociatedTable,
                 "id=?",
-                new String[] {image.getId().toString()}
-                );
+                new String[] {image.getId().toString()});
     }
 }

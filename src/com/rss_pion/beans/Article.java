@@ -25,7 +25,7 @@ public class Article {
 	private String author;
 
 	//! Catégorie
-	private List<String> categories;
+	private List<Category> categories;
 
 	//! Commentaires
 	private String comments;
@@ -43,7 +43,7 @@ public class Article {
 	private Long id;
 
 	//! Numéro d'entrée du flux associé
-	private Long idFather;
+	private Long idFlux;
 
 	//! Lu
 	private Boolean isRead;
@@ -67,13 +67,13 @@ public class Article {
 
 	public Article() {
 		super();
-        this.idFather = null;
+        this.idFlux = null;
         this.isRead = false;
         this.title = "";
         this.link = "";
         this.description = "";
         this.author = "";
-        this.categories = new ArrayList<String>();
+        this.categories = new ArrayList<Category>();
         this.comments = "";
         this.enclosure = null;
         this.guid = null;
@@ -82,13 +82,13 @@ public class Article {
         this.userRate = null;
 	}
 
-	public Article(final Long idFather, final Boolean isRead,
+	public Article(final Long idFlux, final Boolean isRead,
 			final String title, final String link, final String description,
-			final String author, final List<String> categories,
+			final String author, final List<Category> categories,
 			final String comments, final Enclosure enclosure, final Guid guid,
 			final Long pubDate, final String source, final Integer userRate) {
 		super();
-		this.idFather = idFather;
+		this.idFlux = idFlux;
 		this.isRead = isRead;
 		this.title = title;
 		this.link = link;
@@ -107,7 +107,7 @@ public class Article {
 		return this.author;
 	}
 
-	public List<String> getCategories() {
+	public List<Category> getCategories() {
 		return this.categories;
 	}
 
@@ -131,8 +131,8 @@ public class Article {
 		return this.id;
 	}
 
-	public Long getIdFather() {
-		return this.idFather;
+	public Long getIdFlux() {
+		return this.idFlux;
 	}
 
 	public Boolean getIsRead() {
@@ -163,7 +163,7 @@ public class Article {
 		this.author = author;
 	}
 
-	public void setCategories(final List<String> categories) {
+	public void setCategories(final List<Category> categories) {
 		this.categories = categories;
 	}
 
@@ -187,8 +187,8 @@ public class Article {
 		this.id = id;
 	}
 
-	public void setIdFather(final Long idFather) {
-		this.idFather = idFather;
+	public void setIdFlux(final Long idFlux) {
+		this.idFlux = idFlux;
 	}
 
 	public void setIsRead(final Boolean isRead) {
@@ -215,7 +215,7 @@ public class Article {
 		this.userRate = userRate;
 	}
 
-    public void addCategory(final String category) {
+    public void addCategory(final Category category) {
         this.categories.add(category);
     }
 }

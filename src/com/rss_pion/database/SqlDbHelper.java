@@ -18,14 +18,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.rss_pion.beans.Enclosure;
-import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.database.dao.CategoryArticleDAO;
 import com.rss_pion.database.dao.CategoryFluxDAO;
 import com.rss_pion.database.dao.CloudDAO;
+import com.rss_pion.database.dao.EnclosureDAO;
 import com.rss_pion.database.dao.FluxDAO;
+import com.rss_pion.database.dao.GuidDAO;
 import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.database.dao.TextInputDAO;
 
@@ -109,10 +109,10 @@ public class SqlDbHelper extends SQLiteOpenHelper {
                 CloudDAO.fieldsOfTheAssociatedTable));
         db.execSQL(this.createTable(ImageDAO.nameOfTheAssociatedTable,
                 ImageDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(Enclosure.nameOfTheAssociatedTable,
-				Enclosure.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(Guid.nameOfTheAssociatedTable,
-				Guid.fieldsOfTheAssociatedTable));
+		db.execSQL(this.createTable(EnclosureDAO.nameOfTheAssociatedTable,
+				EnclosureDAO.fieldsOfTheAssociatedTable));
+		db.execSQL(this.createTable(GuidDAO.nameOfTheAssociatedTable,
+				GuidDAO.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(TextInputDAO.nameOfTheAssociatedTable,
 				TextInputDAO.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(
@@ -133,8 +133,8 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 		db.execSQL(this.dropTable(FluxDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(ArticleDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(CloudDAO.nameOfTheAssociatedTable));
-		db.execSQL(this.dropTable(Enclosure.nameOfTheAssociatedTable));
-		db.execSQL(this.dropTable(Guid.nameOfTheAssociatedTable));
+		db.execSQL(this.dropTable(EnclosureDAO.nameOfTheAssociatedTable));
+		db.execSQL(this.dropTable(GuidDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(TextInputDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(CategoryArticleDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(CategoryFluxDAO.nameOfTheAssociatedTable));

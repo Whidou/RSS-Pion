@@ -32,18 +32,18 @@ public class CloudDAO {
     //! Champs
     public static ArrayList<String[]> fieldsOfTheAssociatedTable;
     static {
-        ArticleDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "domain", "TEXT"});
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "domain", "TEXT"});
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "path", "TEXT"});
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "port", "INTEGER"});
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "protocol", "TEXT"});
-        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "registerProcedure", "TEXT"});
     }
 

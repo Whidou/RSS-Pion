@@ -55,7 +55,7 @@ public class Flux {
 	private Long lastBuildDate;
 
 	//! Articles
-	private List<String> categories = new ArrayList<String>();
+	private List<Category> categories = new ArrayList<Category>();
 
 	//! Logiciel utilisé pour générer le flux
 	private String generator;
@@ -106,7 +106,7 @@ public class Flux {
 		super();
 
         this.articles = new ArrayList<Article>();
-        this.categories = new ArrayList<String>();
+        this.categories = new ArrayList<Category>();
         this.cloud = null;
         this.copyright = "";
         this.description = "";
@@ -136,7 +136,7 @@ public class Flux {
 			final String description, final String language,
 			final String copyright, final String managingEditor,
 			final String webMaster, final Long pubDate,
-			final Long lastBuildDate, final List<String> categories,
+			final Long lastBuildDate, final List<Category> categories,
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageRSS image, final String rating,
 			final TextInput textInput, final List<Integer> skipHours,
@@ -181,7 +181,7 @@ public class Flux {
 		return this.articles;
 	}
 
-	public List<String> getCategories() {
+	public List<Category> getCategories() {
 		return this.categories;
 	}
 
@@ -285,7 +285,7 @@ public class Flux {
 		this.articles = articles;
 	}
 
-	public void setCategories(final List<String> categories) {
+	public void setCategories(final List<Category> categories) {
 		this.categories = categories;
 	}
 
@@ -389,7 +389,7 @@ public class Flux {
         this.articles.add(article);
     }
 
-    public void addCategory(String category) {
+    public void addCategory(Category category) {
         this.categories.add(category);
     }
 

@@ -17,7 +17,6 @@ import java.io.ByteArrayOutputStream;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -50,7 +49,7 @@ public class ImageRSS {
         final ByteArrayOutputStream stream;
 
         stream = new ByteArrayOutputStream();
-        this.bitmap.compress(CompressFormat.PNG, 0, stream);
+        this.bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
 
         return stream.toByteArray();
     }
