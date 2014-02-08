@@ -38,7 +38,7 @@ public abstract class CategoryFluxDAO {
         fieldsOfTheAssociatedTable.add(new String[] {
                 "category", "TEXT" });
         fieldsOfTheAssociatedTable.add(new String[] {
-                "idFather", "INTEGER" });
+                "idParent", "INTEGER" });
         fieldsOfTheAssociatedTable.add(new String[] {
                 "idGrandfather", "INTEGER" });
     }
@@ -176,8 +176,6 @@ public abstract class CategoryFluxDAO {
         if (id == null) {
             return new ArrayList<Category>();
         }
-
-        Log.e("CategoryFluxDAO", CategoryFluxDAO.nameOfTheAssociatedTable);
 
         c = Constants.sqlHandler.query(
                 CategoryFluxDAO.nameOfTheAssociatedTable,

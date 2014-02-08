@@ -38,7 +38,7 @@ public abstract class CategoryArticleDAO {
         fieldsOfTheAssociatedTable.add(new String[] {
                 "category", "TEXT" });
         fieldsOfTheAssociatedTable.add(new String[] {
-                "idFather", "INTEGER" });
+                "idParent", "INTEGER" });
         fieldsOfTheAssociatedTable.add(new String[] {
                 "idGrandfather", "INTEGER" });
     }
@@ -136,10 +136,7 @@ public abstract class CategoryArticleDAO {
         }
 
         if (!c.moveToFirst()) {
-
-            listeCategories.add(null);
             c.close();
-
             return listeCategories;
         }
 

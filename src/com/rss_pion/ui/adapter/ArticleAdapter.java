@@ -26,37 +26,13 @@ import android.widget.TextView;
 
 import com.rss_pion.R;
 import com.rss_pion.beans.Article;
+import com.rss_pion.configuration.Constants;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class ArticleAdapter.
  */
 public class ArticleAdapter extends ArrayAdapter<Article> {
-
-	/* HOLDER */
-	/**
-	 * The Class ArticleHolder.
-	 */
-	private static class ArticleHolder {
-
-		/** The user rate view. */
-		TextView userRateView;
-
-		/** The title view. */
-		TextView titleView;
-
-		/** The pub date view. */
-		TextView pubDateView;
-
-		/** The category view. */
-		TextView categoryView;
-
-		/** The author view. */
-		TextView authorView;
-
-		/** The description view. */
-		TextView descriptionView;
-	}
 
 	/** The context. */
 
@@ -88,10 +64,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	 *      android.view.ViewGroup)
 	 ***************************************************************************/
 	@Override
-	public View getView(final int position, final View convertView,
-			final ViewGroup parent) {
+	public View getView(
+	        final int position,
+	        final View convertView,
+	        final ViewGroup parent) {
+
 		View row = convertView;
 		ArticleHolder holder = null;
+
 		if (row == null) {
 			final LayoutInflater inflater = ((Activity) this.context)
 					.getLayoutInflater();
@@ -114,9 +94,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		} else {
 			holder = (ArticleHolder) row.getTag();
 		}
-		final Article article = this.data.get(position);
-		holder.userRateView.setText("Note : " + article.getUserRate() + "/"
-				+ "5");
+
+        final Article article = this.data.get(position);
+        
+        if (article == null) {
+            return row;
+        }
+
+		holder.userRateView.setText(article.getUserRate() + "/5");
 		final SpannableString spanTitleView = new SpannableString(
 				article.getTitle());
 		if (!article.getIsRead()) {
@@ -125,12 +110,45 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		}
 		spanTitleView
 				.setSpan(new UnderlineSpan(), 0, spanTitleView.length(), 0);
+
 		holder.titleView.setText(spanTitleView);
-		holder.authorView.setText(article.getAuthor() + ", publié le ");
-		holder.pubDateView.setText((new Date(article.getPubDate()))
-		        .toString());
+
+		if (article.getAuthor() != null && !article.getAuthor().equals("")) {
+		    holder.authorView.setText(article.getAuthor() + ", ");
+		}
+
+		holder.pubDateView.setText(
+		        "le " +
+                Constants.dateFormat.format(new Date(article.getPubDate())));
+
 		holder.categoryView.setText(article.getCategories().toString());
-		holder.descriptionView.setText(article.getDescription());
+		holder.descriptionView.setText(article.getHtmlDescription());
+
 		return row;
 	}
+
+    /* HOLDER */
+    /**
+     * The Class ArticleHolder.
+     */
+    private static class ArticleHolder {
+    
+    	/** The user rate view. */
+    	TextView userRateView;
+    
+    	/** The title view. */
+    	TextView titleView;
+    
+    	/** The pub date view. */
+    	TextView pubDateView;
+    
+    	/** The category view. */
+    	TextView categoryView;
+    
+    	/** The author view. */
+    	TextView authorView;
+    
+    	/** The description view. */
+    	TextView descriptionView;
+    }
 }

@@ -51,10 +51,14 @@ public class EnclosureDAO {
  * @return          ID de l'entrée en BDD
  ******************************************************************************/
     public static Long insertEnclosureIntoDB(final Enclosure enclosure) {
-        
+
         Long idEnclosure;
         ContentValues valuesMap;
-        
+
+        if (enclosure == null) {
+            return null;
+        }
+
         idEnclosure = enclosure.getId();
         
         if (idEnclosure == null) {

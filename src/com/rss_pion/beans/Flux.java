@@ -99,6 +99,7 @@ public class Flux {
 
 		super();
 
+		this.id = null;
         this.articles = new ArrayList<Article>();
         this.categories = new ArrayList<Category>();
         this.cloud = null;
@@ -231,17 +232,20 @@ public class Flux {
 		return this.articles.size();
 	}
 
-	public Integer getNumberOfReadArticles() {
+	public Integer getNumberOfUnreadArticles() {
 
-	    Integer nRead = 0;
+	    Integer nUnread = 0;
 
 	    for (Article article : this.articles) {
-	        if (article.getIsRead()) {
-	            nRead++;
+	        if (article == null) {
+	            continue;
+	        }
+	        if (!article.getIsRead()) {
+	            nUnread++;
 	        }
 	    }
 
-		return nRead;
+		return nUnread;
 	}
 
 	public Integer getOwnRate() {
@@ -381,7 +385,10 @@ public class Flux {
 	}
 
     public void addArticle(Article article) {
-        this.articles.add(article);
+        if (article != null) {
+            article.setIdFlux(this.id);
+            this.articles.add(article);
+        }
     }
 
     public void addCategory(Category category) {
@@ -397,5 +404,25 @@ public class Flux {
 
     public void addSkipHour(int hour) {
         this.skipHours.add(hour);
+    }
+    
+    @Override
+    public String toString() {
+        return "Flux {Titre:" + this.title + ", " +
+                "Copyright:" + this.copyright + ", " +
+                "Description:" + this.description + ", " +
+                "Docs:" + this.docs + ", " +
+                "Flux:" + this.feed + ", " +
+                "Generateur:" + this.generator + ", " +
+                "ID:" + this.id + ", " +
+                "Langue:" + this.language + ", " +
+                "MàJ:" + this.lastBuildDate + ", " +
+                "Lien:" + this.link + ", " +
+                "Éditeur:" + this.managingEditor + ", " +
+                "Publication:" + this.pubDate + ", " +
+                "Rating:" + this.rating + ", " +
+                "TTL:" + this.ttl + ", " +
+                "Image:" + this.urlImage + ", " +
+                "Webmestre:" + this.webMaster + "}";
     }
 }

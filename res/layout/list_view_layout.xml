@@ -43,12 +43,9 @@
             android:id="@+id/listFlux"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:background="@color/middleColor"
             android:gravity="right"
             android:orientation="horizontal"
-            android:paddingRight="20dp"
             tools:context=".FluxActivity" >
 
             <ListView
@@ -56,15 +53,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bordure_bas"
-        android:layout_width="fill_parent"
-        android:layout_height="20dp"
-        android:background="@color/darkColor"
-        android:orientation="vertical"
-        tools:context=".FluxActivity" >
     </LinearLayout>
 
 </LinearLayout>

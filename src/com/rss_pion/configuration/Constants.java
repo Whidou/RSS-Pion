@@ -9,7 +9,9 @@
  ***************************************************************************/
 package com.rss_pion.configuration;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import android.app.Application;
 import android.widget.ListView;
@@ -50,4 +52,6 @@ public class Constants extends Application {
 	/** The sql handler. */
 	public static SqlHandler sqlHandler;
 
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat(
+	        "yyyy-MM-dd", Locale.US);
 }

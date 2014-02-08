@@ -34,7 +34,7 @@ public class GuidDAO {
     static {
         GuidDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
         GuidDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "isPermalink", "INTEGER"});
+                "isPermaLink", "INTEGER"});
         GuidDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "value", "TEXT"});
     }
@@ -75,7 +75,7 @@ public class GuidDAO {
 
         // Préparation des champs
         valuesMap = new ContentValues();
-        valuesMap.put("isPermalink", guid.isPermaLink());
+        valuesMap.put("isPermaLink", guid.isPermaLink());
         valuesMap.put("value", guid.getValue());
 
         Constants.sqlHandler.update(
@@ -121,7 +121,7 @@ public class GuidDAO {
             // Configuration de l'guid à partir des données
             guid.setId(id);
             guid.setPermaLink(
-                    (c.getInt(c.getColumnIndex("domain"))!= 0)?true:false);
+                    (c.getInt(c.getColumnIndex("isPermaLink"))!= 0)?true:false);
             guid.setValue(c.getString(c.getColumnIndex("value")));
         } else {
             guid = null;

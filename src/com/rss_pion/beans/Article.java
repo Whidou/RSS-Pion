@@ -15,6 +15,9 @@ package com.rss_pion.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.Html;
+import android.text.Spanned;
+
 /*** MAIN CLASS ***************************************************************/
 
 public class Article {
@@ -118,6 +121,10 @@ public class Article {
 	public String getDescription() {
 		return this.description;
 	}
+
+    public Spanned getHtmlDescription() {
+        return Html.fromHtml(this.description, null, null);
+    }
 
 	public Enclosure getEnclosure() {
 		return this.enclosure;

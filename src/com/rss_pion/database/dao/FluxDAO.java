@@ -94,6 +94,10 @@ public class FluxDAO {
         Long idFlux;
         String strValue;
 
+        if (flux == null) {
+            return null;
+        }
+
         idFlux = flux.getId();
 
         // Si le flux n'existe pas dans la BDD
@@ -181,6 +185,11 @@ public class FluxDAO {
         Long id;
         List<String> days = new ArrayList<String>();
         List<Integer> hours = new ArrayList<Integer>();
+
+        if (c == null) {
+            return listeFlux;
+        }
+
 
         if (!c.moveToFirst()) {
 
@@ -285,11 +294,17 @@ public class FluxDAO {
  * 
  * @param id    Numéro d'identification du flux
  * 
- * @return      Flux demandé ou null si cette ID n'est pas dans la BDD
+ * @return      Flux demandé
  ******************************************************************************/
 	public static Flux getFluxFromDB(final Long id) {
 
-        final Cursor c = Constants.sqlHandler.query(
+        Cursor c;
+
+        if (id == null) {
+            return null;
+        }
+
+        c = Constants.sqlHandler.query(
                 FluxDAO.nameOfTheAssociatedTable,
                 null,
                 "id=?",
@@ -308,6 +323,10 @@ public class FluxDAO {
  * @param flux  Flux à supprimer
  ******************************************************************************/
     public static void deleteFluxFromDB(final Flux flux) {
+
+        if (flux == null) {
+            return;
+        }
 
         // Suppression des objets associés
         ArticleDAO.deleteArticlesFromDB(flux.getArticles());

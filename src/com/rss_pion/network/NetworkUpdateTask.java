@@ -19,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -28,11 +31,49 @@ import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.beans.ImageRSS;
 import com.rss_pion.configuration.Constants;
+import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.rss.RSSParser;
 
 /*** MAIN CLASS ***************************************************************/
 
 public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
+
+    NotificationManager notiManager;
+    Notification noti;
+
+private ImageRSS getImage(String url) {
+
+    URL urlObj;
+    HttpURLConnection connection;
+    InputStream inStr;
+    Bitmap image;
+
+    try {
+        urlObj = new URL(url);
+    } catch (MalformedURLException e) {
+        return null;
+    }
+
+    try {
+        connection = (HttpURLConnection) urlObj.openConnection();
+    } catch (IOException e) {
+        return null;
+    }
+
+    try {
+        inStr = connection.getInputStream();
+    } catch (IOException e) {
+        connection.disconnect();
+        return null;
+    }
+
+    // Conversion de l'image en bitmap
+    image = BitmapFactory.decodeStream(inStr);
+    
+    connection.disconnect();
+
+    return new ImageRSS(image);
+}
 
 /***************************************************************************//**
  * Obtention d'un flux depuis le réseau
@@ -48,9 +89,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         HttpURLConnection urlConnection;
         InputStream inStr;
         RSSParser rssParser;
-        Bitmap image;
-        
-        Log.e("URL flux", feed);
 
         // Téléchargement du flux
         try {
@@ -59,8 +97,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
             e.printStackTrace();
             return null;
         }
-        
-        Log.e("URL flux", url.toString());
 
         urlConnection = (HttpURLConnection) url.openConnection();
 
@@ -75,24 +111,7 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         urlConnection.disconnect();
 
         // Téléchargement de l'éventuelle image associée
-        try {
-            url = new URL(flux.getUrlImage());
-        } catch (MalformedURLException e) {
-            return flux;
-        }
-
-        urlConnection = (HttpURLConnection) url.openConnection();
-
-        try {
-            inStr = urlConnection.getInputStream();
-        } finally {
-            urlConnection.disconnect();
-        }
-
-        // Conversion de l'image en bitmap
-        image = BitmapFactory.decodeStream(inStr);
-
-        flux.setImage(new ImageRSS(image));
+        flux.setImage(this.getImage(flux.getUrlImage()));
 
         return flux;
     }
@@ -105,27 +124,19 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
     private void updateFlux(Flux flux) throws IOException {
 
         Flux update;
-        Long lastUpdateTimestamp = flux.getLastBuildDate();
-
-        Log.e("NetworkUpdateTask", "Récupération du flux.");
+        Long lastUpdateTimestamp = flux.getPubDate();
 
         // Obtention de la dernière version du flux
         update = this.getFlux(flux.getFeed());
-
-        Log.e("NetworkUpdateTask", "Fin de récupération du flux.");
 
         if (update == null) {
             return;
         }
 
-        Log.e("NetworkUpdateTask", "Vérification des dates.");
-
         // Vérification de la date de dernière mise à jour
-        if (update.getLastBuildDate() <= lastUpdateTimestamp) {
+        if (update.getPubDate() <= lastUpdateTimestamp) {
             return;
         }
-
-        Log.e("NetworkUpdateTask", "Mise à jour.");
 
         // Mise à jour des attributs du flux
         flux.setCategories(update.getCategories());
@@ -134,8 +145,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setDescription(update.getDescription());
         flux.setDocs(update.getDocs());
         flux.setGenerator(update.getGenerator());
-        flux.setId(update.getId());
-        flux.setImage(update.getImage());
         flux.setLanguage(update.getLanguage());
         flux.setLastBuildDate(lastUpdateTimestamp);
         flux.setLink(update.getLink());
@@ -150,14 +159,37 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setUrlImage(update.getUrlImage());
         flux.setWebMaster(update.getWebMaster());
 
-        Log.e("NetworkUpdateTask", "Ajout des articles.");
-
         // Ajout des nouveaux articles
         for (Article article : update.getArticles()) {
             if (article.getPubDate() > lastUpdateTimestamp) {
                 flux.addArticle(article);
             }
         }
+
+        FluxDAO.insertFluxIntoDB(flux);
+    }
+    
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onPreExecute () {
+
+        Context context;
+
+        Log.e("NetworkUpdateTask", "Starting update.");
+        
+        context = Constants.adapterOfFlux.getContext();
+
+        this.noti = new Notification.Builder(context)
+                .setContentTitle("RSS Pion")
+                .setContentText("Updating the RSS feeds...")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setOngoing(true)
+                .getNotification();
+
+        this.notiManager = (NotificationManager) context.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+
+        this.notiManager.notify("NetworkUpdate", 0, this.noti);
     }
 
     @Override
@@ -168,9 +200,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         i = 0;
         nFlux = Constants.listOfFlux.size();
 
-        Log.e("NetworkUpdateTask", "Starting update.");
-        Log.e("NetworkUpdateTask", Constants.listOfFlux.toString());
-
         for (Flux flux : Constants.listOfFlux) {
             try {
                 this.updateFlux(flux);
@@ -180,8 +209,24 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
             publishProgress((int) ((i / (float) nFlux) * 100));
         }
 
-        Log.e("NetworkUpdateTask", "Ending update.");
-
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        
+        Constants.listOfFlux.clear();
+
+        for (Flux flux : FluxDAO.getFluxFromDB()) {
+            if (flux != null) {
+                Constants.listOfFlux.add(flux);
+            }
+        }
+
+        Constants.adapterOfFlux.notifyDataSetChanged();
+        
+        this.notiManager.cancel("NetworkUpdate", 0);
+
+        Log.e("NetworkUpdateTask", "Ending update.");
     }
 }

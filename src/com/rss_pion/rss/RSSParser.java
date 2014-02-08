@@ -70,7 +70,8 @@ public class RSSParser extends DefaultHandler {
         this.flux = new Flux();
         this.article = null;
         this.text = new StringBuilder();
-        this.dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz",
+        this.dateFormat = new SimpleDateFormat(
+                "EEE, dd MMM yyyy kk:mm:ss zzz",
                 Locale.US);
     }
 
@@ -126,6 +127,9 @@ public class RSSParser extends DefaultHandler {
                                 String localName,
                                 String qName,
                                 Attributes attributes) {
+        
+        Guid guid;
+        String permaLink;
 
         // À l'ouverture d'une balise d'article
         if (qName.equalsIgnoreCase("item")) {
@@ -149,14 +153,17 @@ public class RSSParser extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("guid") && this.article != null) {
 
             // Création du GUID
-            this.article.setGuid(new Guid());
+            guid = new Guid();
+            permaLink = attributes.getValue("isPermaLink");
 
             // (In)Validation du statut de permalien
-            if (attributes.getValue("isPermaLink").equalsIgnoreCase("true")) {
-                this.article.getGuid().setPermaLink(true);
-            } else {
-                this.article.getGuid().setPermaLink(false);
+            if (permaLink != null) {
+                if (permaLink.equalsIgnoreCase("true")) {
+                    guid.setPermaLink(true);
+                }
             }
+
+            this.article.setGuid(guid);
         }
     }
 

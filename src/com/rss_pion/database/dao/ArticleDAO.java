@@ -220,7 +220,7 @@ public class ArticleDAO {
  ******************************************************************************/
     public static List<Article> getArticlesFromDB(final Long id) {
 
-        final Cursor c;
+        Cursor c;
 
         if (id == null) {
             return new ArrayList<Article>();

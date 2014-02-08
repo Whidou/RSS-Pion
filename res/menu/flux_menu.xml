@@ -7,6 +7,9 @@
     <item    
         android:id="@+id/maj_flux"
         android:title="@string/menu_maj"/>
+    <item    
+        android:id="@+id/maj_affichage"
+        android:title="@string/menu_affichage"/>
     <item
         android:id="@+id/help_flux"
         android:title="@string/menu_help"/>

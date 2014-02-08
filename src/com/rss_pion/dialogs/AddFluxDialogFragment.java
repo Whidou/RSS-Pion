@@ -16,13 +16,13 @@ import com.rss_pion.R;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.FluxDAO;
+import com.rss_pion.network.NetworkUpdateTask;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -59,22 +59,11 @@ public class AddFluxDialogFragment extends DialogFragment {
             Flux flux;
 
             champUrl = (EditText) view.findViewById(R.id.url_flux);
-
-            Log.e("AddFluxDialogFragment", "Création du flux.");
-
             flux = new Flux(champUrl.getText().toString());
-
-            Log.e("AddFluxDialogFragment", "Ajout à la BDD.");
-
             FluxDAO.insertFluxIntoDB(flux);
-
-            Log.e("AddFluxDialogFragment", "Ajout à la liste.");
-
             Constants.listOfFlux.add(flux);
 
-            Log.e("AddFluxDialogFragment", Constants.listOfFlux.toString());
-
-            Constants.adapterOfFlux.notifyDataSetChanged();
+            (new NetworkUpdateTask()).execute();
         }
     }
     
