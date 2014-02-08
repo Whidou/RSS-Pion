@@ -9,7 +9,7 @@
  ***************************************************************************/
 package com.rss_pion.activities;
 
-import java.util.Iterator;
+import java.util.LinkedList;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -146,14 +146,9 @@ public class ArticlesActivity extends RSS_PionActivity {
 	 * Update list de articles.
 	 */
 	private void updateListDeArticles() {
-		final Iterator<Article> it = Constants.focusedFlux
-				.getArticles().iterator();
-		Constants.listOfArticles.clear();
-		while (it.hasNext()) {
-			final Article article = new Article();
-			article.translateDaoToObject(it.next());
-			Constants.listOfArticles.add(article);
-		}
+		Constants.listOfArticles =
+		        (LinkedList<Article>) ArticleDAO.getArticlesFromDB(
+		                Constants.focusedFlux.getId());
 		Constants.adapterOfArticles.notifyDataSetChanged();
 	}
 }

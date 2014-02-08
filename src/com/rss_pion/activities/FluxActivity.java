@@ -9,7 +9,7 @@
  ***************************************************************************/
 package com.rss_pion.activities;
 
-import java.util.Iterator;
+import java.util.LinkedList;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -33,6 +33,7 @@ import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlHandler;
+import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.dialogs.AddFluxDialogFragment;
 import com.rss_pion.network.NetworkUpdateTask;
@@ -106,14 +107,10 @@ public class FluxActivity extends RSS_PionActivity {
 										.getId());
 
 						// Chargement des articles du flux :
-						final Iterator<Article> it = Constants.focusedFlux
-								.getArticles().iterator();
-						Constants.listOfArticles.clear();
-						while (it.hasNext()) {
-							final Article article = new Article();
-							article.translateDaoToObject(it.next());
-							Constants.listOfArticles.add(article);
-						}
+						Constants.listOfArticles =
+						        (LinkedList<Article>) ArticleDAO
+						        .getArticlesFromDB(
+						                Constants.focusedFlux.getId());
 
 						// Ouverture de l'activité gérant les articles du flux :
 						final Intent intent = new Intent(FluxActivity.this,

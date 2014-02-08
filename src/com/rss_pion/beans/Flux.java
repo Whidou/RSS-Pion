@@ -5,7 +5,7 @@
  * @date    23 janv. 2014
  * @version 0.5
  *
- * Classe pour les objets FLux RSS
+ * Classe pour les objets flux RSS
  ******************************************************************************/
 
 package com.rss_pion.beans;
