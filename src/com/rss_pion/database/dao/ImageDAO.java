@@ -50,6 +50,10 @@ public class ImageDAO {
 	    
 	    Long idImage;
 		ContentValues valuesMap;
+        
+        if (image == null) {
+            return null;
+        }
 		
 		idImage = image.getId();
 		
@@ -92,6 +96,10 @@ public class ImageDAO {
         final Cursor c;
         ImageRSS image;
 
+        if (id == null) {
+            return null;
+        }
+
         // Requête
         c = Constants.sqlHandler.query(
                 ImageDAO.nameOfTheAssociatedTable,
@@ -125,6 +133,11 @@ public class ImageDAO {
  * @param image Image à supprimer
  ******************************************************************************/
     public static void deleteImageFromDB(final ImageRSS image) {
+
+        if (image == null) {
+            return;
+        }
+
         Constants.sqlHandler.delete(
                 ImageDAO.nameOfTheAssociatedTable,
                 "id=?",

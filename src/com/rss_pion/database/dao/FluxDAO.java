@@ -60,10 +60,6 @@ public class FluxDAO {
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] {
 		        "managingEditor", "TEXT"});
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] {
-				"numberOfArticles", "INTEGER"});
-		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] {
-				"numberOfReadArticles", "INTEGER"});
-		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] {
 		        "ownRate", "INTEGER"});
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] {
 		        "pubDate", "INTEGER"});

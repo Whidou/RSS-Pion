@@ -75,6 +75,10 @@ public class ArticleDAO {
         ContentValues valuesMap;
         Long idArticle;
 
+        if (article == null) {
+            return null;
+        }
+
         idArticle = article.getId();
 
         // Si le article n'existe pas dans la BDD
@@ -139,7 +143,7 @@ public class ArticleDAO {
         List<Long> ids = new ArrayList<Long>();
 
         for (Article article : articles) {
-            insertArticleIntoDB(article);
+            ids.add(insertArticleIntoDB(article));
         }
 
         return ids;
@@ -150,13 +154,17 @@ public class ArticleDAO {
  * 
  * @param c Curseur obtenu par requête sur la BDD
  * 
- * @return  Liste d'articles ou null
+ * @return  Liste d'articles
  ******************************************************************************/
     protected static List<Article> getArticlesFromDB(final Cursor c) {
 
         final List<Article> listeArticles = new ArrayList<Article>();
         Article article;
         Long id;
+
+        if (c == null) {
+            return listeArticles;
+        }
 
         if (!c.moveToFirst()) {
 
@@ -208,11 +216,17 @@ public class ArticleDAO {
  * 
  * @param id    ID du flux
  * 
- * @return      Liste d'articles ou null si ce flux n'a aucun article
+ * @return      Liste d'articles
  ******************************************************************************/
     public static List<Article> getArticlesFromDB(final Long id) {
 
-        final Cursor c = Constants.sqlHandler.query(
+        final Cursor c;
+
+        if (id == null) {
+            return new ArrayList<Article>();
+        }
+
+        c = Constants.sqlHandler.query(
                 ArticleDAO.nameOfTheAssociatedTable,
                 null,
                 "idFlux=?",
@@ -234,7 +248,14 @@ public class ArticleDAO {
  ******************************************************************************/
     public static Article getArticleFromDB(final Long id) {
 
-        final Cursor c = Constants.sqlHandler.query(
+        final Cursor c;
+        List<Article> articles;
+
+        if (id == null) {
+            return null;
+        }
+
+        c = Constants.sqlHandler.query(
                 ArticleDAO.nameOfTheAssociatedTable,
                 null,
                 "id=?",
@@ -244,7 +265,13 @@ public class ArticleDAO {
                 null,
                 null);
 
-        return getArticlesFromDB(c).get(0);
+        articles = getArticlesFromDB(c);
+
+        if (articles.size() < 1) {
+            return null;
+        }
+
+        return articles.get(0);
     }
 
 /***************************************************************************//**
@@ -253,6 +280,10 @@ public class ArticleDAO {
  * @param article   Article à supprimer
  ******************************************************************************/
     public static void deleteArticleFromDB(final Article article) {
+        
+        if (article == null) {
+            return;
+        }
 
         // Suppression des objets associés
         EnclosureDAO.deleteEnclosureFromDB(article.getEnclosure());

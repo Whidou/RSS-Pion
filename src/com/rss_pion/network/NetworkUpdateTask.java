@@ -91,11 +91,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
         // Conversion de l'image en bitmap
         image = BitmapFactory.decodeStream(inStr);
-        
-        flux.setImage(new ImageRSS(image));
 
-        flux.setNumberOfArticles(flux.getArticles().size());
-        flux.setNumberOfReadArticles(0);
+        flux.setImage(new ImageRSS(image));
 
         return flux;
     }

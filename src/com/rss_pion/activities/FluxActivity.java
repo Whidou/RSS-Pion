@@ -1,13 +1,16 @@
-/***************************************************************************
- * @file FluxActivity.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    FluxActivity.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-02-08
+ * @version 0.5
  *
- * @brief
- ***************************************************************************/
+ * Activité listant les flux
+ ******************************************************************************/
+
 package com.rss_pion.activities;
+
+/*** INCLUDES *****************************************************************/
 
 import java.util.LinkedList;
 
@@ -39,23 +42,18 @@ import com.rss_pion.dialogs.AddFluxDialogFragment;
 import com.rss_pion.network.NetworkUpdateTask;
 import com.rss_pion.ui.adapter.FluxAdapter;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class FluxActivity.
- */
+/*** MAIN CLASS ***************************************************************/
+
 public class FluxActivity extends RSS_PionActivity {
 
-	/**
-	 * On create.
-	 * 
-	 * @param savedInstanceState : The saved instance state
-	 */
+/***************************************************************************//**
+ * @see android.app.Activity#onCreate(Bundle)
+ ******************************************************************************/
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
-		// UI :
 		ActionBar actionBar;
 		EditText fluxLinkInput;
 
@@ -79,18 +77,18 @@ public class FluxActivity extends RSS_PionActivity {
 		fluxLinkInput.setSelected(false);
 
 		// Affichage de l'AB
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
-				| ActionBar.DISPLAY_SHOW_HOME);
+		actionBar.setDisplayOptions(
+		        ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
 
-		// Liaison avec le layout principal
+		// Définition du layout
 		this.setContentView(R.layout.list_view_layout);
 
 		// Définition de la liste visuelle des flux
 		Constants.listViewOfFlux = (ListView) this.findViewById(R.id.listView1);
 
 		// Définition de l'adaptateur liant la liste à son affichage
-		Constants.adapterOfFlux = new FluxAdapter(this,
-				R.layout.flux_listview_row, Constants.listOfFlux);
+		Constants.adapterOfFlux = new FluxAdapter(
+		        this, R.layout.flux_listview_row, Constants.listOfFlux);
 
 		// Mise en place de l'adaptateur
 		Constants.listViewOfFlux.setAdapter(Constants.adapterOfFlux);
@@ -215,7 +213,9 @@ public class FluxActivity extends RSS_PionActivity {
 	private void updateListDeFlux() {
 		Constants.listOfFlux.clear();
 		for (Flux flux : FluxDAO.getFluxFromDB()) {
-			Constants.listOfFlux.add(flux);
+		    if (flux != null) {
+		        Constants.listOfFlux.add(flux);
+		    }
 		}
 		Constants.adapterOfFlux.notifyDataSetChanged();
 	}

@@ -45,7 +45,7 @@ public class Flux {
 	//! Adresse courriel de l'éditeur
 	private String managingEditor;
 
-    //! Adresse courriel du webmaster
+    //! Adresse courriel du webmestre
 	private String webMaster;
 
 	//! Date de dernière publication
@@ -84,12 +84,6 @@ public class Flux {
     //! Jours de non-mise à jour
     private List<String> skipDays;
 
-    //! Nombre d'articles lus
-    private Integer numberOfReadArticles;
-
-    //! Nombre d'articles
-    private Integer numberOfArticles;
-
     //! ???
     private Integer ownRate;
 
@@ -118,8 +112,6 @@ public class Flux {
         this.language = "";
         this.link = "";
         this.managingEditor = "";
-        this.numberOfReadArticles = 0;
-        this.numberOfArticles = 0;
         this.ownRate = 0;
         this.pubDate = Long.valueOf(0);
         this.skipDays = new ArrayList<String>();
@@ -140,8 +132,7 @@ public class Flux {
 			final String generator, final String docs, final Cloud cloud,
 			final Integer ttl, final ImageRSS image, final String rating,
 			final TextInput textInput, final List<Integer> skipHours,
-			final List<String> skipDays, final Integer numberOfReadArticles,
-			final Integer numberOfArticles, final Integer ownRate,
+			final List<String> skipDays, final Integer ownRate,
 			final List<Article> articles, final String urlImage) {
 		super();
 		this.feed = feed;
@@ -164,8 +155,6 @@ public class Flux {
 		this.textInput = textInput;
 		this.skipHours = skipHours;
 		this.skipDays = skipDays;
-		this.numberOfReadArticles = numberOfReadArticles;
-		this.numberOfArticles = numberOfArticles;
 		this.ownRate = ownRate;
 		this.articles = articles;
 		this.urlImage = urlImage;
@@ -234,11 +223,25 @@ public class Flux {
 	}
 
 	public Integer getNumberOfArticles() {
-		return this.numberOfArticles;
+
+	    if (this.articles == null) {
+	        return 0;
+	    }
+
+		return this.articles.size();
 	}
 
 	public Integer getNumberOfReadArticles() {
-		return this.numberOfReadArticles;
+
+	    Integer nRead = 0;
+
+	    for (Article article : this.articles) {
+	        if (article.getIsRead()) {
+	            nRead++;
+	        }
+	    }
+
+		return nRead;
 	}
 
 	public Integer getOwnRate() {
@@ -337,14 +340,6 @@ public class Flux {
 		this.managingEditor = managingEditor;
 	}
 
-	public void setNumberOfArticles(final Integer numberOfArticles) {
-		this.numberOfArticles = numberOfArticles;
-	}
-
-	public void setNumberOfReadArticles(final Integer numberOfReadArticles) {
-		this.numberOfReadArticles = numberOfReadArticles;
-	}
-
 	public void setOwnRate(final Integer ownRate) {
 		this.ownRate = ownRate;
 	}
@@ -390,7 +385,10 @@ public class Flux {
     }
 
     public void addCategory(Category category) {
-        this.categories.add(category);
+        if (category != null) {
+            category.setIdParent(this.id);
+            this.categories.add(category);
+        }
     }
 
     public void addSkipDay(String day) {
@@ -399,6 +397,5 @@ public class Flux {
 
     public void addSkipHour(int hour) {
         this.skipHours.add(hour);
-        
     }
 }

@@ -1,13 +1,16 @@
-/***************************************************************************
- * @file RSS_PionActivity.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    RSS_PionActivity.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-02-08
+ * @version 0.5
  *
- * @brief
- ***************************************************************************/
+ * Classe parentes des activités de l'application
+ ******************************************************************************/
+
 package com.rss_pion.activities;
+
+/*** INCLUDES *****************************************************************/
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -17,31 +20,30 @@ import android.widget.TextView;
 
 import com.rss_pion.ui.RSS_PionTextView;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class RSS_PionActivity.
- */
+/*** MAIN CLASS ***************************************************************/
+
 public abstract class RSS_PionActivity extends Activity {
 
-	/***************************************************************************
-	 * @see android.app.Activity#onResume()
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.app.Activity#onResume()
+ ******************************************************************************/
 	@Override
 	protected void onResume() {
 
 		super.onResume();
-		final ViewGroup root = ((ViewGroup) this
-				.findViewById(android.R.id.content));
 
-		// Tests des polices
+		final ViewGroup root = (ViewGroup) this.findViewById(
+		        android.R.id.content);
+
+		// Assignation de la police spéciale
 		this.setAllTypeface(root);
 	}
 
-	/**
-	 * Sets the all typeface.
-	 *
-	 * @param view : The new all typeface
-	 */
+/***************************************************************************//**
+ * Modifie la police des tous les textes de façon récursive
+ * 
+ * @param view  Élément à modifier
+ ******************************************************************************/
 	protected void setAllTypeface(final View view) {
 
 		int i;
@@ -53,11 +55,11 @@ public abstract class RSS_PionActivity extends Activity {
 				this.setAllTypeface(((ViewGroup) view).getChildAt(i));
 			}
 
-			// Tests de la police des textes
+		// Assignation de la police aux textes
 		} else if ((view instanceof TextView)
 				&& !(view instanceof RSS_PionTextView)) {
-			tf = Typeface.createFromAsset(this.getAssets(),
-					"fonts/trebucbd.ttf");
+			tf = Typeface.createFromAsset(
+			        this.getAssets(), "fonts/trebucbd.ttf");
 			((TextView) view).setTypeface(tf);
 		}
 	}

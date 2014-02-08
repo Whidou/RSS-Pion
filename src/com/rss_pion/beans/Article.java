@@ -216,6 +216,9 @@ public class Article {
 	}
 
     public void addCategory(final Category category) {
-        this.categories.add(category);
+        if (category != null) {
+            category.setIdParent(this.id);
+            this.categories.add(category);
+        }
     }
 }

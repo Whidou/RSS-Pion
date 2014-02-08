@@ -56,6 +56,10 @@ public class TextInputDAO {
         
         Long idTextInput;
         ContentValues valuesMap;
+
+        if (textInput == null) {
+            return null;
+        }
         
         idTextInput = textInput.getId();
         
@@ -101,6 +105,10 @@ public class TextInputDAO {
         final Cursor c;
         TextInput textInput;
 
+        if (id == null) {
+            return null;
+        }
+
         // Requête
         c = Constants.sqlHandler.query(
                 TextInputDAO.nameOfTheAssociatedTable,
@@ -138,6 +146,11 @@ public class TextInputDAO {
  * @param textInput Text input à supprimer
  ******************************************************************************/
     public static void deleteTextInputFromDB(final TextInput textInput) {
+
+                if (textInput == null) {
+                    return;
+                }
+
         Constants.sqlHandler.delete(
                 TextInputDAO.nameOfTheAssociatedTable,
                 "id=?",

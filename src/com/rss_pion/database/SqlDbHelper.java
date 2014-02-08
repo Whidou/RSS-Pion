@@ -101,24 +101,32 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 	 ***************************************************************************/
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		db.execSQL(this.createTable(FluxDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        FluxDAO.nameOfTheAssociatedTable,
 				FluxDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(ArticleDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        ArticleDAO.nameOfTheAssociatedTable,
 				ArticleDAO.fieldsOfTheAssociatedTable));
-        db.execSQL(this.createTable(CloudDAO.nameOfTheAssociatedTable,
+        db.execSQL(this.createTable(
+                CloudDAO.nameOfTheAssociatedTable,
                 CloudDAO.fieldsOfTheAssociatedTable));
-        db.execSQL(this.createTable(ImageDAO.nameOfTheAssociatedTable,
+        db.execSQL(this.createTable(
+                ImageDAO.nameOfTheAssociatedTable,
                 ImageDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(EnclosureDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        EnclosureDAO.nameOfTheAssociatedTable,
 				EnclosureDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(GuidDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        GuidDAO.nameOfTheAssociatedTable,
 				GuidDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(TextInputDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        TextInputDAO.nameOfTheAssociatedTable,
 				TextInputDAO.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(
 				CategoryArticleDAO.nameOfTheAssociatedTable,
 				CategoryArticleDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(CategoryFluxDAO.nameOfTheAssociatedTable,
+		db.execSQL(this.createTable(
+		        CategoryFluxDAO.nameOfTheAssociatedTable,
 				CategoryFluxDAO.fieldsOfTheAssociatedTable));
 	}
 

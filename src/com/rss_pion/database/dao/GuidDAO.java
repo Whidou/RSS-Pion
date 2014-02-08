@@ -52,6 +52,10 @@ public class GuidDAO {
         
         Long idGuid;
         ContentValues valuesMap;
+
+        if (guid == null) {
+            return null;
+        }
         
         idGuid = guid.getId();
         
@@ -95,6 +99,10 @@ public class GuidDAO {
         final Cursor c;
         Guid guid;
 
+        if (id == null) {
+            return null;
+        }
+
         // Requête
         c = Constants.sqlHandler.query(
                 GuidDAO.nameOfTheAssociatedTable,
@@ -130,6 +138,11 @@ public class GuidDAO {
  * @param guid Guid à supprimer
  ******************************************************************************/
     public static void deleteGuidFromDB(final Guid guid) {
+        
+        if (guid == null) {
+            return;
+        }
+
         Constants.sqlHandler.delete(
                 GuidDAO.nameOfTheAssociatedTable,
                 "id=?",

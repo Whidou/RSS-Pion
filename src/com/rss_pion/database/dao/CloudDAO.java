@@ -36,8 +36,6 @@ public class CloudDAO {
         CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "domain", "TEXT"});
         CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "domain", "TEXT"});
-        CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "path", "TEXT"});
         CloudDAO.fieldsOfTheAssociatedTable.add(new String[] {
                 "port", "INTEGER"});
@@ -61,6 +59,10 @@ public class CloudDAO {
         Long idCloud;
         ContentValues valuesMap;
         
+        if (cloud == null) {
+            return null;
+        }
+
         idCloud = cloud.getId();
         
         if (idCloud == null) {
@@ -106,6 +108,10 @@ public class CloudDAO {
         final Cursor c;
         Cloud cloud;
 
+        if (id == null) {
+            return null;
+        }
+
         // Requête
         c = Constants.sqlHandler.query(
                 CloudDAO.nameOfTheAssociatedTable,
@@ -144,6 +150,11 @@ public class CloudDAO {
  * @param cloud Cloud à supprimer
  ******************************************************************************/
     public static void deleteCloudFromDB(final Cloud cloud) {
+        
+        if (cloud == null) {
+            return;
+        }
+
         Constants.sqlHandler.delete(
                 CloudDAO.nameOfTheAssociatedTable,
                 "id=?",

@@ -98,6 +98,10 @@ public class EnclosureDAO {
         final Cursor c;
         Enclosure enclosure;
 
+        if (id == null) {
+            return null;
+        }
+
         // Requête
         c = Constants.sqlHandler.query(
                 EnclosureDAO.nameOfTheAssociatedTable,
@@ -133,6 +137,11 @@ public class EnclosureDAO {
  * @param enclosure Pièce jointe à supprimer
  ******************************************************************************/
     public static void deleteEnclosureFromDB(final Enclosure enclosure) {
+        
+        if (enclosure == null) {
+            return;
+        }
+
         Constants.sqlHandler.delete(
                 EnclosureDAO.nameOfTheAssociatedTable,
                 "id=?",
