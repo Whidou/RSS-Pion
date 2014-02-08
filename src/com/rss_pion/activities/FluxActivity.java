@@ -134,8 +134,7 @@ public class FluxActivity extends RSS_PionActivity {
 										.getId());
 
 						// Suppression du flux à l'origine du click :
-						FluxDAO.deleteFluxInTheDataBase(Constants.focusedFlux
-								.getId());
+						FluxDAO.deleteFluxFromDB(Constants.focusedFlux);
 
 						// Rafraichissement de l'affichage :
 						FluxActivity.this.updateListDeFlux();

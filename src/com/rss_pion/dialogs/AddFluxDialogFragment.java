@@ -15,6 +15,7 @@ package com.rss_pion.dialogs;
 import com.rss_pion.R;
 import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
+import com.rss_pion.database.dao.FluxDAO;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -65,7 +66,7 @@ public class AddFluxDialogFragment extends DialogFragment {
 
             Log.e("AddFluxDialogFragment", "Ajout à la BDD.");
 
-            flux.insertIntoDB();
+            FluxDAO.insertFluxIntoDB(flux);
 
             Log.e("AddFluxDialogFragment", "Ajout à la liste.");
 
