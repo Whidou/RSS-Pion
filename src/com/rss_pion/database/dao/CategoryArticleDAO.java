@@ -17,7 +17,6 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.rss_pion.beans.Category;
 import com.rss_pion.configuration.Constants;
@@ -173,8 +172,6 @@ public abstract class CategoryArticleDAO {
         if (id == null) {
             return new ArrayList<Category>();
         }
-
-        Log.e("CategoryArticleDAO", CategoryArticleDAO.nameOfTheAssociatedTable);
 
         c = Constants.sqlHandler.query(
                 CategoryArticleDAO.nameOfTheAssociatedTable,

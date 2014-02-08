@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:contentDescription="Feed"
+            android:contentDescription="@string/imageDesc"
             android:src="@drawable/icon_flux_default" />
     </RelativeLayout>
 
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:text="Last update: " />
+                android:text="@string/updated" />
 
             <requestFocus />
 

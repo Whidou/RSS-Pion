@@ -17,7 +17,6 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.rss_pion.beans.Category;
 import com.rss_pion.configuration.Constants;
