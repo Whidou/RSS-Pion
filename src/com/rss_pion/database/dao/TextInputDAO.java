@@ -1,11 +1,11 @@
 /***************************************************************************//**
- * @file TextInputDAO.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 2014-02-02
+ * @file    TextInputDAO.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-02-08
  * @version 0.5
  *
- * Interface BDD pour les objets TextInput
+ * Interface pour les objets text input
  ******************************************************************************/
 
 package com.rss_pion.database.dao;
@@ -13,216 +13,135 @@ package com.rss_pion.database.dao;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
+import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
+import com.rss_pion.beans.TextInput;
 import com.rss_pion.configuration.Constants;
-import com.rss_pion.database.SqlDbHelper;
-import com.rss_pion.database.dao.abstracts.SerializedObject;
 
 /*** MAIN CLASS ***************************************************************/
 
-public class TextInputDAO extends SerializedObject {
+public class TextInputDAO {
 
 /*** ATTRIBUTES ***************************************************************/
 
-    //! Titre
-    private String title;
+    //! Table
+    public static String nameOfTheAssociatedTable = "TEXTINPUT_IT";
 
-    //! Lien
-    private String link;
-
-    //! Description
-    private String description;
-
-    //! Nom
-    private String name;
-
-	//! Table
-	public static String nameOfTheAssociatedTable = "TEXTINPUT_IT";
-
-	//! Champs
-	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
-	static {
-		TextInputDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-		TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] { "name",
-				"TEXT NOT NULL" });
-		TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] {
-				"description", "TEXT NOT NULL" });
-		TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] { "link",
-				"TEXT NOT NULL" });
-		TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] { "title",
-				"TEXT NOT NULL" });
-	}
+    //! Champs
+    public static ArrayList<String[]> fieldsOfTheAssociatedTable;
+    static {
+        TextInputDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
+        TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] {
+                "description", "TEXT NOT NULL" });
+        TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] {
+                "link", "TEXT NOT NULL" });
+        TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] {
+                "name", "TEXT NOT NULL" });
+        TextInputDAO.fieldsOfTheAssociatedTable.add(new String[] {
+                "title", "TEXT NOT NULL" });
+    }
 
 /*** METHODS ******************************************************************/
 
-    public TextInputDAO() {
-        super();
-    }
+/***************************************************************************//**
+ * Insère un text input dans la BDD
+ * 
+ * @param textInput text input à insérer
+ * 
+ * @return          ID de l'entrée en BDD
+ ******************************************************************************/
+    public static Long insertTextInputIntoDB(final TextInput textInput) {
+        
+        Long idTextInput;
+        ContentValues valuesMap;
+        
+        idTextInput = textInput.getId();
+        
+        if (idTextInput == null) {
 
-    public String getName() {
-        return this.name;
-    }
+            // Préparation des champs
+            valuesMap = new ContentValues();
 
-    public String getDescription() {
-        return this.description;
-    }
+            // Insertion de l'textInput
+            idTextInput = Constants.sqlHandler.insert(
+                    TextInputDAO.nameOfTheAssociatedTable,
+                    "name",
+                    valuesMap);
 
-    public String getLink() {
-        return this.link;
-    }
+            textInput.setId(idTextInput);
+        }
 
-    public String getTitle() {
-        return this.title;
-    }
+        // Préparation des champs
+        valuesMap = new ContentValues();
+        valuesMap.put("description", textInput.getDescription());
+        valuesMap.put("link", textInput.getLink());
+        valuesMap.put("name", textInput.getName());
+        valuesMap.put("title", textInput.getTitle());
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+        Constants.sqlHandler.update(
+                TextInputDAO.nameOfTheAssociatedTable,
+                valuesMap,
+                "id=?",
+                new String[] {idTextInput.toString()});
 
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public void setLink(final String link) {
-        this.link = link;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
+        return idTextInput;
     }
 
 /***************************************************************************//**
- * Suppression du text input de la BDD
+ * Retourne un text input de la BDD à partir de son ID
  * 
- * @param id    ID du text input à supprimer
+ * @param id    Numéro d'identification du text input
+ * 
+ * @return      Text input obtenu ou null
  ******************************************************************************/
-	public static void deleteTextInputInTheDataBase(final Long id) {
-		final String query = "SELECT * FROM "
-				+ TextInputDAO.nameOfTheAssociatedTable + " WHERE id = " + id;
-		final Cursor c1 = Constants.sqlHandler.selectQuery(query);
-		if ((c1 != null) && (c1.getCount() != 0)) {
-			if (c1.moveToFirst()) {
-				do {
-					Constants.sqlHandler.deleteDAO(
-							TextInputDAO.nameOfTheAssociatedTable, id);
-				} while (c1.moveToNext());
-			}
-		}
-		c1.close();
-	}
+    public static TextInput getTextInputFromDB(final Long id) {
 
-/**
- * Gets the flux dao.
- * 
- * @return The flux dao
- */
-	public static ArrayList<FluxDAO> getFluxDAO() {
+        final Cursor c;
+        TextInput textInput;
 
-		final String query = "SELECT * FROM "
-				+ ArticleDAO.nameOfTheAssociatedTable + ";";
-		final Cursor c1 = Constants.sqlHandler.selectQuery(query);
-		final ArrayList<FluxDAO> flux_list = new ArrayList<FluxDAO>();
+        // Requête
+        c = Constants.sqlHandler.query(
+                TextInputDAO.nameOfTheAssociatedTable,
+                null,
+                "id=?",
+                new String[] {id.toString()},
+                null,
+                null,
+                null,
+                null);
 
-		if ((c1 != null) && (c1.getCount() != 0)) {
-			if (c1.moveToFirst()) {
-				do {
-					final FluxDAO fluxDAO = new FluxDAO();
-					fluxDAO.setIdCloud(Long.parseLong(c1.getString(c1
-							.getColumnIndex("cloud"))));
-					fluxDAO.setCopyright(c1.getString(c1
-							.getColumnIndex("copyright")));
-					fluxDAO.setDescription(c1.getString(c1
-							.getColumnIndex("description")));
-					fluxDAO.setDocs(c1.getString(c1.getColumnIndex("docs")));
-					fluxDAO.setFeed(c1.getString(c1.getColumnIndex("feed")));
-					fluxDAO.setGenerator(c1.getString(c1
-							.getColumnIndex("generator")));
-					fluxDAO.setId(Long.parseLong(c1.getString(c1
-							.getColumnIndex("id"))));
-					fluxDAO.setIdImage(Long.parseLong(c1.getString(c1
-							.getColumnIndex("image"))));
-					fluxDAO.setLanguage(c1.getString(c1
-							.getColumnIndex("language")));
-					fluxDAO.setLastBuildDate(c1.getLong(c1
-							.getColumnIndex("lastBuildDate")));
-					fluxDAO.setLink(c1.getString(c1.getColumnIndex("link")));
-					fluxDAO.setManagingEditor(c1.getString(c1
-							.getColumnIndex("managingEditor")));
-					fluxDAO.setNumberOfArticles(Integer.parseInt(c1
-							.getString(c1.getColumnIndex("numberOfArticles"))));
-					fluxDAO.setNumberOfReadArticles(Integer.parseInt(c1
-							.getString(c1
-									.getColumnIndex("numberOfReadArticles"))));
-					fluxDAO.setOwnRate(Integer.parseInt(c1.getString(c1
-							.getColumnIndex("ownRate"))));
-					fluxDAO.setPubDate(c1.getLong(c1
-							.getColumnIndex("pubDate")));
-					fluxDAO.setRating(c1.getString(c1.getColumnIndex("rating")));
-					fluxDAO.setSkipDays(c1.getString(c1
-							.getColumnIndex("skipDays")));
-					fluxDAO.setSkipHours(c1.getString(c1
-							.getColumnIndex("skipHours")));
-					fluxDAO.setIdTextInput(Long.parseLong(c1.getString(c1
-							.getColumnIndex("textInput"))));
-					fluxDAO.setTitle(c1.getString(c1.getColumnIndex("title")));
-					fluxDAO.setTtl(Integer.parseInt(c1.getString(c1
-							.getColumnIndex("ttl"))));
-					fluxDAO.setWebMaster(c1.getString(c1
-							.getColumnIndex("webMaster")));
-					flux_list.add(fluxDAO);
-				} while (c1.moveToNext());
-			}
-		}
+        if (c.moveToFirst()) {
 
-		c1.close();
+            textInput = new TextInput();
 
-		return flux_list;
-	}
+            // Configuration de l'textInput à partir des données
+            textInput.setId(id);
+            textInput.setDescription(
+                    c.getString(c.getColumnIndex("description")));
+            textInput.setLink(c.getString(c.getColumnIndex("link")));
+            textInput.setName(c.getString(c.getColumnIndex("name")));
+            textInput.setTitle(c.getString(c.getColumnIndex("title")));
+        } else {
+            textInput = null;
+        }
+
+        c.close();
+
+        return textInput;
+    }
 
 /***************************************************************************//**
- * Insère le text input dans la BDD
+ * Supprime un text input de la BDD.
  * 
- * @param objects   
- * 
- * @return          Id de l'entrée
+ * @param textInput Text input à supprimer
  ******************************************************************************/
-	@Override
-	public Long insertInTheDataBase(final Object... objects)
-			throws IllegalAccessException, IllegalArgumentException {
-
-		String names = "";
-
-		final Iterator<String[]> it = TextInputDAO
-		        .fieldsOfTheAssociatedTable.iterator();
-		while (it.hasNext()) {
-			names += it.next()[0] + (it.hasNext() ? ", " : ")");
-		}
-
-		Constants.sqlHandler.executeQuery("INSERT INTO " +
-		        TextInputDAO.nameOfTheAssociatedTable + " (" + names +
-		        " VALUES ('" + this.getName() + "', '" + this.getDescription() +
-		        "', " + this.getLink() + "');");
-
-		Log.d("TEXT INPUT ADDED", this.toString());
-
-		return SqlDbHelper.lastInsertId(TextInputDAO.nameOfTheAssociatedTable);
-	}
-
-/***************************************************************************//**
- * Retourne un string correspondant au text input
- * 
- * @return  Texte de description du text input
- * 
- * @see java.lang.Object#toString()
- ******************************************************************************/
-	@Override
-	public String toString() {
-		return "TextInputDAO [title=" + this.title + ", link=" + this.link +
-		        ", description=" + this.description + ", name=" + this.name +
-		        "]";
-	}
+    public static void deleteTextInputFromDB(final TextInput textInput) {
+        Constants.sqlHandler.delete(
+                TextInputDAO.nameOfTheAssociatedTable,
+                "id=?",
+                new String[] {textInput.getId().toString()}
+                );
+    }
 }

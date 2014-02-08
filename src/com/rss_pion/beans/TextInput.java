@@ -7,158 +7,90 @@
  *
  * @brief
  ***************************************************************************/
+
 package com.rss_pion.beans;
 
-import com.rss_pion.database.dao.TextInputDAO;
-import com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject;
+/*** MAIN CLASS ***************************************************************/
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class TextInput.
- */
-public class TextInput extends NeedTranslationToBeSerializedObject {
+public class TextInput {
 
-	/** The title. */
+/*** ATTRIBUTES ***************************************************************/
+
+    //! Numéro d'entrée dans la BDD
+    private Long id;
+
+	//! Titre
 	private String title;
 
-	/** The description. */
+	//! Description
 	private String description;
 
-	/** The author. */
+	//! Nom
 	private String name;
 
-	/** The link. */
+	//! Lien
 	private String link;
 
-	/**
-	 * Instantiates a new text input.
-	 */
+/*** METHODS ******************************************************************/
+
 	public TextInput() {
+
 		super();
-		// TODO Auto-generated constructor stub
+
+		this.title = "";
+		this.link = "";
+		this.description = "";
+		this.name = "";
 	}
 
-	/**
-	 * Instantiates a new text input.
-	 *
-	 * @param title : The title
-	 * @param link : The link
-	 * @param description : The description
-	 * @param author : The author
-	 * @param category : The category
-	 * @param comments : The comments
-	 * @param enclosure : The enclosure
-	 * @param guid : The guid
-	 * @param pubDate : The pub date
-	 * @param source : The source
-	 */
 	public TextInput(final String title, final String link,
 			final String description, final String name) {
+
 		super();
-		this.title = title;
-		this.link = link;
-		this.description = description;
-		this.name = name;
+
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.name = name;
 	}
 
-	/**
-	 * Gets the author.
-	 *
-	 * @return The author
-	 */
-	public String getName() {
-		return this.name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	/**
-	 * Gets the description.
-	 *
-	 * @return The description
-	 */
-	public String getDescription() {
-		return this.description;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	/**
-	 * Gets the link.
-	 *
-	 * @return The link
-	 */
-	public String getLink() {
-		return this.link;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Gets the title.
-	 *
-	 * @return The title
-	 */
-	public String getTitle() {
-		return this.title;
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the author.
-	 *
-	 * @param author : The new author
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public String getLink() {
+        return link;
+    }
 
-	/**
-	 * Sets the description.
-	 *
-	 * @param description : The new description
-	 */
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/**
-	 * Sets the link.
-	 *
-	 * @param link : The new link
-	 */
-	public void setLink(final String link) {
-		this.link = link;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	/**
-	 * Sets the title.
-	 *
-	 * @param title : The new title
-	 */
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/***************************************************************************
-	 * @see com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject#translateDaoToObject(java.lang.Object)
-	 ***************************************************************************/
-	@Override
-	public void translateDaoToObject(final Object object) {
-		final TextInputDAO textInputDAO = object instanceof TextInputDAO ? (TextInputDAO) object
-				: null;
-		if (textInputDAO != null) {
-			this.name = textInputDAO.getName();
-			this.description = textInputDAO.getDescription();
-			this.link = textInputDAO.getLink();
-			this.title = textInputDAO.getTitle();
-		}
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/***************************************************************************
-	 * @see com.rss_pion.database.dao.abstracts.NeedTranslationToBeSerializedObject#translateObjectToDao(java.lang.Long[])
-	 ***************************************************************************/
-	@Override
-	public Object translateObjectToDao(final Long... ids)
-			throws IllegalAccessException, IllegalArgumentException {
-		final TextInputDAO textInputDAO = new TextInputDAO();
-		textInputDAO.setName(this.getName());
-		textInputDAO.setDescription(this.getDescription());
-		textInputDAO.setLink(this.getLink());
-		textInputDAO.setTitle(this.getTitle());
-		return textInputDAO;
-	}
+    public void setLink(String link) {
+        this.link = link;
+    }
 }
