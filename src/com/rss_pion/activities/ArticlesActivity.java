@@ -89,9 +89,8 @@ public class ArticlesActivity extends RSS_PionActivity {
 					public boolean onItemLongClick(final AdapterView<?> arg0,
 							final View arg1, final int arg2, final long arg3) {
 						// Suppression de l'article sélectionné :
-						ArticleDAO
-								.deleteArticleInTheDataBase(Constants.listOfArticles
-										.get(arg2).getId());
+						ArticleDAO.deleteArticleFromDB(
+						        Constants.listOfArticles.get(arg2));
 						// Rafraichissement de l'affichage :
 						ArticlesActivity.this.updateListDeArticles();
 						return true;

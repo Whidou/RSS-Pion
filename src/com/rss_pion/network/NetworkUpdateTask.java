@@ -26,8 +26,8 @@ import android.util.Log;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
+import com.rss_pion.beans.ImageRSS;
 import com.rss_pion.configuration.Constants;
-import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.rss.RSSParser;
 
 /*** MAIN CLASS ***************************************************************/

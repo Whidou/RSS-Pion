@@ -13,23 +13,14 @@ package com.rss_pion.database.dao;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.rss_pion.beans.Article;
-import com.rss_pion.beans.CategoryFlux;
-import com.rss_pion.beans.Cloud;
-import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Flux;
-import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
-import com.rss_pion.database.SqlDbHelper;
-import com.rss_pion.database.dao.abstracts.SerializedObject;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -161,7 +152,7 @@ public class FluxDAO {
         }
 
         if (flux.getCloud() != null) {
-            idLinkedObject = flux.getCloud().insertIntoDB();
+            idLinkedObject = CloudDAO.insertCloudIntoDB(flux.getCloud());
             valuesMap.put("idCloud", idLinkedObject);
         } else {
             valuesMap.put("idCloud", (Long) null);
@@ -268,11 +259,12 @@ public class FluxDAO {
                     }
                     flux.setSkipHours(hours);
 
-                    flux.setCloud(new Cloud(c.getLong(
-                            c.getColumnIndex("idCloud"))));
+                    flux.setCloud(CloudDAO.getCloudFromDB(
+                            c.getLong(c.getColumnIndex("idCloud"))));
+
+                    flux.setImage(ImageDAO.getImageFromDB(
+                            c.getLong(c.getColumnIndex("idImage"))));
 /*
-                    flux.setImage(new ImageDAO(c.getLong(
-                            c.getColumnIndex("idImage"))));
                     flux.setTextInput(new TextInput(c.getLong(
                             c.getColumnIndex("idTextInput"))));
 */
@@ -363,11 +355,11 @@ public class FluxDAO {
         if (flux.getArticles() != null) {
             ArticleDAO.deleteArticlesFromDB(flux.getArticles());
         }
-/*
+
         if (flux.getCloud() != null) {
-            CloudDAO.deleteCloud.DB(flux.getCloud());
+            CloudDAO.deleteCloudFromDB(flux.getCloud());
         }
-*/
+
         if (flux.getImage() != null) {
             ImageDAO.deleteImageFromDB(flux.getImage());
         }

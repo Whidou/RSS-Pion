@@ -12,6 +12,8 @@ package com.rss_pion.database.dao;
 
 /*** INCLUDES *****************************************************************/
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -29,8 +31,12 @@ public class ImageDAO {
 	public static String nameOfTheAssociatedTable = "IMAGE_IT";
 
 	//! Champs
-	public static String[] fieldsOfTheAssociatedTable = { "bitmap",
-			"BLOB" };
+	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
+    static {
+        ArticleDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
+        ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+                "bitmap", "BLOB"});
+    }
 
 /*** METHODS ******************************************************************/
 

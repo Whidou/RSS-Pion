@@ -18,13 +18,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.rss_pion.beans.Cloud;
 import com.rss_pion.beans.Enclosure;
 import com.rss_pion.beans.Guid;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.database.dao.CategoryArticleDAO;
 import com.rss_pion.database.dao.CategoryFluxDAO;
+import com.rss_pion.database.dao.CloudDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.database.dao.ImageDAO;
 import com.rss_pion.database.dao.TextInputDAO;
@@ -101,16 +101,14 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 	 ***************************************************************************/
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		final ArrayList<String[]> arrayList = new ArrayList<String[]>();
-		arrayList.add(ImageDAO.fieldsOfTheAssociatedTable);
-		db.execSQL(this.createTable(ImageDAO.nameOfTheAssociatedTable,
-				arrayList));
 		db.execSQL(this.createTable(FluxDAO.nameOfTheAssociatedTable,
 				FluxDAO.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(ArticleDAO.nameOfTheAssociatedTable,
 				ArticleDAO.fieldsOfTheAssociatedTable));
-		db.execSQL(this.createTable(Cloud.nameOfTheAssociatedTable,
-				Cloud.fieldsOfTheAssociatedTable));
+        db.execSQL(this.createTable(CloudDAO.nameOfTheAssociatedTable,
+                CloudDAO.fieldsOfTheAssociatedTable));
+        db.execSQL(this.createTable(ImageDAO.nameOfTheAssociatedTable,
+                ImageDAO.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(Enclosure.nameOfTheAssociatedTable,
 				Enclosure.fieldsOfTheAssociatedTable));
 		db.execSQL(this.createTable(Guid.nameOfTheAssociatedTable,
@@ -134,7 +132,7 @@ public class SqlDbHelper extends SQLiteOpenHelper {
 		db.execSQL(this.dropTable(ImageDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(FluxDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(ArticleDAO.nameOfTheAssociatedTable));
-		db.execSQL(this.dropTable(Cloud.nameOfTheAssociatedTable));
+		db.execSQL(this.dropTable(CloudDAO.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(Enclosure.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(Guid.nameOfTheAssociatedTable));
 		db.execSQL(this.dropTable(TextInputDAO.nameOfTheAssociatedTable));
