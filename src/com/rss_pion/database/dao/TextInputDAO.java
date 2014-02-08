@@ -189,8 +189,6 @@ public class TextInputDAO extends SerializedObject {
  * @param objects   
  * 
  * @return          Id de l'entrée
- * 
- * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
  ******************************************************************************/
 	@Override
 	public Long insertInTheDataBase(final Object... objects)

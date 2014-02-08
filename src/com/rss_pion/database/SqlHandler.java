@@ -118,6 +118,16 @@ public class SqlHandler {
                 limit);
     }
 
+    public int delete(String table,
+            String whereClause,
+            String[] whereArgs) {
+        if (this.sqlDatabase.isOpen()) {
+            this.sqlDatabase.close();
+        }
+        this.sqlDatabase = this.dbHelper.getWritableDatabase();
+        return this.sqlDatabase.delete(table, whereClause, whereArgs);
+    }
+
 	/**
 	 * Insert dao.
 	 * 

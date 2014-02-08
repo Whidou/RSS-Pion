@@ -9,10 +9,12 @@
  ***************************************************************************/
 package com.rss_pion.configuration;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -26,11 +28,16 @@ public class Tools {
 	 * @param bitmap : The bitmap
 	 * @return The bytes
 	 */
-	public static byte[] getBytes(final Bitmap bitmap) {
-		final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bitmap.compress(CompressFormat.PNG, 0, stream);
-		return stream.toByteArray();
-	}
+    public static byte[] getBytes(final Bitmap bitmap) {
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    public static Bitmap getBitmap(final byte[] bytes) {
+        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        return BitmapFactory.decodeStream(stream);
+    }
 
 	/**
 	 * Instantiates a new tools.

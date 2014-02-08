@@ -1,9 +1,9 @@
 /***************************************************************************//**
- * @file FluxDAO.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+ * @file    FluxDAO.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    23 janv. 2014
+ * @version 0.5
  *
  * Interface BDD pour les objets flux
  ******************************************************************************/
@@ -41,7 +41,7 @@ public class FluxDAO {
 	public static String nameOfTheAssociatedTable = "FLUX_IT";
 
 	//! Champs
-	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
+	public static ArrayList<String[]> fieldsOfTheAssociatedTable; 
 	static {
 		FluxDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
 		FluxDAO.fieldsOfTheAssociatedTable.add(new String[] { "copyright",
@@ -95,44 +95,102 @@ public class FluxDAO {
 /*** METHODS ******************************************************************/
 
 /***************************************************************************//**
- * Supprime un flux de la BDD.
+ * Insère un flux dans la BDD
  * 
- * @param flux  Flux à supprimer
+ * @param flux  Flux à insérer
+ * 
+ * @return      ID de l'entrée en BDD
  ******************************************************************************/
-    public static void deleteFluxFromDB(final Flux flux) {
+    public static Long insertFluxIntoDB(Flux flux) {
 
-        if (flux.getArticles() != null) {
-            ArticleDAO.deleteArticlesFromDB(flux.getArticles());
+        ContentValues valuesMap;
+        Long idFlux, idLinkedObject;
+        String strValue;
+
+        idFlux = flux.getId();
+
+        // Si le flux n'existe pas dans la BDD
+        if (idFlux == null) {
+
+            // Préparation des champs du flux
+            valuesMap = new ContentValues();
+            valuesMap.put("feed", flux.getFeed());
+
+            // Insertion du flux
+            idFlux = Constants.sqlHandler.insert(
+                    FluxDAO.nameOfTheAssociatedTable,
+                    "feed",
+                    valuesMap);
+
+            flux.setId(idFlux);
+        }
+
+        // Préparation des champs du flux
+        valuesMap = new ContentValues();
+        valuesMap.put("copyright", flux.getCopyright());
+        valuesMap.put("description", flux.getDescription());
+        valuesMap.put("docs", flux.getDocs());
+        valuesMap.put("generator", flux.getGenerator());
+        valuesMap.put("language", flux.getLanguage());
+        valuesMap.put("lastBuildDate", flux.getLastBuildDate());
+        valuesMap.put("link", flux.getLink());
+        valuesMap.put("managingEditor", flux.getManagingEditor());
+        valuesMap.put("pubDate", flux.getPubDate());
+        valuesMap.put("rating", flux.getRating());
+        valuesMap.put("title", flux.getTitle());
+        valuesMap.put("ttl", flux.getTtl());
+        valuesMap.put("webMaster", flux.getWebMaster());
+        valuesMap.put("urlImage", flux.getUrlImage());
+
+        // Concaténation des jours
+        if (flux.getSkipDays() != null) {
+            strValue = new String();
+            for (String day : flux.getSkipDays()){
+                strValue.concat(day);
+            }
+            valuesMap.put("skipDays", strValue);
+        }
+
+        // Concaténation des heures
+        if (flux.getSkipHours() != null) {
+            strValue = new String();
+            for (Integer hour : flux.getSkipHours()){
+                strValue.concat(hour.toString());
+            }
+            valuesMap.put("skipHours", strValue);
         }
 
         if (flux.getCloud() != null) {
-            CloudDAO.deleteCloud.DB(flux.getCloud());
+            idLinkedObject = flux.getCloud().insertIntoDB();
+            valuesMap.put("idCloud", idLinkedObject);
+        } else {
+            valuesMap.put("idCloud", (Long) null);
         }
-
+/*
         if (flux.getImage() != null) {
-            ImageDAO.deleteImageFromDB(flux.getImage());
+            idLinkedObject = ImageDAO.insertImageIntoDB(flux.getImage());
+            valuesMap.put("idImage", idLinkedObject);
+        } else {
+            valuesMap.put("idImage", (Long) null);
         }
 
         if (flux.getTextInput() != null) {
-            TextInputDAO.deleteTextInputFromDB(flux.getTextInput());
+            idLinkedObject = TextInputDAO.insertTextInputIntoDB(
+                    flux.getTextInput());
+            valuesMap.put("idTextInput", idLinkedObject);
+        } else {
+            valuesMap.put("idTextInput", (Long) null);
         }
-
-        Constants.sqlHandler.delete(
-                FluxDAO.nameOfTheAssociatedTable,
+*/
+        // Update du flux
+        Constants.sqlHandler.update(FluxDAO.nameOfTheAssociatedTable,
+                valuesMap,
                 "id=?",
-                new String[] {flux.getId().toString()}
-                );
-    }
+                new String[] {idFlux.toString()});
 
-/***************************************************************************//**
- * Supprime une liste de flux de la BDD.
- * 
- * @param listeFlux Liste des flux à supprimer
- ******************************************************************************/
-    public static void deleteFluxFromDB(final Flux[] listeFlux) {
-        for (Flux flux : listeFlux) {
-            deleteFluxFromDB(flux);
-        }
+        Log.d("FLUX ADDED", flux.toString());
+
+        return idFlux;
     }
 
 /***************************************************************************//**
@@ -296,101 +354,43 @@ public class FluxDAO {
 	}
 
 /***************************************************************************//**
- * Insère un flux dans la BDD
+ * Supprime un flux de la BDD.
  * 
- * @param flux  Flux à insérer
- * 
- * @return      ID de l'entrée en BDD
+ * @param flux  Flux à supprimer
  ******************************************************************************/
-    public static Long insertFluxIntoDB(Flux flux) {
+    public static void deleteFluxFromDB(final Flux flux) {
 
-        ContentValues valuesMap;
-        Long idFlux, idLinkedObject;
-        String strValue;
-
-        idFlux = flux.getId();
-
-        // Si le flux n'existe pas dans la BDD
-        if (idFlux == null) {
-
-            // Préparation des champs du flux
-            valuesMap = new ContentValues();
-            valuesMap.put("feed", flux.getFeed());
-
-            // Insertion du flux
-            idFlux = Constants.sqlHandler.insert(
-                    FluxDAO.nameOfTheAssociatedTable,
-                    null,
-                    valuesMap);
-
-            flux.setId(idFlux);
-        }
-
-        // Préparation des champs du flux
-        valuesMap = new ContentValues();
-        valuesMap.put("copyright", flux.getCopyright());
-        valuesMap.put("description", flux.getDescription());
-        valuesMap.put("docs", flux.getDocs());
-        valuesMap.put("generator", flux.getGenerator());
-        valuesMap.put("language", flux.getLanguage());
-        valuesMap.put("lastBuildDate", flux.getLastBuildDate());
-        valuesMap.put("link", flux.getLink());
-        valuesMap.put("managingEditor", flux.getManagingEditor());
-        valuesMap.put("pubDate", flux.getPubDate());
-        valuesMap.put("rating", flux.getRating());
-        valuesMap.put("title", flux.getTitle());
-        valuesMap.put("ttl", flux.getTtl());
-        valuesMap.put("webMaster", flux.getWebMaster());
-        valuesMap.put("urlImage", flux.getUrlImage());
-
-        // Concaténation des jours
-        if (flux.getSkipDays() != null) {
-            strValue = new String();
-            for (String day : flux.getSkipDays()){
-                strValue.concat(day);
-            }
-            valuesMap.put("skipDays", strValue);
-        }
-
-        // Concaténation des heures
-        if (flux.getSkipHours() != null) {
-            strValue = new String();
-            for (Integer hour : flux.getSkipHours()){
-                strValue.concat(hour.toString());
-            }
-            valuesMap.put("skipHours", strValue);
-        }
-
-        if (flux.getCloud() != null) {
-            idLinkedObject = flux.getCloud().insertIntoDB();
-            valuesMap.put("idCloud", idLinkedObject);
-        } else {
-            valuesMap.put("idCloud", (Long) null);
+        if (flux.getArticles() != null) {
+            ArticleDAO.deleteArticlesFromDB(flux.getArticles());
         }
 /*
-        if (flux.getImage() != null) {
-            idLinkedObject = ImageDAO.insertImageIntoDB(flux.getImage());
-            valuesMap.put("idImage", idLinkedObject);
-        } else {
-            valuesMap.put("idImage", (Long) null);
-        }
-
-        if (flux.getTextInput() != null) {
-            idLinkedObject = TextInputDAO.insertTextInputIntoDB(
-                    flux.getTextInput());
-            valuesMap.put("idTextInput", idLinkedObject);
-        } else {
-            valuesMap.put("idTextInput", (Long) null);
+        if (flux.getCloud() != null) {
+            CloudDAO.deleteCloud.DB(flux.getCloud());
         }
 */
-        // Update du flux
-        Constants.sqlHandler.update(FluxDAO.nameOfTheAssociatedTable,
-                valuesMap, 
+        if (flux.getImage() != null) {
+            ImageDAO.deleteImageFromDB(flux.getImage());
+        }
+/*
+        if (flux.getTextInput() != null) {
+            TextInputDAO.deleteTextInputFromDB(flux.getTextInput());
+        }
+*/
+        Constants.sqlHandler.delete(
+                FluxDAO.nameOfTheAssociatedTable,
                 "id=?",
-                new String[] {idFlux.toString()});
+                new String[] {flux.getId().toString()}
+                );
+    }
 
-        Log.d("FLUX ADDED", flux.toString());
-
-        return idFlux;
+/***************************************************************************//**
+ * Supprime une liste de flux de la BDD.
+ * 
+ * @param listeFlux Liste des flux à supprimer
+ ******************************************************************************/
+    public static void deleteFluxFromDB(final Flux[] listeFlux) {
+        for (Flux flux : listeFlux) {
+            deleteFluxFromDB(flux);
+        }
     }
 }

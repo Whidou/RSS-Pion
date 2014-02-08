@@ -1,79 +1,130 @@
-/***************************************************************************
- * @file ImageDAO.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    ImageDAO.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    23 janv. 2014
+ * @version 0.5
  *
- * @brief
- ***************************************************************************/
+ * Interface pour les objets image
+ ******************************************************************************/
+
 package com.rss_pion.database.dao;
 
-import android.content.ContentValues;
-import android.graphics.Bitmap;
+/*** INCLUDES *****************************************************************/
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.rss_pion.beans.ImageRSS;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.configuration.Tools;
-import com.rss_pion.database.dao.abstracts.SerializedObject;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ImageDAO.
- */
-public class ImageDAO extends SerializedObject {
+/*** MAIN CLASS ***************************************************************/
 
-	/** The name of the associated table. */
+public class ImageDAO {
+
+/*** ATTRIBUTES ***************************************************************/
+
+	//! Table
 	public static String nameOfTheAssociatedTable = "IMAGE_IT";
 
-	/** The fields of the associated table. */
+	//! Champs
 	public static String[] fieldsOfTheAssociatedTable = { "bitmap",
-			"BLOB NOT NULL" };
+			"BLOB" };
 
-	/** The bitmap. */
-	private Bitmap bitmap;
+/*** METHODS ******************************************************************/
 
-	/**
-	 * Instantiates a new image dao.
-	 */
-	public ImageDAO() {
-		// TODO Auto-generated constructor stub
+/***************************************************************************//**
+ * Insère une image dans la BDD
+ * 
+ * @param image Image à insérer
+ * 
+ * @return      ID de l'entrée en BDD
+ ******************************************************************************/
+	public static Long insertImageIntoDB(final ImageRSS image) {
+	    
+	    Long idImage;
+		ContentValues valuesMap;
+		
+		idImage = image.getId();
+		
+		if (idImage == null) {
+
+            // Préparation des champs
+            valuesMap = new ContentValues();
+
+            // Insertion de l'image
+            idImage = Constants.sqlHandler.insert(
+                    ImageDAO.nameOfTheAssociatedTable,
+                    "bitmap",
+                    valuesMap);
+
+            image.setId(idImage);
+		}
+
+        // Préparation des champs
+        valuesMap = new ContentValues();
+        valuesMap.put("bitmap", Tools.getBytes(image.getBitmap()));
+
+		Constants.sqlHandler.update(
+				ImageDAO.nameOfTheAssociatedTable,
+				valuesMap,
+                "id=?",
+                new String[] {idImage.toString()});
+
+		return idImage;
 	}
 
-	/**
-	 * Instantiates a new image dao.
-	 */
-	public ImageDAO(final Bitmap image) {
-		this.bitmap = image;
-	}
+/***************************************************************************//**
+ * Retourne une image de la BDD à partir de son ID
+ * 
+ * @param id    Numéro d'identification de l'image
+ * 
+ * @return      Image obtenue ou null
+ ******************************************************************************/
+    public static ImageRSS getImageFromDB(final Long id) {
 
-	/**
-	 * Gets the bitmap.
-	 * 
-	 * @return The bitmap
-	 */
-	public Bitmap getBitmap() {
-		return this.bitmap;
-	}
+        final Cursor c;
+        ImageRSS image;
 
-	/***************************************************************************
-	 * @see com.rss_pion.database.dao.abstracts.SerializedObject#insertInTheDataBase()
-	 ***************************************************************************/
-	@Override
-	public Long insertInTheDataBase(final Object... objects)
-			throws IllegalAccessException, IllegalArgumentException {
-		final ContentValues cv = (new ContentValues());
-		cv.put(ImageDAO.fieldsOfTheAssociatedTable[0],
-				Tools.getBytes(this.getBitmap()));
-		return Constants.sqlHandler.insertDAO(
-				ImageDAO.nameOfTheAssociatedTable, cv);
-	}
+        // Requête
+        c = Constants.sqlHandler.query(
+                ImageDAO.nameOfTheAssociatedTable,
+                null,
+                "id=?",
+                new String[] {id.toString()},
+                null,
+                null,
+                null,
+                null);
 
-	/**
-	 * Sets the image.
-	 * 
-	 * @param image : The new image
-	 */
-	public void setImage(final Bitmap image) {
-		this.bitmap = image;
-	}
+        if (c.moveToFirst()) {
+
+            image = new ImageRSS();
+
+            // Configuration de l'image à partir des données
+            image.setId(id);
+            image.setBitmap(Tools.getBitmap(
+                    c.getString(c.getColumnIndex("bitmap")).getBytes()));
+        } else {
+            image = null;
+        }
+
+        c.close();
+
+        return image;
+    }
+
+/***************************************************************************//**
+ * Supprime une image de la BDD.
+ * 
+ * @param image Image à supprimer
+ ******************************************************************************/
+    public static void deleteImageFromDB(final ImageRSS image) {
+        Constants.sqlHandler.delete(
+                ImageDAO.nameOfTheAssociatedTable,
+                "id=?",
+                new String[] {image.getId().toString()}
+                );
+    }
 }
