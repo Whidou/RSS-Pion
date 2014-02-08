@@ -12,7 +12,12 @@ package com.rss_pion.beans;
 
 /*** INCLUDES *****************************************************************/
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -40,12 +45,30 @@ public class ImageRSS {
         return bitmap;
     }
 
+    public byte[] getBytes() {
+
+        final ByteArrayOutputStream stream;
+
+        stream = new ByteArrayOutputStream();
+        this.bitmap.compress(CompressFormat.PNG, 0, stream);
+
+        return stream.toByteArray();
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public void setBytes(byte[] bytes) {
+
+        final ByteArrayInputStream stream;
+
+        stream = new ByteArrayInputStream(bytes);
+        this.bitmap = BitmapFactory.decodeStream(stream);
     }
 
     public void setId(Long id) {

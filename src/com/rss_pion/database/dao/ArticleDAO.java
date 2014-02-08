@@ -33,30 +33,30 @@ public class ArticleDAO {
 	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
 	static {
 		ArticleDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "author",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "comments",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "description",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "idEnclosure",
-				"INTEGER NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "idFather",
-				"INTEGER NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "idGuid",
-				"INTEGER NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "isRead",
-				"INTEGER NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "link",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "pubDate",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "source",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "title",
-				"TEXT NOT NULL" });
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] { "userRate",
-				"INTEGER NOT NULL" });
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "author", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "comments", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "description", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "idEnclosure", "INTEGER"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "idFather", "INTEGER"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "idGuid", "INTEGER"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "isRead", "INTEGER"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "link", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "pubDate", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "source", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "title", "TEXT"});
+		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
+		        "userRate", "INTEGER"});
 	}
 
 /*** METHODS ******************************************************************/

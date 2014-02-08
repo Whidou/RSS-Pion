@@ -19,7 +19,6 @@ import android.database.Cursor;
 
 import com.rss_pion.beans.ImageRSS;
 import com.rss_pion.configuration.Constants;
-import com.rss_pion.configuration.Tools;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -70,7 +69,7 @@ public class ImageDAO {
 
         // Préparation des champs
         valuesMap = new ContentValues();
-        valuesMap.put("bitmap", Tools.getBytes(image.getBitmap()));
+        valuesMap.put("bitmap", image.getBytes());
 
 		Constants.sqlHandler.update(
 				ImageDAO.nameOfTheAssociatedTable,
@@ -110,8 +109,7 @@ public class ImageDAO {
 
             // Configuration de l'image à partir des données
             image.setId(id);
-            image.setBitmap(Tools.getBitmap(
-                    c.getString(c.getColumnIndex("bitmap")).getBytes()));
+            image.setBytes(c.getString(c.getColumnIndex("bitmap")).getBytes());
         } else {
             image = null;
         }
