@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -103,18 +104,24 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
     private void updateFlux(Flux flux) throws IOException {
 
         Flux update;
-        Long lastUpdateTimestamp = flux.getPubDate();
+        Long lastBuildDate, newBuildDate, articlePubDate;
 
         // Obtention de la dernière version du flux
         update = this.getFlux(flux.getFeed());
 
         // En cas d'erreur, pas de modification
         if (update == null) {
+            Log.e("NetworkUpdateTask", "Erreur récupération flux.");
             return;
         }
 
-        // Vérification de la date de dernière mise à jour
-        if (update.getPubDate() <= lastUpdateTimestamp) {
+        lastBuildDate = flux.getLastBuildDate();
+        newBuildDate = update.getLastBuildDate();
+        if (newBuildDate == 0) {
+            newBuildDate = (new Date()).getTime();
+        }
+
+        if (newBuildDate <= lastBuildDate) {
             return;
         }
 
@@ -126,7 +133,7 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setDocs(update.getDocs());
         flux.setGenerator(update.getGenerator());
         flux.setLanguage(update.getLanguage());
-        flux.setLastBuildDate(lastUpdateTimestamp);
+        flux.setLastBuildDate(newBuildDate);
         flux.setLink(update.getLink());
         flux.setManagingEditor(update.getManagingEditor());
         flux.setPubDate(update.getPubDate());
@@ -141,7 +148,11 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
         // Ajout des nouveaux articles
         for (Article article : update.getArticles()) {
-            if (article.getPubDate() > lastUpdateTimestamp) {
+            articlePubDate = article.getPubDate();
+            if (articlePubDate == 0) {
+                articlePubDate = newBuildDate;
+            }
+            if (articlePubDate > lastBuildDate) {
                 flux.addArticle(article);
             }
         }

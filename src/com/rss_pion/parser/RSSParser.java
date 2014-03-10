@@ -12,6 +12,8 @@ package com.rss_pion.parser;
 
 /*** INCLUDES *****************************************************************/
 
+import android.util.Log;
+
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Category;
 import com.rss_pion.beans.Flux;
@@ -71,7 +73,7 @@ public class RSSParser extends DefaultHandler {
         this.article = null;
         this.text = new StringBuilder();
         this.dateFormat = new SimpleDateFormat(
-                "EEE, dd MMM yyyy kk:mm:ss zzz",
+                "EEE, dd MMM yyyy kk:mm:ss",
                 Locale.US);
     }
 
@@ -249,17 +251,22 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("lastbuilddate")) {
                 try {
                     this.flux.setLastBuildDate(dateFormat.parse(value).getTime());
+                    Log.e("RSSParser", "DateBuild: "+this.flux.getLastBuildDate());
                 } catch (ParseException e) {
+                    Log.e("RSSParser", "Date parsing error: "+value);
                     this.flux.setLastBuildDate((new Date()).getTime());
                 }
             } else if (qName.equalsIgnoreCase("link")) {
                 this.flux.setLink(value);
             } else if (qName.equalsIgnoreCase("managingeditor")) {
                 this.flux.setManagingEditor(value);
-            } else if (qName.equalsIgnoreCase("pubdate")) {
+            } else if (qName.equalsIgnoreCase("pubDate")) {
+                Log.e("RSSParser", qName+"="+value);
                 try {
                     this.flux.setPubDate(dateFormat.parse(value).getTime());
+                    Log.e("RSSParser", "DateFlux: "+this.flux.getPubDate());
                 } catch (ParseException e) {
+                    Log.e("RSSParser", "Date parsing error: "+value);
                     this.flux.setPubDate((new Date()).getTime());
                 }
             } else if (qName.equalsIgnoreCase("rating")) {
