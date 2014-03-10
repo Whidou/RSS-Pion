@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    FluxActivity.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -15,9 +16,10 @@ package com.rss_pion.activities;
 import java.util.LinkedList;
 
 import android.app.ActionBar;
-
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +28,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -36,6 +39,7 @@ import com.rss_pion.R;
 import com.rss_pion.beans.Article;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlHandler;
+import com.rss_pion.database.dao.CategoryFluxDAO;
 import com.rss_pion.database.dao.FluxDAO;
 import com.rss_pion.dialogs.AddFluxDialogFragment;
 import com.rss_pion.network.NetworkUpdateTask;
@@ -45,24 +49,25 @@ import com.rss_pion.ui.adapter.FluxAdapter;
 
 public class FluxActivity extends RSS_PionActivity {
 
-/***************************************************************************//**
- * @see android.app.Activity#onCreate(Bundle)
- ******************************************************************************/
+	/***************************************************************************/
+	/**
+	 * @see android.app.Activity#onCreate(Bundle)
+	 ******************************************************************************/
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
 		ActionBar actionBar;
-		EditText fluxLinkInput;
+		AutoCompleteTextView fluxLinkInput;
 
 		// Action Bar
 		actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.flux_action_bar);
 
 		// Champ d'ajout de flux
-		fluxLinkInput = (EditText) actionBar.getCustomView().findViewById(
-				R.id.flux_link_input);
+		fluxLinkInput = (AutoCompleteTextView) actionBar.getCustomView()
+				.findViewById(R.id.flux_link_input);
 		fluxLinkInput.setOnEditorActionListener(new OnEditorActionListener() {
 
 			@Override
@@ -76,8 +81,8 @@ public class FluxActivity extends RSS_PionActivity {
 		fluxLinkInput.setSelected(false);
 
 		// Affichage de l'AB
-		actionBar.setDisplayOptions(
-		        ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
+				| ActionBar.DISPLAY_SHOW_HOME);
 
 		// Définition du layout
 		this.setContentView(R.layout.list_view_layout);
@@ -86,8 +91,8 @@ public class FluxActivity extends RSS_PionActivity {
 		Constants.listViewOfFlux = (ListView) this.findViewById(R.id.listView1);
 
 		// Définition de l'adaptateur liant la liste à son affichage
-		Constants.adapterOfFlux = new FluxAdapter(
-		        this, R.layout.flux_listview_row, Constants.listOfFlux);
+		Constants.adapterOfFlux = new FluxAdapter(this,
+				R.layout.flux_listview_row, Constants.listOfFlux);
 
 		// Mise en place de l'adaptateur
 		Constants.listViewOfFlux.setAdapter(Constants.adapterOfFlux);
@@ -104,11 +109,10 @@ public class FluxActivity extends RSS_PionActivity {
 
 						// Chargement des articles du flux :
 						Constants.listOfArticles = new LinkedList<Article>(
-						        Constants.focusedFlux.getArticles());
+								Constants.focusedFlux.getArticles());
 
 						// Ouverture de l'activité gérant les articles du flux :
-						final Intent intent = new Intent(
-						        FluxActivity.this,
+						final Intent intent = new Intent(FluxActivity.this,
 								ArticlesActivity.class);
 						FluxActivity.this.startActivity(intent);
 					}
@@ -122,8 +126,7 @@ public class FluxActivity extends RSS_PionActivity {
 							final View arg1, final int arg2, final long arg3) {
 
 						// Suppression du flux à l'origine du click :
-						FluxDAO.deleteFluxFromDB(
-						        Constants.listOfFlux.get(arg2));
+						FluxDAO.deleteFluxFromDB(Constants.listOfFlux.get(arg2));
 
 						// Rafraichissement de l'affichage :
 						(new NetworkUpdateTask()).execute();
@@ -142,6 +145,25 @@ public class FluxActivity extends RSS_PionActivity {
 
 		// Initialise le conteneur de base de donné :
 		Constants.sqlHandler = new SqlHandler(this);
+
+		// Récupère les catégories de flux pour l'auto-complétion :
+		final Cursor c = Constants.sqlHandler.selectQuery("SELECT * FROM "
+				+ CategoryFluxDAO.nameOfTheAssociatedTable);
+		int i = 0;
+		while ((c != null) && c.moveToFirst()) {
+			final String cat_loc = c.getString(c.getColumnIndex("name"));
+			if (!Constants.categoriesInDB.contains(cat_loc)) {
+				Constants.categoriesInDB.add(cat_loc);
+			}
+			i++;
+		}
+
+		// Initialise l'auto-complétion :
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				R.layout.flux_action_bar, Constants.categoriesInDB);
+		fluxLinkInput.setThreshold(1);
+		fluxLinkInput.setAdapter(adapter);
+		Log.d("TEST", "i : " + i + ",   " + Constants.categoriesInDB.toString());
 	}
 
 	/**
@@ -167,11 +189,12 @@ public class FluxActivity extends RSS_PionActivity {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.add_flux:
-		    (new AddFluxDialogFragment()).show(getFragmentManager(), "addFlux");
+			(new AddFluxDialogFragment()).show(this.getFragmentManager(),
+					"addFlux");
 			return true;
-        case R.id.maj_flux:
-            (new NetworkUpdateTask()).execute();
-            return true;
+		case R.id.maj_flux:
+			(new NetworkUpdateTask()).execute();
+			return true;
 		case R.id.help_flux:
 			return true;
 		case R.id.exit_flux:
