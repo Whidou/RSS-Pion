@@ -35,11 +35,9 @@ public abstract class CategoryArticleDAO {
     static {
         fieldsOfTheAssociatedTable = new ArrayList<String[]>();
         fieldsOfTheAssociatedTable.add(new String[] {
-                "category", "TEXT" });
+                "name", "TEXT" });
         fieldsOfTheAssociatedTable.add(new String[] {
                 "idParent", "INTEGER" });
-        fieldsOfTheAssociatedTable.add(new String[] {
-                "idGrandfather", "INTEGER" });
     }
 
 /*** METHODS ******************************************************************/
@@ -67,7 +65,7 @@ public abstract class CategoryArticleDAO {
             // Préparation des champs
             valuesMap = new ContentValues();
 
-            // Insertion de l'category
+            // Insertion de la catégorie
             idCategory = Constants.sqlHandler.insert(
                     CategoryArticleDAO.nameOfTheAssociatedTable,
                     "name",

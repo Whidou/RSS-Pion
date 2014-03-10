@@ -122,7 +122,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                 Constants.dateFormat.format(new Date(article.getPubDate())));
 
 		holder.categoryView.setText(article.getCategories().toString());
-		holder.descriptionView.setText(article.getHtmlDescription());
+		holder.descriptionView.setText(article.getDescription());
 
 		return row;
 	}

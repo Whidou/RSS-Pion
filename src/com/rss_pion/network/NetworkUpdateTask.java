@@ -1,11 +1,11 @@
 /***************************************************************************//**
- * @file    FluxActivity.java
+ * @file    NetworkUpdateTask.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-02
- * @version 1.0
+ * @version 1.1
  *
- * Activité d'affichage des flux.
+ * Tâche de synchronisation réseau.
  ******************************************************************************/
 
 package com.rss_pion.network;
@@ -14,7 +14,6 @@ package com.rss_pion.network;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,8 +21,7 @@ import java.net.URL;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -32,54 +30,27 @@ import com.rss_pion.beans.Flux;
 import com.rss_pion.beans.ImageRSS;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.FluxDAO;
-import com.rss_pion.rss.RSSParser;
+import com.rss_pion.parser.RSSParser;
 
 /*** MAIN CLASS ***************************************************************/
 
 public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
+/*** ATTRIBUTES ***************************************************************/
+
+    //! Gestionnaire de notifications
     NotificationManager notiManager;
+
+    //! Notification de travail
     Notification noti;
 
-private ImageRSS getImage(String url) {
-
-    URL urlObj;
-    HttpURLConnection connection;
-    InputStream inStr;
-    Bitmap image;
-
-    try {
-        urlObj = new URL(url);
-    } catch (MalformedURLException e) {
-        return null;
-    }
-
-    try {
-        connection = (HttpURLConnection) urlObj.openConnection();
-    } catch (IOException e) {
-        return null;
-    }
-
-    try {
-        inStr = connection.getInputStream();
-    } catch (IOException e) {
-        connection.disconnect();
-        return null;
-    }
-
-    // Conversion de l'image en bitmap
-    image = BitmapFactory.decodeStream(inStr);
-    
-    connection.disconnect();
-
-    return new ImageRSS(image);
-}
+/*** METHODS ******************************************************************/
 
 /***************************************************************************//**
  * Obtention d'un flux depuis le réseau
- * 
+ *
  * @param feed  URL du flux
- * 
+ *
  * @return      Flux obtenu
  ******************************************************************************/
     private Flux getFlux(String feed) throws IOException {
@@ -89,8 +60,9 @@ private ImageRSS getImage(String url) {
         HttpURLConnection urlConnection;
         InputStream inStr;
         RSSParser rssParser;
+        BitmapDrawable imageDrawable;
 
-        // Téléchargement du flux
+        // Validation URL
         try {
             url = new URL(feed);
         } catch (MalformedURLException e) {
@@ -98,27 +70,34 @@ private ImageRSS getImage(String url) {
             return null;
         }
 
+        // Connexion
         urlConnection = (HttpURLConnection) url.openConnection();
 
+        // Réception
         inStr = urlConnection.getInputStream();
 
-        // Analyse du flux
+        // Analyse du flux RSS
         rssParser = new RSSParser(inStr);
         rssParser.parse();
 
+        // Obtention du flux RSS analysé
         flux = rssParser.getFlux();
 
+        // Déconnexion
         urlConnection.disconnect();
 
         // Téléchargement de l'éventuelle image associée
-        flux.setImage(this.getImage(flux.getUrlImage()));
+        imageDrawable = ImageGetterTask.getImage(flux.getUrlImage());
+        if (imageDrawable != null) {
+            flux.setImage(new ImageRSS(imageDrawable.getBitmap()));
+        }
 
         return flux;
     }
 
 /***************************************************************************//**
  * Mise à jour d'un flux depuis le réseau
- * 
+ *
  * @param flux  Object flux à mettre à jour
  ******************************************************************************/
     private void updateFlux(Flux flux) throws IOException {
@@ -129,6 +108,7 @@ private ImageRSS getImage(String url) {
         // Obtention de la dernière version du flux
         update = this.getFlux(flux.getFeed());
 
+        // En cas d'erreur, pas de modification
         if (update == null) {
             return;
         }
@@ -166,9 +146,13 @@ private ImageRSS getImage(String url) {
             }
         }
 
+        // Mise à jour de la BDD
         FluxDAO.insertFluxIntoDB(flux);
     }
-    
+
+/***************************************************************************//**
+ * @see android.os.AsyncTask#onPreExecute()
+ ******************************************************************************/
     @SuppressWarnings("deprecation")
     @Override
     protected void onPreExecute () {
@@ -176,9 +160,12 @@ private ImageRSS getImage(String url) {
         Context context;
 
         Log.e("NetworkUpdateTask", "Starting update.");
-        
+
+        // Obtention du conexte
         context = Constants.adapterOfFlux.getContext();
 
+        // Création de la notification
+        // (ancienne méthode pour compatibilité avec les vielles APIs)
         this.noti = new Notification.Builder(context)
                 .setContentTitle("RSS Pion")
                 .setContentText("Updating the RSS feeds...")
@@ -186,12 +173,19 @@ private ImageRSS getImage(String url) {
                 .setOngoing(true)
                 .getNotification();
 
+        // Obtention du gestionnaire de notifications depuis le contexte
         this.notiManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
 
+        // Affichage de la notification
         this.notiManager.notify("NetworkUpdate", 0, this.noti);
     }
 
+/***************************************************************************//**
+ * Tâche de mise à jour des flux RSS
+ *
+ * @see android.os.AsyncTask#doInBackground(Params...)
+ ******************************************************************************/
     @Override
     protected Void doInBackground(Void... params) {
 
@@ -200,6 +194,7 @@ private ImageRSS getImage(String url) {
         i = 0;
         nFlux = Constants.listOfFlux.size();
 
+        // Mise à jour de chaque flux un par un
         for (Flux flux : Constants.listOfFlux) {
             try {
                 this.updateFlux(flux);
@@ -212,19 +207,24 @@ private ImageRSS getImage(String url) {
         return null;
     }
 
+/***************************************************************************//**
+ * @see android.os.AsyncTask#onPostExecute(Result)
+ ******************************************************************************/
     @Override
     protected void onPostExecute(Void result) {
-        
-        Constants.listOfFlux.clear();
 
+        // Reconstruction de la liste des flux à partir de la BDD
+        Constants.listOfFlux.clear();
         for (Flux flux : FluxDAO.getFluxFromDB()) {
             if (flux != null) {
                 Constants.listOfFlux.add(flux);
             }
         }
 
+        // Mise à jour de l'affichage
         Constants.adapterOfFlux.notifyDataSetChanged();
-        
+
+        // Suppression de la notification
         this.notiManager.cancel("NetworkUpdate", 0);
 
         Log.e("NetworkUpdateTask", "Ending update.");

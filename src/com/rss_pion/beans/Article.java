@@ -18,6 +18,8 @@ import java.util.List;
 import android.text.Html;
 import android.text.Spanned;
 
+import com.rss_pion.parser.URLImageParser;
+
 /*** MAIN CLASS ***************************************************************/
 
 public class Article {
@@ -123,7 +125,7 @@ public class Article {
 	}
 
     public Spanned getHtmlDescription() {
-        return Html.fromHtml(this.description, null, null);
+        return Html.fromHtml(this.description, new URLImageParser(), null);
     }
 
 	public Enclosure getEnclosure() {

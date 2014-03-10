@@ -35,11 +35,9 @@ public abstract class CategoryFluxDAO {
     static {
         fieldsOfTheAssociatedTable = new ArrayList<String[]>();
         fieldsOfTheAssociatedTable.add(new String[] {
-                "category", "TEXT" });
+                "name", "TEXT" });
         fieldsOfTheAssociatedTable.add(new String[] {
                 "idParent", "INTEGER" });
-        fieldsOfTheAssociatedTable.add(new String[] {
-                "idGrandfather", "INTEGER" });
     }
 
 /*** METHODS ******************************************************************/
