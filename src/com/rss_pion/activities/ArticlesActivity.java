@@ -10,7 +10,7 @@
 package com.rss_pion.activities;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -248,7 +248,7 @@ public class ArticlesActivity extends RSS_PionActivity {
 	 * Update list de articles.
 	 */
 	private void updateListDeArticles() {
-		Constants.listOfArticles = (LinkedList<Article>) ArticleDAO
+		Constants.listOfArticles = (ArrayList<Article>) ArticleDAO
 				.getArticlesFromDB(Constants.focusedFlux.getId());
 		Constants.adapterOfArticles.notifyDataSetChanged();
 	}

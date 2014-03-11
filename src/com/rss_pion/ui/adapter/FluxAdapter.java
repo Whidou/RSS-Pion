@@ -13,7 +13,7 @@ package com.rss_pion.ui.adapter;
 /*** INCLUDES *****************************************************************/
 
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,14 +47,14 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 	private final int layoutResourceId;
 
 	//! Liste des flux
-	private LinkedList<Flux> data;
+	private ArrayList<Flux> data;
 
 /*** METHODS ******************************************************************/
 
 	public FluxAdapter(
 	        final Context context,
 	        final int layoutResourceId,
-	        final LinkedList<Flux> data) {
+	        final ArrayList<Flux> data) {
 
 		super(context, layoutResourceId, data);
 

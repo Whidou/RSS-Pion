@@ -14,7 +14,7 @@ package com.rss_pion.activities;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -116,7 +116,7 @@ public class FluxActivity extends RSS_PionActivity {
 						Constants.focusedFlux = Constants.listOfFlux.get(arg2);
 
 						// Chargement des articles du flux :
-						Constants.listOfArticles = new LinkedList<Article>(
+						Constants.listOfArticles = new ArrayList<Article>(
 								Constants.focusedFlux.getArticles());
 
 						// Ouverture de l'activité gérant les articles du flux :

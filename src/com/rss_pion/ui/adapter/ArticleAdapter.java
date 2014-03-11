@@ -10,7 +10,7 @@
 package com.rss_pion.ui.adapter;
 
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,7 +42,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	private final int layoutResourceId;
 
 	/** The data. */
-	private LinkedList<Article> data = new LinkedList<Article>();
+	private ArrayList<Article> data = new ArrayList<Article>();
 
 	/**
 	 * Instantiates a new article adapter.
@@ -52,7 +52,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	 * @param data : The data
 	 */
 	public ArticleAdapter(final Context context, final int layoutResourceId,
-			final LinkedList<Article> data) {
+			final ArrayList<Article> data) {
 		super(context, layoutResourceId, data);
 		this.layoutResourceId = layoutResourceId;
 		this.context = context;
