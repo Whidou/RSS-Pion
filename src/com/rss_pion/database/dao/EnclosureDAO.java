@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    EnclosureDAO.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -24,132 +25,119 @@ import com.rss_pion.configuration.Constants;
 
 public class EnclosureDAO {
 
-/*** ATTRIBUTES ***************************************************************/
+	/*** ATTRIBUTES ***************************************************************/
 
-    //! Table
-    public static String nameOfTheAssociatedTable = "ENCOLSURE_IT";
+	// ! Table
+	public static String nameOfTheAssociatedTable = "ENCLOSURE_IT";
 
-    //! Champs
-    public static ArrayList<String[]> fieldsOfTheAssociatedTable;
-    static {
-        EnclosureDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-        EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "length", "INTEGER"});
-        EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "type", "TEXT"});
-        EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "url", "TEXT"});
-    }
+	// ! Champs
+	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
+	static {
+		EnclosureDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
+		EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] { "length",
+				"INTEGER" });
+		EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] { "type",
+				"TEXT" });
+		EnclosureDAO.fieldsOfTheAssociatedTable.add(new String[] { "url",
+				"TEXT" });
+	}
 
-/*** METHODS ******************************************************************/
+	/*** METHODS ******************************************************************/
 
-/***************************************************************************//**
- * Insère une pièce jointe dans la BDD
- * 
- * @param enclosure Pièce jointe à insérer
- * 
- * @return          ID de l'entrée en BDD
- ******************************************************************************/
-    public static Long insertEnclosureIntoDB(final Enclosure enclosure) {
+	/***************************************************************************/
+	/**
+	 * Supprime une pièce jointe de la BDD.
+	 * 
+	 * @param enclosure Pièce jointe à supprimer
+	 ******************************************************************************/
+	public static void deleteEnclosureFromDB(final Enclosure enclosure) {
 
-        Long idEnclosure;
-        ContentValues valuesMap;
+		if (enclosure == null) {
+			return;
+		}
 
-        if (enclosure == null) {
-            return null;
-        }
+		Constants.sqlHandler.delete(EnclosureDAO.nameOfTheAssociatedTable,
+				"id=?", new String[] { enclosure.getId().toString() });
+	}
 
-        idEnclosure = enclosure.getId();
-        
-        if (idEnclosure == null) {
+	/***************************************************************************/
+	/**
+	 * Retourne une pièce jointe de la BDD à partir de son ID
+	 * 
+	 * @param id Numéro d'identification de la pièce jointe
+	 * @return Pièce jointe obtenue ou null
+	 ******************************************************************************/
+	public static Enclosure getEnclosureFromDB(final Long id) {
 
-            // Préparation des champs
-            valuesMap = new ContentValues();
+		final Cursor c;
+		Enclosure enclosure;
 
-            // Insertion de l'enclosure
-            idEnclosure = Constants.sqlHandler.insert(
-                    EnclosureDAO.nameOfTheAssociatedTable,
-                    "url",
-                    valuesMap);
+		if (id == null) {
+			return null;
+		}
 
-            enclosure.setId(idEnclosure);
-        }
+		// Requête
+		c = Constants.sqlHandler.query(EnclosureDAO.nameOfTheAssociatedTable,
+				null, "id=?", new String[] { id.toString() }, null, null, null,
+				null);
 
-        // Préparation des champs
-        valuesMap = new ContentValues();
-        valuesMap.put("length", enclosure.getLength());
-        valuesMap.put("type", enclosure.getType());
-        valuesMap.put("url", enclosure.getUrl());
+		if (c.moveToFirst()) {
 
-        Constants.sqlHandler.update(
-                EnclosureDAO.nameOfTheAssociatedTable,
-                valuesMap,
-                "id=?",
-                new String[] {idEnclosure.toString()});
+			enclosure = new Enclosure();
 
-        return idEnclosure;
-    }
+			// Configuration de l'enclosure à partir des données
+			enclosure.setId(id);
+			enclosure.setLength(c.getLong(c.getColumnIndex("length")));
+			enclosure.setType(c.getString(c.getColumnIndex("type")));
+			enclosure.setUrl(c.getString(c.getColumnIndex("url")));
+		} else {
+			enclosure = null;
+		}
 
-/***************************************************************************//**
- * Retourne une pièce jointe de la BDD à partir de son ID
- * 
- * @param id    Numéro d'identification de la pièce jointe
- * 
- * @return      Pièce jointe obtenue ou null
- ******************************************************************************/
-    public static Enclosure getEnclosureFromDB(final Long id) {
+		c.close();
 
-        final Cursor c;
-        Enclosure enclosure;
+		return enclosure;
+	}
 
-        if (id == null) {
-            return null;
-        }
+	/***************************************************************************/
+	/**
+	 * Insère une pièce jointe dans la BDD
+	 * 
+	 * @param enclosure Pièce jointe à insérer
+	 * @return ID de l'entrée en BDD
+	 ******************************************************************************/
+	public static Long insertEnclosureIntoDB(final Enclosure enclosure) {
 
-        // Requête
-        c = Constants.sqlHandler.query(
-                EnclosureDAO.nameOfTheAssociatedTable,
-                null,
-                "id=?",
-                new String[] {id.toString()},
-                null,
-                null,
-                null,
-                null);
+		Long idEnclosure;
+		ContentValues valuesMap;
 
-        if (c.moveToFirst()) {
+		if (enclosure == null) {
+			return null;
+		}
 
-            enclosure = new Enclosure();
+		idEnclosure = enclosure.getId();
 
-            // Configuration de l'enclosure à partir des données
-            enclosure.setId(id);
-            enclosure.setLength(c.getLong(c.getColumnIndex("length")));
-            enclosure.setType(c.getString(c.getColumnIndex("type")));
-            enclosure.setUrl(c.getString(c.getColumnIndex("url")));
-        } else {
-            enclosure = null;
-        }
+		if (idEnclosure == null) {
 
-        c.close();
+			// Préparation des champs
+			valuesMap = new ContentValues();
 
-        return enclosure;
-    }
+			// Insertion de l'enclosure
+			idEnclosure = Constants.sqlHandler.insert(
+					EnclosureDAO.nameOfTheAssociatedTable, "url", valuesMap);
 
-/***************************************************************************//**
- * Supprime une pièce jointe de la BDD.
- * 
- * @param enclosure Pièce jointe à supprimer
- ******************************************************************************/
-    public static void deleteEnclosureFromDB(final Enclosure enclosure) {
-        
-        if (enclosure == null) {
-            return;
-        }
+			enclosure.setId(idEnclosure);
+		}
 
-        Constants.sqlHandler.delete(
-                EnclosureDAO.nameOfTheAssociatedTable,
-                "id=?",
-                new String[] {enclosure.getId().toString()}
-                );
-    }
+		// Préparation des champs
+		valuesMap = new ContentValues();
+		valuesMap.put("length", enclosure.getLength());
+		valuesMap.put("type", enclosure.getType());
+		valuesMap.put("url", enclosure.getUrl());
+
+		Constants.sqlHandler.update(EnclosureDAO.nameOfTheAssociatedTable,
+				valuesMap, "id=?", new String[] { idEnclosure.toString() });
+
+		return idEnclosure;
+	}
 }
