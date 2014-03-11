@@ -236,8 +236,15 @@ public class FluxActivity extends RSS_PionActivity {
 		Constants.sqlHandler = new SqlHandler(this);
 
 		// Récupère les catégories de flux pour l'auto-complétion :
-		final Cursor c = Constants.sqlHandler.selectQuery("SELECT * FROM "
-				+ CategoryFluxDAO.nameOfTheAssociatedTable);
+		final Cursor c = Constants.sqlHandler.query(
+		        CategoryFluxDAO.nameOfTheAssociatedTable,
+		        null,
+		        null,
+		        null,
+		        null,
+                null,
+                null,
+		        null);
 		int i = 0;
 		while ((c != null) && c.moveToFirst()) {
 			final String cat_loc = c.getString(c.getColumnIndex("name"));

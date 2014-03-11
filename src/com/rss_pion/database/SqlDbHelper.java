@@ -13,12 +13,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.database.dao.CategoryArticleDAO;
 import com.rss_pion.database.dao.CategoryFluxDAO;
@@ -34,23 +32,6 @@ import com.rss_pion.database.dao.TextInputDAO;
  * The Class SqlDbHelper.
  */
 public class SqlDbHelper extends SQLiteOpenHelper {
-
-	/**
-	 * Last insert id.
-	 * 
-	 * @param table_name : The table_name
-	 * @return The long
-	 */
-	public static Long lastInsertId(final String table_name) {
-		final String query = "SELECT ROWID FROM " + table_name
-				+ " ORDER BY ROWID DESC LIMIT 1;";
-		final Cursor c = Constants.sqlHandler.selectQuery(query);
-		if ((c != null) && c.moveToFirst()) {
-			return c.getLong(0);
-		} else {
-			return 0l;
-		}
-	}
 
 	/**
 	 * Instantiates a new sql db helper.
