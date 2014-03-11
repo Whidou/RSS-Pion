@@ -87,8 +87,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 					.findViewById(R.id.articleAuthorView);
 			holder.descriptionView = (TextView) row
 					.findViewById(R.id.articleDescriptionView);
-			holder.userRateView = (TextView) row
-					.findViewById(R.id.articleUserRateView);
 
 			row.setTag(holder);
 		} else {
@@ -101,7 +99,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             return row;
         }
 
-		holder.userRateView.setText(article.getUserRate() + "/5");
 		final SpannableString spanTitleView = new SpannableString(
 				article.getTitle());
 		if (!article.getIsRead()) {
@@ -121,8 +118,11 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		        "le " +
                 Constants.dateFormat.format(new Date(article.getPubDate())));
 
-		holder.categoryView.setText(article.getCategories().toString());
-		holder.descriptionView.setText(article.getDescription());
+		if (!article.getCategories().isEmpty()) {
+		    holder.categoryView.setText(article.getCategories().toString());
+		}
+
+		holder.descriptionView.setText(article.getHtmlDescription());
 
 		return row;
 	}
@@ -132,9 +132,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
      * The Class ArticleHolder.
      */
     private static class ArticleHolder {
-    
-    	/** The user rate view. */
-    	TextView userRateView;
     
     	/** The title view. */
     	TextView titleView;

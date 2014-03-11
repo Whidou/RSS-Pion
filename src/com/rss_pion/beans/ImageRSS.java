@@ -12,11 +12,12 @@ package com.rss_pion.beans;
 
 /*** INCLUDES *****************************************************************/
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import com.rss_pion.configuration.Constants;
+
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -27,50 +28,50 @@ public class ImageRSS {
     //! Numéro d'entrée dans la BDD
     private Long id;
 
-    //! Image
-    private Bitmap bitmap;
+    //! URL d'origine
+    private String url;
+
+    //! Chemin de stockage local
+    private String path;
 
 /*** METHODS ******************************************************************/
 
     public ImageRSS() {
-        this.bitmap = null;
+        this.url = null;
+        this.path = null;
     }
 
-    public ImageRSS(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public byte[] getBytes() {
-
-        final ByteArrayOutputStream stream;
-
-        stream = new ByteArrayOutputStream();
-        this.bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-
-        return stream.toByteArray();
+    public BitmapDrawable getDrawable() {
+        Context context = Constants.adapterOfFlux.getContext();
+        try {
+            return new BitmapDrawable(context.getResources(), context.openFileInput(this.path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public String getUrl() {
+        return this.url;
     }
 
-    public void setBytes(byte[] bytes) {
-
-        final ByteArrayInputStream stream;
-
-        stream = new ByteArrayInputStream(bytes);
-        this.bitmap = BitmapFactory.decodeStream(stream);
+    public String getPath() {
+        return this.path;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

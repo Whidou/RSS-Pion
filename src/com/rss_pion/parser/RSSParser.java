@@ -251,7 +251,6 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("lastbuilddate")) {
                 try {
                     this.flux.setLastBuildDate(dateFormat.parse(value).getTime());
-                    Log.e("RSSParser", "DateBuild: "+this.flux.getLastBuildDate());
                 } catch (ParseException e) {
                     Log.e("RSSParser", "Date parsing error: "+value);
                     this.flux.setLastBuildDate((new Date()).getTime());
@@ -261,10 +260,8 @@ public class RSSParser extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("managingeditor")) {
                 this.flux.setManagingEditor(value);
             } else if (qName.equalsIgnoreCase("pubDate")) {
-                Log.e("RSSParser", qName+"="+value);
                 try {
                     this.flux.setPubDate(dateFormat.parse(value).getTime());
-                    Log.e("RSSParser", "DateFlux: "+this.flux.getPubDate());
                 } catch (ParseException e) {
                     Log.e("RSSParser", "Date parsing error: "+value);
                     this.flux.setPubDate((new Date()).getTime());

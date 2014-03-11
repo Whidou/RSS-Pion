@@ -55,21 +55,11 @@
     <requestFocus />
 
     <android.widget.TextView
-        android:id="@+id/articleUserRateView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/articleCategoryView" />
-
-    <requestFocus />
-
-    <android.widget.TextView
         android:id="@+id/articleDescriptionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/articleUserRateView" />
+        android:layout_below="@+id/articleCategoryView" />
 
     <requestFocus />
 

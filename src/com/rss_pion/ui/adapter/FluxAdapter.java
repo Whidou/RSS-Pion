@@ -18,9 +18,11 @@ import java.util.LinkedList;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +75,7 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 
 		View row = convertView;
 		FluxHolder holder = null;
+		BitmapDrawable d;
 
 		if (row == null) {
 			final LayoutInflater inflater = ((Activity) this.context)
@@ -96,8 +99,11 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
             return row;
         }
 
+        Log.d("FA", "image:"+flux.getImage());
 		if (flux.getImage() != null) {
-		    holder.imageView.setImageBitmap(flux.getImage().getBitmap());
+		    d = flux.getImage().getDrawable();
+            Log.d("FAI", "Drawable: "+d);
+		    holder.imageView.setImageDrawable(d);
 		}
 
 		holder.numberOfReadArticlesView.setText(

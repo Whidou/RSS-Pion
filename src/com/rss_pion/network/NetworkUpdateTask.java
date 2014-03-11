@@ -12,6 +12,8 @@ package com.rss_pion.network;
 
 /*** INCLUDES *****************************************************************/
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,7 +24,6 @@ import java.util.Date;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -48,6 +49,94 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 /*** METHODS ******************************************************************/
 
 /***************************************************************************//**
+ * Obtention d'une image depuis le réseau
+ *
+ * @param url   URL de l'image
+ *
+ * @return     Image obtenue
+ ******************************************************************************/
+    static protected ImageRSS getImage(String url) {
+
+        URL urlObj;
+        HttpURLConnection connection;
+        InputStream inStr;
+        FileOutputStream outStr;
+        Context context;
+        String path;
+        ImageRSS image;
+        byte[] buffer;
+        int read;
+
+        // Validation de l'URL
+        try {
+            urlObj = new URL(url);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+        
+        Log.d("NUT", "URL: "+url);
+
+        // Obtention du contexte
+        context = Constants.adapterOfFlux.getContext();
+
+        // Connexion
+        try {
+            connection = (HttpURLConnection) urlObj.openConnection();
+        } catch (IOException e) {
+            return null;
+        }
+
+        // Réception
+        try {
+            inStr = connection.getInputStream();
+        } catch (IOException e) {
+            connection.disconnect();
+            return null;
+        }
+
+        // Création du nom de fichier
+        path = "image_"+urlObj.hashCode()+urlObj.getFile().replace("/", "_");
+
+        // Sauvegarde de l'image
+        try {
+            outStr = context.openFileOutput(path, Context.MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        buffer = new byte[1024];
+        do {
+            try {
+                read = inStr.read(buffer, 0, 1024);
+                outStr.write(buffer, 0, 1024);
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+        } while (read >= 1024);
+        try {
+            outStr.close();
+            inStr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        Log.d("NUT", "Image sauvegardée: "+path);
+
+        // Déconnexion
+        connection.disconnect();
+
+        // Création de l'image
+        image = new ImageRSS();
+        image.setUrl(url);
+        image.setPath(path);
+        
+        Log.d("NUT", "Image: "+image);
+
+        return image;
+    }
+
+/***************************************************************************//**
  * Obtention d'un flux depuis le réseau
  *
  * @param feed  URL du flux
@@ -61,7 +150,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         HttpURLConnection urlConnection;
         InputStream inStr;
         RSSParser rssParser;
-        BitmapDrawable imageDrawable;
 
         // Validation URL
         try {
@@ -88,10 +176,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         urlConnection.disconnect();
 
         // Téléchargement de l'éventuelle image associée
-        imageDrawable = ImageGetterTask.getImage(flux.getUrlImage());
-        if (imageDrawable != null) {
-            flux.setImage(new ImageRSS(imageDrawable.getBitmap()));
-        }
+        flux.setImage(getImage(flux.getUrlImage()));
+        Log.d("NUT", "Image: "+flux.getImage());
 
         return flux;
     }
@@ -132,6 +218,8 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setDescription(update.getDescription());
         flux.setDocs(update.getDocs());
         flux.setGenerator(update.getGenerator());
+        flux.setImage(update.getImage());
+        Log.d("NUTUF", "Image: "+flux.getImage());
         flux.setLanguage(update.getLanguage());
         flux.setLastBuildDate(newBuildDate);
         flux.setLink(update.getLink());
@@ -170,7 +258,7 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
         Context context;
 
-        Log.e("NetworkUpdateTask", "Starting update.");
+        Log.d("NetworkUpdateTask", "Starting update.");
 
         // Obtention du conexte
         context = Constants.adapterOfFlux.getContext();
@@ -238,6 +326,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         // Suppression de la notification
         this.notiManager.cancel("NetworkUpdate", 0);
 
-        Log.e("NetworkUpdateTask", "Ending update.");
+        Log.d("NetworkUpdateTask", "Ending update.");
     }
 }

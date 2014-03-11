@@ -17,7 +17,6 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.configuration.Constants;
@@ -57,8 +56,6 @@ public class ArticleDAO {
 		        "source", "TEXT"});
 		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
 		        "title", "TEXT"});
-		ArticleDAO.fieldsOfTheAssociatedTable.add(new String[] {
-		        "userRate", "INTEGER"});
 	}
 
 /*** METHODS ******************************************************************/
@@ -108,7 +105,6 @@ public class ArticleDAO {
         valuesMap.put("pubDate", article.getPubDate());
         valuesMap.put("source", article.getSource());
         valuesMap.put("title", article.getTitle());
-        valuesMap.put("userRate", article.getUserRate());
 
         // Insertion des objets associés
         valuesMap.put(
@@ -124,8 +120,6 @@ public class ArticleDAO {
                 valuesMap,
                 "id=?",
                 new String[] {idArticle.toString()});
-
-        Log.d("ARTICLE ADDED", article.toString());
 
         return idArticle;
 	}
@@ -193,7 +187,6 @@ public class ArticleDAO {
             article.setPubDate(c.getLong(c.getColumnIndex("pubDate")));
             article.setSource(c.getString(c.getColumnIndex("source")));
             article.setTitle(c.getString(c.getColumnIndex("title")));
-            article.setUserRate(c.getInt(c.getColumnIndex("userRate")));
 
             // Obtention des objets associés
             article.setEnclosure(EnclosureDAO.getEnclosureFromDB(

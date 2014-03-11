@@ -17,7 +17,6 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.rss_pion.beans.Flux;
 import com.rss_pion.configuration.Constants;
@@ -165,8 +164,6 @@ public class FluxDAO {
                 valuesMap,
                 "id=?",
                 new String[] {idFlux.toString()});
-
-        Log.d("FLUX ADDED", flux.toString());
 
         return idFlux;
     }

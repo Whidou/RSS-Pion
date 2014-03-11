@@ -33,8 +33,8 @@ public class ImageDAO {
 	public static ArrayList<String[]> fieldsOfTheAssociatedTable;
     static {
         ImageDAO.fieldsOfTheAssociatedTable = new ArrayList<String[]>();
-        ImageDAO.fieldsOfTheAssociatedTable.add(new String[] {
-                "bitmap", "BLOB"});
+        ImageDAO.fieldsOfTheAssociatedTable.add(new String[] {"url", "TEXT"});
+        ImageDAO.fieldsOfTheAssociatedTable.add(new String[] {"path", "TEXT"});
     }
 
 /*** METHODS ******************************************************************/
@@ -65,7 +65,7 @@ public class ImageDAO {
             // Insertion de l'image
             idImage = Constants.sqlHandler.insert(
                     ImageDAO.nameOfTheAssociatedTable,
-                    "bitmap",
+                    "url",
                     valuesMap);
 
             image.setId(idImage);
@@ -73,7 +73,8 @@ public class ImageDAO {
 
         // Préparation des champs
         valuesMap = new ContentValues();
-        valuesMap.put("bitmap", image.getBytes());
+        valuesMap.put("url", image.getUrl());
+        valuesMap.put("path", image.getPath());
 
 		Constants.sqlHandler.update(
 				ImageDAO.nameOfTheAssociatedTable,
@@ -117,7 +118,8 @@ public class ImageDAO {
 
             // Configuration de l'image à partir des données
             image.setId(id);
-            image.setBytes(c.getString(c.getColumnIndex("bitmap")).getBytes());
+            image.setUrl(c.getString(c.getColumnIndex("url")));
+            image.setPath(c.getString(c.getColumnIndex("path")));
         } else {
             image = null;
         }

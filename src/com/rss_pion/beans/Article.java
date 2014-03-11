@@ -15,10 +15,8 @@ package com.rss_pion.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.text.Html;
 import android.text.Spanned;
-
-import com.rss_pion.parser.URLImageParser;
+import android.text.SpannedString;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -65,9 +63,6 @@ public class Article {
 	//! Titre
 	private String title;
 
-	//! ???
-	private Integer userRate;
-
 /*** METHODS ******************************************************************/
 
 	public Article() {
@@ -84,14 +79,13 @@ public class Article {
         this.guid = null;
         this.pubDate = Long.valueOf(0);
         this.source = "";
-        this.userRate = null;
 	}
 
 	public Article(final Long idFlux, final Boolean isRead,
 			final String title, final String link, final String description,
 			final String author, final List<Category> categories,
 			final String comments, final Enclosure enclosure, final Guid guid,
-			final Long pubDate, final String source, final Integer userRate) {
+			final Long pubDate, final String source) {
 		super();
 		this.idFlux = idFlux;
 		this.isRead = isRead;
@@ -105,7 +99,6 @@ public class Article {
 		this.guid = guid;
 		this.pubDate = pubDate;
 		this.source = source;
-		this.userRate = userRate;
 	}
 
 	public String getAuthor() {
@@ -125,7 +118,7 @@ public class Article {
 	}
 
     public Spanned getHtmlDescription() {
-        return Html.fromHtml(this.description, new URLImageParser(), null);
+        return new SpannedString(this.description.replaceAll("<.*>", ""));
     }
 
 	public Enclosure getEnclosure() {
@@ -162,10 +155,6 @@ public class Article {
 
 	public String getTitle() {
 		return this.title;
-	}
-
-	public Integer getUserRate() {
-		return this.userRate;
 	}
 
 	public void setAuthor(final String author) {
@@ -218,10 +207,6 @@ public class Article {
 
 	public void setTitle(final String title) {
 		this.title = title;
-	}
-
-	public void setUserRate(final Integer userRate) {
-		this.userRate = userRate;
 	}
 
     public void addCategory(final Category category) {
