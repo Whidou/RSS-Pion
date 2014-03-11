@@ -73,8 +73,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         } catch (MalformedURLException e) {
             return null;
         }
-        
-        Log.d("NUT", "URL: "+url);
 
         // Obtention du contexte
         context = Constants.adapterOfFlux.getContext();
@@ -120,8 +118,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        Log.d("NUT", "Image sauvegardée: "+path);
 
         // Déconnexion
         connection.disconnect();
@@ -130,8 +126,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         image = new ImageRSS();
         image.setUrl(url);
         image.setPath(path);
-        
-        Log.d("NUT", "Image: "+image);
 
         return image;
     }
@@ -177,7 +171,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
 
         // Téléchargement de l'éventuelle image associée
         flux.setImage(getImage(flux.getUrlImage()));
-        Log.d("NUT", "Image: "+flux.getImage());
 
         return flux;
     }
@@ -219,7 +212,6 @@ public class NetworkUpdateTask extends AsyncTask<Void, Integer, Void> {
         flux.setDocs(update.getDocs());
         flux.setGenerator(update.getGenerator());
         flux.setImage(update.getImage());
-        Log.d("NUTUF", "Image: "+flux.getImage());
         flux.setLanguage(update.getLanguage());
         flux.setLastBuildDate(newBuildDate);
         flux.setLink(update.getLink());

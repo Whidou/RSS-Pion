@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2013-12-19
- * @version 0.5
+ * @version 1.0
  *
  * Adaptateur définissant l'affichage des flux.
  ******************************************************************************/
@@ -42,7 +42,7 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 	//! Contexte
 	private final Context context;
 
-	//! ?
+    //! Informations d'agencement
 	private final int layoutResourceId;
 
 	//! Liste des flux
@@ -62,10 +62,10 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		this.data = data;
 	}
 
-/***************************************************************************
+/***************************************************************************//**
  * @see android.widget.ArrayAdapter#getView(int, android.view.View,
  *      android.view.ViewGroup)
- ***************************************************************************/
+ ******************************************************************************/
 	@Override
 	public View getView(
 	        final int position,
@@ -77,16 +77,23 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		BitmapDrawable d;
 
 		if (row == null) {
-			final LayoutInflater inflater = ((Activity) this.context)
-					.getLayoutInflater();
+
+			final LayoutInflater inflater =
+			        ((Activity) this.context).getLayoutInflater();
 			row = inflater.inflate(this.layoutResourceId, parent, false);
+
+            // Assignation des vues à configurer
 			holder = new FluxHolder();
-			holder.imageView = (ImageView) row.findViewById(R.id.fluxImageView);
-			holder.lastBuildDateView = (TextView) row
-					.findViewById(R.id.fluxLastBuildDateView);
-			holder.titleView = (TextView) row.findViewById(R.id.fluxTitleView);
-			holder.numberOfReadArticlesView = (TextView) row
-					.findViewById(R.id.fluxNumberOfReadArticlesView);
+			holder.imageView =
+			        (ImageView) row.findViewById(R.id.fluxImageView);
+			holder.lastBuildDateView =
+			        (TextView) row.findViewById(R.id.fluxLastBuildDateView);
+			holder.titleView = 
+			        (TextView) row.findViewById(R.id.fluxTitleView);
+			holder.numberOfReadArticlesView =
+			        (TextView) row.findViewById(
+			                R.id.fluxNumberOfReadArticlesView);
+
 			row.setTag(holder);
 		} else {
 			holder = (FluxHolder) row.getTag();
@@ -98,32 +105,34 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
             return row;
         }
 
+        // Image
 		if (flux.getImage() != null) {
 		    d = flux.getImage().getDrawable();
-		    holder.imageView.setImageDrawable(d);
 		} else {
-		    holder.imageView.setImageDrawable(
-		            context.getResources().getDrawable(
-		                    R.drawable.icon_flux_default));
+		    d = (BitmapDrawable) context.getResources().getDrawable(
+		            R.drawable.icon_flux_default);
 		}
+        holder.imageView.setImageDrawable(d);
 
+		// Articles lus
 		holder.numberOfReadArticlesView.setText(
 		        flux.getNumberOfUnreadArticles().toString() +
 		        "/" +
 				flux.getNumberOfArticles().toString());
-
 		holder.lastBuildDateView.setText(
 		        Constants.dateFormat.format(new Date(flux.getPubDate())));
 
-		final SpannableString spanTitleView = new SpannableString(
-				flux.getTitle());
+		// Titre
+		final SpannableString spanTitleView =
+		        new SpannableString(flux.getTitle());
+		spanTitleView.setSpan(
+		        new UnderlineSpan(), 0, spanTitleView.length(), 0);
 
+		// Mise en évidence si il reste des articles non lus
 		if (flux.getNumberOfUnreadArticles() > 0) {
 			spanTitleView.setSpan(new StyleSpan(Typeface.BOLD), 0,
 					spanTitleView.length(), 0);
 		}
-		spanTitleView.setSpan(
-		        new UnderlineSpan(), 0, spanTitleView.length(), 0);
 		holder.titleView.setText(spanTitleView);
 
 		return row;
@@ -131,21 +140,21 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 
 /*** SUBCLASSES ***************************************************************/
 
-/**
- * The Class FluxHolder.
- */
+/***************************************************************************//**
+ * Données à afficher pour chaque flux
+ ******************************************************************************/
     private static class FluxHolder {
     
-    	/** The image view. */
+    	//! Image
     	ImageView imageView;
     
-    	/** The title view. */
+    	//! Titre
     	TextView titleView;
     
-    	/** The last build date view. */
+    	//! Date de dernière mise à jour
     	TextView lastBuildDateView;
     
-    	/** The number of read articles view. */
+    	//! Nombre d'articles lus
     	TextView numberOfReadArticlesView;
     }
 }

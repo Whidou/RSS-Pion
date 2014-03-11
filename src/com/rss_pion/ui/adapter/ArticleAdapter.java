@@ -1,13 +1,16 @@
-/***************************************************************************
- * @file ArticleAdapter.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    ArticleAdapter.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-01-23
+ * @version 1.0
  *
- * @brief
- ***************************************************************************/
+ * Adaptateur d'affichage pour les articles
+ ******************************************************************************/
+
 package com.rss_pion.ui.adapter;
+
+/*** INCLUDES *****************************************************************/
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -27,29 +30,23 @@ import com.rss_pion.R;
 import com.rss_pion.beans.Article;
 import com.rss_pion.configuration.Constants;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ArticleAdapter.
- */
+/*** MAIN CLASS ***************************************************************/
+
 public class ArticleAdapter extends ArrayAdapter<Article> {
 
-	/** The context. */
+/*** ATTRIBUTES ***************************************************************/
 
+	//! Contexte d'exécution
 	private final Context context;
 
-	/** The layout resource id. */
+	//! Informations d'agencement
 	private final int layoutResourceId;
 
-	/** The data. */
+	//! Articles à afficher
 	private ArrayList<Article> data = new ArrayList<Article>();
 
-	/**
-	 * Instantiates a new article adapter.
-	 * 
-	 * @param context : The context
-	 * @param layoutResourceId : The layout resource id
-	 * @param data : The data
-	 */
+/*** METHODS ******************************************************************/
+
 	public ArticleAdapter(final Context context, final int layoutResourceId,
 			final ArrayList<Article> data) {
 		super(context, layoutResourceId, data);
@@ -58,10 +55,10 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		this.data = data;
 	}
 
-	/***************************************************************************
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
-	 *      android.view.ViewGroup)
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.widget.ArrayAdapter#getView(
+ * int, android.view.View, android.view.ViewGroup)
+ ******************************************************************************/
 	@Override
 	public View getView(
 	        final int position,
@@ -72,9 +69,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 		ArticleHolder holder = null;
 
 		if (row == null) {
+
 			final LayoutInflater inflater = ((Activity) this.context)
 					.getLayoutInflater();
 			row = inflater.inflate(this.layoutResourceId, parent, false);
+
+            // Assignation des vues à configurer
 			holder = new ArticleHolder();
 			holder.titleView = (TextView) row
 					.findViewById(R.id.articleTitleView);
@@ -98,51 +98,57 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             return row;
         }
 
-		final SpannableString spanTitleView = new SpannableString(
-				article.getTitle());
+        // Titre
+		final SpannableString spanTitleView =
+		        new SpannableString(article.getTitle());
+
+		// Mise en évidence si non lu
 		if (!article.getIsRead()) {
-			spanTitleView.setSpan(new StyleSpan(Typeface.BOLD), 0,
-					spanTitleView.length(), 0);
+			spanTitleView.setSpan(
+			        new StyleSpan(Typeface.BOLD), 0,spanTitleView.length(), 0);
 		}
 
 		holder.titleView.setText(spanTitleView);
 
+		// Auteur
 		if (article.getAuthor() != null && !article.getAuthor().equals("")) {
 		    holder.authorView.setText(article.getAuthor() + ", ");
 		}
 
+		// Date de publication
 		holder.pubDateView.setText(
 		        "le " +
                 Constants.dateFormat.format(new Date(article.getPubDate())));
 
+		// Catégories
 		if (!article.getCategories().isEmpty()) {
 		    holder.categoryView.setText(article.getCategories().toString());
 		}
-
 		holder.descriptionView.setText(article.getHtmlDescription());
 
 		return row;
 	}
 
-    /* HOLDER */
-    /**
-     * The Class ArticleHolder.
-     */
+/*** SUBCLASSES ***************************************************************/
+
+/***************************************************************************//**
+ * Données à afficher pour chaque article
+ ******************************************************************************/
     private static class ArticleHolder {
     
-    	/** The title view. */
+    	//! Titre
     	TextView titleView;
     
-    	/** The pub date view. */
+    	//! Date de publication
     	TextView pubDateView;
     
-    	/** The category view. */
+    	//! Catégories
     	TextView categoryView;
     
-    	/** The author view. */
+    	//! Auteur
     	TextView authorView;
     
-    	/** The description view. */
+    	//! Description
     	TextView descriptionView;
     }
 }

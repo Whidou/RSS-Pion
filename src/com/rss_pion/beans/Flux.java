@@ -329,7 +329,9 @@ public class Flux {
 	}
 
 	public void setImage(final ImageRSS image) {
-		this.image = image;
+	    if (image != null) {
+	        this.image = image;
+	    }
 	}
 
 	public void setLanguage(final String language) {
