@@ -10,7 +10,6 @@
 package com.rss_pion.activities;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

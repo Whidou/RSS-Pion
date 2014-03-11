@@ -103,7 +103,6 @@ public class FluxDAO {
 				new String[] { flux.getId().toString() });
 	}
 
-<<<<<<< HEAD
 /***************************************************************************//**
  * Insère un flux dans la BDD
  * 
@@ -295,26 +294,6 @@ public class FluxDAO {
  * 
  * @return  Liste de flux ou null si il n'y a aucun flux dans la BDD
  ******************************************************************************/
-=======
-	/***************************************************************************/
-	/**
-	 * Supprime une liste de flux de la BDD.
-	 * 
-	 * @param listeFlux Liste des flux à supprimer
-	 ******************************************************************************/
-	public static void deleteFluxFromDB(final Flux[] listeFlux) {
-		for (final Flux flux : listeFlux) {
-			FluxDAO.deleteFluxFromDB(flux);
-		}
-	}
-
-	/***************************************************************************/
-	/**
-	 * Retourne une liste de tous les flux dans la BDD.
-	 * 
-	 * @return Liste de flux ou null si il n'y a aucun flux dans la BDD
-	 ******************************************************************************/
->>>>>>> 563c7cd8c587e12b5ac65dd8ae618e7b8ba1b06f
 	public static List<Flux> getFluxFromDB() {
 
 		final Cursor c = Constants.sqlHandler.query(
@@ -324,97 +303,7 @@ public class FluxDAO {
 		return FluxDAO.getFluxFromDB(c);
 	}
 
-	/***************************************************************************/
-	/**
-	 * Retourne une liste de flux à partir d'un curseur.
-	 * 
-	 * @param c Curseur obtenu par requête sur la BDD
-	 * @return Liste de flux ou null
-	 ******************************************************************************/
-	protected static List<Flux> getFluxFromDB(final Cursor c) {
-
-		final List<Flux> listeFlux = new ArrayList<Flux>();
-		Flux flux;
-		Long id;
-		final List<String> days = new ArrayList<String>();
-		final List<Integer> hours = new ArrayList<Integer>();
-
-		if (c == null) {
-			return listeFlux;
-		}
-
-		if (!c.moveToFirst()) {
-
-			listeFlux.add(null);
-			c.close();
-
-			return listeFlux;
-		}
-
-		do {
-
-			flux = new Flux();
-
-			id = c.getLong(c.getColumnIndex("id"));
-
-			// Configuration du flux à partir des données
-			flux.setId(id);
-			flux.setCopyright(c.getString(c.getColumnIndex("copyright")));
-			flux.setDescription(c.getString(c.getColumnIndex("description")));
-			flux.setDocs(c.getString(c.getColumnIndex("docs")));
-			flux.setFeed(c.getString(c.getColumnIndex("feed")));
-			flux.setGenerator(c.getString(c.getColumnIndex("generator")));
-			flux.setLanguage(c.getString(c.getColumnIndex("language")));
-			flux.setLastBuildDate(c.getLong(c.getColumnIndex("lastBuildDate")));
-			flux.setLink(c.getString(c.getColumnIndex("link")));
-			flux.setManagingEditor(c.getString(c
-					.getColumnIndex("managingEditor")));
-			flux.setOwnRate(c.getInt(c.getColumnIndex("ownRate")));
-			flux.setPubDate(c.getLong(c.getColumnIndex("pubDate")));
-			flux.setRating(c.getString(c.getColumnIndex("rating")));
-			flux.setTitle(c.getString(c.getColumnIndex("title")));
-			flux.setTtl(c.getInt(c.getColumnIndex("ttl")));
-			flux.setWebMaster(c.getString(c.getColumnIndex("webMaster")));
-			flux.setUrlImage(c.getString(c.getColumnIndex("urlImage")));
-
-			// Séparation des jours
-			for (final String day : c.getString(c.getColumnIndex("skipDays"))
-					.split("/")) {
-				days.add(day);
-			}
-			flux.setSkipDays(days);
-
-			// Séparation des heures
-			for (final String hour : c.getString(c.getColumnIndex("skipHours"))
-					.split("/")) {
-				try {
-					hours.add(Integer.parseInt(hour));
-				} catch (final NumberFormatException e) {
-					// Les heures mal formattées sont ignorées
-				}
-			}
-			flux.setSkipHours(hours);
-
-			// Obtention des objets associés
-			flux.setCloud(CloudDAO.getCloudFromDB(c.getLong(c
-					.getColumnIndex("idCloud"))));
-			flux.setImage(ImageDAO.getImageFromDB(c.getLong(c
-					.getColumnIndex("idImage"))));
-			flux.setTextInput(TextInputDAO.getTextInputFromDB(c.getLong(c
-					.getColumnIndex("idTextInput"))));
-			flux.setArticles(ArticleDAO.getArticlesFromDB(id));
-			flux.setCategories(CategoryFluxDAO.getCategoriesFromDB(id));
-
-			// Ajout du flux à la liste
-			listeFlux.add(flux);
-		} while (c.moveToNext());
-
-		c.close();
-
-		return listeFlux;
-	}
-
-	/***************************************************************************/
+/***************************************************************************/
 	/**
 	 * Retourne un flux de la BDD à partir de son ID
 	 * 
@@ -435,92 +324,7 @@ public class FluxDAO {
 		return FluxDAO.getFluxFromDB(c).get(0);
 	}
 
-	/***************************************************************************/
-	/**
-	 * Insère un flux dans la BDD
-	 * 
-	 * @param flux Flux à insérer
-	 * @return ID de l'entrée en BDD
-	 ******************************************************************************/
-	public static Long insertFluxIntoDB(final Flux flux) {
-
-		ContentValues valuesMap;
-		Long idFlux;
-		String strValue;
-
-		if (flux == null) {
-			return null;
-		}
-
-		idFlux = flux.getId();
-
-		// Si le flux n'existe pas dans la BDD
-		if (idFlux == null) {
-
-			// Préparation des champs du flux
-			valuesMap = new ContentValues();
-			valuesMap.put("feed", flux.getFeed());
-
-			// Insertion du flux
-			idFlux = Constants.sqlHandler.insert(
-					FluxDAO.nameOfTheAssociatedTable, "feed", valuesMap);
-
-			flux.setId(idFlux);
-		}
-
-		// Préparation des champs du flux
-		valuesMap = new ContentValues();
-		valuesMap.put("copyright", flux.getCopyright());
-		valuesMap.put("description", flux.getDescription());
-		valuesMap.put("docs", flux.getDocs());
-		valuesMap.put("generator", flux.getGenerator());
-		valuesMap.put("language", flux.getLanguage());
-		valuesMap.put("lastBuildDate", flux.getLastBuildDate());
-		valuesMap.put("link", flux.getLink());
-		valuesMap.put("managingEditor", flux.getManagingEditor());
-		valuesMap.put("pubDate", flux.getPubDate());
-		valuesMap.put("rating", flux.getRating());
-		valuesMap.put("title", flux.getTitle());
-		valuesMap.put("ttl", flux.getTtl());
-		valuesMap.put("webMaster", flux.getWebMaster());
-		valuesMap.put("urlImage", flux.getUrlImage());
-
-		// Concaténation des jours
-		if (flux.getSkipDays() != null) {
-			strValue = new String();
-			for (final String day : flux.getSkipDays()) {
-				strValue.concat(day);
-			}
-			valuesMap.put("skipDays", strValue);
-		}
-
-		// Concaténation des heures
-		if (flux.getSkipHours() != null) {
-			strValue = new String();
-			for (final Integer hour : flux.getSkipHours()) {
-				strValue.concat(hour.toString());
-			}
-			valuesMap.put("skipHours", strValue);
-		}
-
-		// Insertion des objets associés
-		valuesMap.put("idCloud", CloudDAO.insertCloudIntoDB(flux.getCloud()));
-		valuesMap.put("idImage", ImageDAO.insertImageIntoDB(flux.getImage()));
-		valuesMap.put("idTextInput",
-				TextInputDAO.insertTextInputIntoDB(flux.getTextInput()));
-		ArticleDAO.insertArticlesIntoDB(flux.getArticles());
-		CategoryArticleDAO.insertCategoriesIntoDB(flux.getCategories());
-
-		// Update du flux
-		Constants.sqlHandler.update(FluxDAO.nameOfTheAssociatedTable,
-				valuesMap, "id=?", new String[] { idFlux.toString() });
-
-		Log.d("FLUX ADDED", flux.toString());
-
-		return idFlux;
-	}
-
-	/***************************************************************************/
+/***************************************************************************/
 	/**
 	 * Met à jour tous les champs isRead des articles du flux.
 	 * 
