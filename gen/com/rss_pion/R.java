@@ -19,11 +19,10 @@ containing a value of this type.
         public static final int ttf_name=0x7f010000;
     }
     public static final class color {
-        public static final int White=0x7f040003;
-        public static final int WhiteSmoke=0x7f040004;
-        public static final int darkColor=0x7f040002;
-        public static final int linkColor=0x7f040000;
-        public static final int middleColor=0x7f040001;
+        public static final int White=0x7f040002;
+        public static final int WhiteSmoke=0x7f040003;
+        public static final int darkColor=0x7f040001;
+        public static final int middleColor=0x7f040000;
     }
     public static final class dimen {
         /** 

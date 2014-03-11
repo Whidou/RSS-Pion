@@ -99,11 +99,11 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
             return row;
         }
 
-        Log.d("FA", "image:"+flux.getImage());
 		if (flux.getImage() != null) {
 		    d = flux.getImage().getDrawable();
-            Log.d("FAI", "Drawable: "+d);
 		    holder.imageView.setImageDrawable(d);
+		} else {
+		    holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_flux_default));
 		}
 
 		holder.numberOfReadArticlesView.setText(

@@ -230,7 +230,7 @@ public class FluxActivity extends RSS_PionActivity {
 
 		// Suppression de l'éventuelle base de donnée existante (à commenter
 		// après validation)
-		this.deleteDatabase(SqlHandler.DATABASE_NAME);
+		// this.deleteDatabase(SqlHandler.DATABASE_NAME);
 
 		// Initialise le conteneur de base de donné :
 		Constants.sqlHandler = new SqlHandler(this);

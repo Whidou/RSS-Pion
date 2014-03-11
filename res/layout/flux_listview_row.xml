@@ -4,6 +4,8 @@
     android:id="@+id/flux_row_activity"
     android:layout_width="wrap_content"
     android:layout_height="80dp"
+    android:layout_margin="2dp"
+    android:background="@color/middleColor"
     android:padding="6dp" >
 
     <RelativeLayout

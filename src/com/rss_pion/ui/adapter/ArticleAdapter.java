@@ -17,7 +17,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,8 +104,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 			spanTitleView.setSpan(new StyleSpan(Typeface.BOLD), 0,
 					spanTitleView.length(), 0);
 		}
-		spanTitleView
-				.setSpan(new UnderlineSpan(), 0, spanTitleView.length(), 0);
 
 		holder.titleView.setText(spanTitleView);
 
