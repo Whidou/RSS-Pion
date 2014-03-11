@@ -16,6 +16,7 @@ package com.rss_pion.activities;
 import java.util.LinkedList;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -25,11 +26,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -124,9 +127,66 @@ public class FluxActivity extends RSS_PionActivity {
 					@Override
 					public boolean onItemLongClick(final AdapterView<?> arg0,
 							final View arg1, final int arg2, final long arg3) {
+						// Initialise la boite de dialogue des options de flux :
+						final Dialog dialog = new Dialog(FluxActivity.this);
+						dialog.setContentView(R.layout.dialog_flux);
+						dialog.setTitle("Flux Options");
+						dialog.setCancelable(true);
 
-						// Suppression du flux à l'origine du click :
-						FluxDAO.deleteFluxFromDB(Constants.listOfFlux.get(arg2));
+						// Implémente le bouton affichant les détails du flux :
+						final Button button_print_infos = (Button) dialog
+								.findViewById(R.id.diag_box_flux_print_infos);
+						button_print_infos
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+
+									}
+								});
+
+						// Implémente le bouton permettant de considérer tous
+						// les articles du flux comme lus :
+						final Button button_all_articles_read = (Button) dialog
+								.findViewById(R.id.diag_box_flux_all_articles_read);
+						button_all_articles_read
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+
+									}
+								});
+
+						// Implémente le bouton permettant de considérer tous
+						// les articles du flux comme non lus :
+						final Button button_all_articles_not_read = (Button) dialog
+								.findViewById(R.id.diag_box_flux_all_articles_not_read);
+						button_all_articles_not_read
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+
+									}
+								});
+
+						// Implémente le bouton supprimant le flux (et tous ses
+						// articles) :
+						final Button button_delete = (Button) dialog
+								.findViewById(R.id.diag_box_flux_delete);
+						button_delete.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(final View v) {
+								Toast.makeText(
+										FluxActivity.this
+												.getApplicationContext(),
+										"Please wait", Toast.LENGTH_LONG)
+										.show();
+								FluxDAO.deleteFluxFromDB(Constants.listOfFlux
+										.get(arg2));
+							}
+						});
+
+						// Affiche la boite de dialogue :
+						dialog.show();
 
 						// Rafraichissement de l'affichage :
 						(new NetworkUpdateTask()).execute();

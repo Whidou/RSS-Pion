@@ -22,5 +22,8 @@
     <string name="canceled_add">Ajout annulé.</string>
     <string name="updated">Updated: </string>
     <string name="imageDesc">Feed</string>
-    
+    <string name="diag_box_flux_print_infos_string">See Details</string>
+    <string name="diag_box_flux_all_articles_read_string">Set all articles as read</string>
+    <string name="diag_box_flux_all_articles_not_read_string">Set all articles as not read</string>
+    <string name="diag_box_flux_delete_string">Delete Flux (and all its articles)</string>
 </resources>
