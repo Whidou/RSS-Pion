@@ -14,7 +14,6 @@ package com.rss_pion.activities;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Dialog;
