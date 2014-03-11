@@ -29,7 +29,7 @@ containing a value of this type.
         public static final int icon_flux_default=0x7f020001;
     }
     public static final class id {
-        public static final int add_flux=0x7f080025;
+        public static final int add_flux=0x7f080024;
         public static final int articleAuthorAndPubDate=0x7f080002;
         public static final int articleAuthorView=0x7f080003;
         public static final int articleCategoryView=0x7f080005;
@@ -47,8 +47,8 @@ containing a value of this type.
         public static final int diag_box_flux_all_articles_read=0x7f08000e;
         public static final int diag_box_flux_delete=0x7f080010;
         public static final int diag_box_flux_print_infos=0x7f08000d;
-        public static final int exit_article=0x7f080024;
-        public static final int exit_flux=0x7f080028;
+        public static final int exit_article=0x7f080023;
+        public static final int exit_flux=0x7f080026;
         public static final int fluxDateDetailsView=0x7f080017;
         public static final int fluxDetailsView=0x7f080016;
         public static final int fluxImageAndCategory=0x7f080014;
@@ -60,14 +60,12 @@ containing a value of this type.
         public static final int flux_link_input=0x7f080012;
         public static final int flux_row_activity=0x7f080013;
         public static final int header=0x7f08001d;
-        public static final int help_article=0x7f080023;
-        public static final int help_flux=0x7f080027;
         public static final int listFlux=0x7f080020;
         public static final int listView1=0x7f080021;
         public static final int listViewArticleDetails=0x7f08000c;
         public static final int listViewFluxDetails=0x7f080011;
         public static final int list_view_slogan=0x7f08001e;
-        public static final int maj_flux=0x7f080026;
+        public static final int maj_flux=0x7f080025;
         public static final int textView1=0x7f080022;
         public static final int url_flux=0x7f080007;
     }
@@ -89,24 +87,22 @@ containing a value of this type.
         public static final int flux_menu=0x7f070001;
     }
     public static final class string {
-        public static final int add=0x7f05000b;
-        public static final int add_flux=0x7f05000a;
+        public static final int add=0x7f050009;
+        public static final int add_flux=0x7f050008;
         public static final int app_name=0x7f050000;
-        public static final int cancel=0x7f05000c;
-        public static final int canceled_add=0x7f05000e;
-        public static final int diag_box_articles_delete_string=0x7f050018;
-        public static final int diag_box_articles_not_read_string=0x7f050017;
-        public static final int diag_box_articles_print_infos_string=0x7f050015;
-        public static final int diag_box_articles_read_string=0x7f050016;
-        public static final int diag_box_flux_all_articles_not_read_string=0x7f050013;
-        public static final int diag_box_flux_all_articles_read_string=0x7f050012;
-        public static final int diag_box_flux_delete_string=0x7f050014;
-        public static final int diag_box_flux_print_infos_string=0x7f050011;
-        public static final int imageDesc=0x7f050010;
+        public static final int cancel=0x7f05000a;
+        public static final int canceled_add=0x7f05000c;
+        public static final int diag_box_articles_delete_string=0x7f050016;
+        public static final int diag_box_articles_not_read_string=0x7f050015;
+        public static final int diag_box_articles_print_infos_string=0x7f050013;
+        public static final int diag_box_articles_read_string=0x7f050014;
+        public static final int diag_box_flux_all_articles_not_read_string=0x7f050011;
+        public static final int diag_box_flux_all_articles_read_string=0x7f050010;
+        public static final int diag_box_flux_delete_string=0x7f050012;
+        public static final int diag_box_flux_print_infos_string=0x7f05000f;
+        public static final int imageDesc=0x7f05000e;
         public static final int menu_add_flux=0x7f050005;
-        public static final int menu_affichage=0x7f050007;
-        public static final int menu_exit=0x7f050009;
-        public static final int menu_help=0x7f050008;
+        public static final int menu_exit=0x7f050007;
         public static final int menu_maj=0x7f050006;
         /**  La gestion et la sauvegarde de vos flux RSS necessitent votre approbation. RSS_Pion s'engage a respecter la confidentialite et l'integrite de vos donnees. 
          */
@@ -114,8 +110,8 @@ containing a value of this type.
         public static final int permission_label=0x7f050003;
         public static final int slogan=0x7f050002;
         public static final int title_articles_activity=0x7f050001;
-        public static final int updated=0x7f05000f;
-        public static final int url_flux=0x7f05000d;
+        public static final int updated=0x7f05000d;
+        public static final int url_flux=0x7f05000b;
     }
     public static final class style {
         /** 

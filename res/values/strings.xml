@@ -9,8 +9,6 @@
     </string>
     <string name="menu_add_flux">Add a feed</string>
     <string name="menu_maj">Update feeds</string>
-    <string name="menu_affichage">Update display</string>
-    <string name="menu_help">Help</string>
     <string name="menu_exit">Exit</string>
     <string name="add_flux">Ajouter un flux</string>
     <string name="add">Ajouter</string>

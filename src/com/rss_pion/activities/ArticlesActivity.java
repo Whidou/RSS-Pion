@@ -217,8 +217,6 @@ public class ArticlesActivity extends RSS_PionActivity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.help_article:
-			return true;
 		case R.id.exit_article:
 			System.exit(0);
 			return true;

@@ -70,6 +70,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignStart="@+id/fluxNumberOfReadArticlesView"
             android:layout_below="@+id/fluxDateDetailsView"
+            android:paddingLeft="5dp"
             android:textStyle="bold" />
 
         <requestFocus />

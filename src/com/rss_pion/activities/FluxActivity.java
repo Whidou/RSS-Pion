@@ -282,8 +282,6 @@ public class FluxActivity extends RSS_PionActivity {
 		case R.id.maj_flux:
 			(new NetworkUpdateTask()).execute();
 			return true;
-		case R.id.help_flux:
-			return true;
 		case R.id.exit_flux:
 			System.exit(0);
 			return true;
