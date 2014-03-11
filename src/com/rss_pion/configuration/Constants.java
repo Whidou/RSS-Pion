@@ -15,13 +15,17 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 import android.app.Application;
+import android.util.SparseArray;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
+import com.rss_pion.beans.GroupFluxDetails;
 import com.rss_pion.database.SqlHandler;
 import com.rss_pion.ui.adapter.ArticleAdapter;
 import com.rss_pion.ui.adapter.FluxAdapter;
+import com.rss_pion.ui.adapter.FluxDetailsExpandableListAdapter;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -57,4 +61,11 @@ public class Constants extends Application {
 			"yyyy-MM-dd", Locale.US);
 
 	public static ArrayList<String> categoriesInDB = new ArrayList<String>();
+
+	public static SparseArray<GroupFluxDetails> groupsOfFluxDetails = new SparseArray<GroupFluxDetails>();
+
+	public static ExpandableListView listViewOfFluxDetails;
+
+	public static FluxDetailsExpandableListAdapter adapterOfFluxDetails;
+
 }

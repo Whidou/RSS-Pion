@@ -38,7 +38,7 @@ containing a value of this type.
         public static final int icon_flux_default=0x7f020001;
     }
     public static final class id {
-        public static final int add_flux=0x7f09001f;
+        public static final int add_flux=0x7f090021;
         public static final int articleAuthorAndPubDate=0x7f090002;
         public static final int articleAuthorView=0x7f090003;
         public static final int articleCategoryView=0x7f090005;
@@ -47,41 +47,46 @@ containing a value of this type.
         public static final int articleTitleView=0x7f090001;
         public static final int articleUserRateView=0x7f090006;
         public static final int article_activity=0x7f090000;
-        public static final int backgroundVertical=0x7f090017;
-        public static final int body=0x7f09001a;
+        public static final int backgroundVertical=0x7f090018;
+        public static final int body=0x7f09001b;
         public static final int diag_box_flux_all_articles_not_read=0x7f09000b;
         public static final int diag_box_flux_all_articles_read=0x7f09000a;
         public static final int diag_box_flux_delete=0x7f09000c;
         public static final int diag_box_flux_print_infos=0x7f090009;
-        public static final int exit_article=0x7f09001e;
-        public static final int exit_flux=0x7f090023;
-        public static final int fluxDateDetailsView=0x7f090012;
-        public static final int fluxDetailsView=0x7f090011;
-        public static final int fluxImageAndCategory=0x7f09000f;
-        public static final int fluxImageView=0x7f090010;
-        public static final int fluxLastBuildDateTextView=0x7f090013;
-        public static final int fluxLastBuildDateView=0x7f090014;
-        public static final int fluxNumberOfReadArticlesView=0x7f090016;
-        public static final int fluxTitleView=0x7f090015;
-        public static final int flux_link_input=0x7f09000d;
-        public static final int flux_row_activity=0x7f09000e;
-        public static final int header=0x7f090018;
-        public static final int help_article=0x7f09001d;
-        public static final int help_flux=0x7f090022;
-        public static final int listFlux=0x7f09001b;
-        public static final int listView1=0x7f09001c;
-        public static final int list_view_slogan=0x7f090019;
-        public static final int maj_affichage=0x7f090021;
-        public static final int maj_flux=0x7f090020;
+        public static final int exit_article=0x7f090020;
+        public static final int exit_flux=0x7f090025;
+        public static final int fluxDateDetailsView=0x7f090013;
+        public static final int fluxDetailsView=0x7f090012;
+        public static final int fluxImageAndCategory=0x7f090010;
+        public static final int fluxImageView=0x7f090011;
+        public static final int fluxLastBuildDateTextView=0x7f090014;
+        public static final int fluxLastBuildDateView=0x7f090015;
+        public static final int fluxNumberOfReadArticlesView=0x7f090017;
+        public static final int fluxTitleView=0x7f090016;
+        public static final int flux_link_input=0x7f09000e;
+        public static final int flux_row_activity=0x7f09000f;
+        public static final int header=0x7f090019;
+        public static final int help_article=0x7f09001f;
+        public static final int help_flux=0x7f090024;
+        public static final int listFlux=0x7f09001c;
+        public static final int listView1=0x7f09001d;
+        public static final int listViewFluxDetails=0x7f09000d;
+        public static final int list_view_slogan=0x7f09001a;
+        public static final int maj_affichage=0x7f090023;
+        public static final int maj_flux=0x7f090022;
+        public static final int textView1=0x7f09001e;
         public static final int url_flux=0x7f090008;
     }
     public static final class layout {
         public static final int article_listview_row=0x7f030000;
         public static final int dialog_addflux=0x7f030001;
         public static final int dialog_flux=0x7f030002;
-        public static final int flux_action_bar=0x7f030003;
-        public static final int flux_listview_row=0x7f030004;
-        public static final int list_view_layout=0x7f030005;
+        public static final int dialog_flux_details=0x7f030003;
+        public static final int flux_action_bar=0x7f030004;
+        public static final int flux_listview_row=0x7f030005;
+        public static final int list_view_layout=0x7f030006;
+        public static final int listrow_details=0x7f030007;
+        public static final int listrow_group=0x7f030008;
     }
     public static final class menu {
         public static final int article_menu=0x7f080000;
