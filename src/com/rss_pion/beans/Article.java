@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    Article.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -13,85 +14,87 @@ package com.rss_pion.beans;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.text.Html;
 import android.text.Spanned;
 
+import com.rss_pion.configuration.Constants;
 import com.rss_pion.parser.URLImageParser;
 
 /*** MAIN CLASS ***************************************************************/
 
 public class Article {
 
-/*** ATTRIBUTES ***************************************************************/
+	/*** ATTRIBUTES ***************************************************************/
 
-	//! Auteur
+	// ! Auteur
 	private String author;
 
-	//! Catégorie
+	// ! Catégorie
 	private List<Category> categories;
 
-	//! Commentaires
+	// ! Commentaires
 	private String comments;
 
-	//! Description
+	// ! Description
 	private String description;
 
-	//! Pièce Jointe
+	// ! Pièce Jointe
 	private Enclosure enclosure;
 
-	//! GUID
+	// ! GUID
 	private Guid guid;
 
-	//! Numéro d'entrée dans la BDD
+	// ! Numéro d'entrée dans la BDD
 	private Long id;
 
-	//! Numéro d'entrée du flux associé
+	// ! Numéro d'entrée du flux associé
 	private Long idFlux;
 
-	//! Lu
+	// ! Lu
 	private Boolean isRead;
 
-	//! URL
+	// ! URL
 	private String link;
 
-	//! Date de publication
+	// ! Date de publication
 	private Long pubDate;
 
-	//! Source
+	// ! Source
 	private String source;
 
-	//! Titre
+	// ! Titre
 	private String title;
 
-	//! ???
+	// ! ???
 	private Integer userRate;
 
-/*** METHODS ******************************************************************/
+	/*** METHODS ******************************************************************/
 
 	public Article() {
 		super();
-        this.idFlux = null;
-        this.isRead = false;
-        this.title = "";
-        this.link = "";
-        this.description = "";
-        this.author = "";
-        this.categories = new ArrayList<Category>();
-        this.comments = "";
-        this.enclosure = null;
-        this.guid = null;
-        this.pubDate = Long.valueOf(0);
-        this.source = "";
-        this.userRate = null;
+		this.idFlux = null;
+		this.isRead = false;
+		this.title = "";
+		this.link = "";
+		this.description = "";
+		this.author = "";
+		this.categories = new ArrayList<Category>();
+		this.comments = "";
+		this.enclosure = null;
+		this.guid = null;
+		this.pubDate = Long.valueOf(0);
+		this.source = "";
+		this.userRate = null;
 	}
 
-	public Article(final Long idFlux, final Boolean isRead,
-			final String title, final String link, final String description,
-			final String author, final List<Category> categories,
-			final String comments, final Enclosure enclosure, final Guid guid,
-			final Long pubDate, final String source, final Integer userRate) {
+	public Article(final Long idFlux, final Boolean isRead, final String title,
+			final String link, final String description, final String author,
+			final List<Category> categories, final String comments,
+			final Enclosure enclosure, final Guid guid, final Long pubDate,
+			final String source, final Integer userRate) {
 		super();
 		this.idFlux = idFlux;
 		this.isRead = isRead;
@@ -106,6 +109,13 @@ public class Article {
 		this.pubDate = pubDate;
 		this.source = source;
 		this.userRate = userRate;
+	}
+
+	public void addCategory(final Category category) {
+		if (category != null) {
+			category.setIdParent(this.id);
+			this.categories.add(category);
+		}
 	}
 
 	public String getAuthor() {
@@ -124,16 +134,16 @@ public class Article {
 		return this.description;
 	}
 
-    public Spanned getHtmlDescription() {
-        return Html.fromHtml(this.description, new URLImageParser(), null);
-    }
-
 	public Enclosure getEnclosure() {
 		return this.enclosure;
 	}
 
 	public Guid getGuid() {
 		return this.guid;
+	}
+
+	public Spanned getHtmlDescription() {
+		return Html.fromHtml(this.description, new URLImageParser(), null);
 	}
 
 	public Long getId() {
@@ -224,10 +234,137 @@ public class Article {
 		this.userRate = userRate;
 	}
 
-    public void addCategory(final Category category) {
-        if (category != null) {
-            category.setIdParent(this.id);
-            this.categories.add(category);
-        }
-    }
+	public void toDetails() {
+		GroupArticleDetails group;
+
+		// ! Auteur
+		group = new GroupArticleDetails("Author");
+		group.children.add(this.getAuthor());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Catégorie
+		group = new GroupArticleDetails("Categories");
+		try {
+			final Iterator<Category> itC = this.getCategories().iterator();
+			while (itC.hasNext()) {
+				try {
+					group.children.add(itC.next().getName());
+				} catch (final Exception e) {
+				}
+			}
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Commentaires
+		group = new GroupArticleDetails("Comments");
+		group.children.add(this.getComments());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Description
+		group = new GroupArticleDetails("Description");
+		group.children.add(this.getDescription());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Pièce Jointe
+		group = new GroupArticleDetails("Enclosure");
+		final ArrayList<String> enclosure_str = new ArrayList<String>();
+		try {
+			enclosure_str.add("Type : " + this.getEnclosure().getType());
+		} catch (final Exception e) {
+		}
+		try {
+			enclosure_str.add("URL : " + this.getEnclosure().getUrl());
+		} catch (final Exception e) {
+		}
+		try {
+			enclosure_str.add("Length : " + this.getEnclosure().getLength());
+		} catch (final Exception e) {
+		}
+		final Iterator<String> itEnclosure_str = enclosure_str.iterator();
+		String enclosure_str_tot = "";
+		while (itEnclosure_str.hasNext()) {
+			enclosure_str_tot += itEnclosure_str.next();
+			if (itEnclosure_str.hasNext()) {
+				enclosure_str_tot += "\n";
+			}
+		}
+		group.children.add(enclosure_str_tot);
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! GUID
+		group = new GroupArticleDetails("Guid");
+		final ArrayList<String> guid_str = new ArrayList<String>();
+		try {
+			guid_str.add("Value : " + this.getGuid().getValue());
+		} catch (final Exception e) {
+		}
+		try {
+			guid_str.add("Is permanent link : "
+					+ this.getGuid().getIsPermaLink());
+		} catch (final Exception e) {
+		}
+		final Iterator<String> itGuid_str = guid_str.iterator();
+		String guid_str_tot = "";
+		while (itGuid_str.hasNext()) {
+			guid_str_tot += itGuid_str.next();
+			if (itGuid_str.hasNext()) {
+				guid_str_tot += "\n";
+			}
+		}
+		group.children.add(guid_str_tot);
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Lu
+		group = new GroupArticleDetails("Is read");
+		try {
+			group.children.add(this.getIsRead().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! URL
+		group = new GroupArticleDetails("Link");
+		group.children.add(this.getLink());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Date de publication
+		group = new GroupArticleDetails("Publication Date");
+		try {
+			group.children.add(this.getPubDate().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Source
+		group = new GroupArticleDetails("Source");
+		group.children.add(this.getSource());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! Titre
+		group = new GroupArticleDetails("Title");
+		group.children.add(this.getTitle());
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+
+		// ! User rate (sorte de favoris pour classer les articles selon sa
+		// propre pertinence)
+		group = new GroupArticleDetails("User Rate");
+		try {
+			group.children.add(this.getUserRate().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfArticleDetails.append(
+				Constants.groupsOfArticleDetails.size(), group);
+	}
 }

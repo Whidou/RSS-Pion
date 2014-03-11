@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    FluxAdapter.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -12,8 +13,8 @@ package com.rss_pion.ui.adapter;
 
 /*** INCLUDES *****************************************************************/
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,23 +37,39 @@ import com.rss_pion.configuration.Constants;
 
 public class FluxAdapter extends ArrayAdapter<Flux> {
 
-/*** ATTRIBUTES ***************************************************************/
+	/**
+	 * The Class FluxHolder.
+	 */
+	private static class FluxHolder {
 
-	//! Contexte
+		/** The image view. */
+		ImageView imageView;
+
+		/** The title view. */
+		TextView titleView;
+
+		/** The last build date view. */
+		TextView lastBuildDateView;
+
+		/** The number of read articles view. */
+		TextView numberOfReadArticlesView;
+	}
+
+	/*** ATTRIBUTES ***************************************************************/
+
+	// ! Contexte
 	private final Context context;
 
-	//! ?
+	// ! ?
 	private final int layoutResourceId;
 
-	//! Liste des flux
-	private LinkedList<Flux> data;
+	// ! Liste des flux
+	private final ArrayList<Flux> data;
 
-/*** METHODS ******************************************************************/
+	/*** METHODS ******************************************************************/
 
-	public FluxAdapter(
-	        final Context context,
-	        final int layoutResourceId,
-	        final LinkedList<Flux> data) {
+	public FluxAdapter(final Context context, final int layoutResourceId,
+			final ArrayList<Flux> data) {
 
 		super(context, layoutResourceId, data);
 
@@ -61,14 +78,14 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		this.data = data;
 	}
 
-/***************************************************************************
- * @see android.widget.ArrayAdapter#getView(int, android.view.View,
- *      android.view.ViewGroup)
- ***************************************************************************/
+	/*** SUBCLASSES ***************************************************************/
+
+	/***************************************************************************
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
+	 *      android.view.ViewGroup)
+	 ***************************************************************************/
 	@Override
-	public View getView(
-	        final int position,
-	        final View convertView,
+	public View getView(final int position, final View convertView,
 			final ViewGroup parent) {
 
 		View row = convertView;
@@ -92,21 +109,21 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 
 		final Flux flux = this.data.get(position);
 
-        if (flux == null) {
-            return row;
-        }
-
-		if (flux.getImage() != null) {
-		    holder.imageView.setImageBitmap(flux.getImage().getBitmap());
+		if (flux == null) {
+			return row;
 		}
 
-		holder.numberOfReadArticlesView.setText(
-		        flux.getNumberOfUnreadArticles().toString() +
-		        "/" +
-				flux.getNumberOfArticles().toString());
+		if (flux.getImage() != null) {
+			holder.imageView.setImageBitmap(flux.getImage().getBitmap());
+		}
 
-		holder.lastBuildDateView.setText(
-		        Constants.dateFormat.format(new Date(flux.getPubDate())));
+		holder.numberOfReadArticlesView.setText(flux
+				.getNumberOfUnreadArticles().toString()
+				+ "/"
+				+ flux.getNumberOfArticles().toString());
+
+		holder.lastBuildDateView.setText(Constants.dateFormat.format(new Date(
+				flux.getPubDate())));
 
 		final SpannableString spanTitleView = new SpannableString(
 				flux.getTitle());
@@ -115,30 +132,10 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 			spanTitleView.setSpan(new StyleSpan(Typeface.BOLD), 0,
 					spanTitleView.length(), 0);
 		}
-		spanTitleView.setSpan(
-		        new UnderlineSpan(), 0, spanTitleView.length(), 0);
+		spanTitleView
+				.setSpan(new UnderlineSpan(), 0, spanTitleView.length(), 0);
 		holder.titleView.setText(spanTitleView);
 
 		return row;
 	}
-
-/*** SUBCLASSES ***************************************************************/
-
-/**
- * The Class FluxHolder.
- */
-    private static class FluxHolder {
-    
-    	/** The image view. */
-    	ImageView imageView;
-    
-    	/** The title view. */
-    	TextView titleView;
-    
-    	/** The last build date view. */
-    	TextView lastBuildDateView;
-    
-    	/** The number of read articles view. */
-    	TextView numberOfReadArticlesView;
-    }
 }

@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    Flux.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -13,116 +14,126 @@ package com.rss_pion.beans;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import com.rss_pion.configuration.Constants;
 
 /*** MAIN CLASS ***************************************************************/
 
 public class Flux {
 
-/*** ATTRIBUTES ***************************************************************/
+	/*** ATTRIBUTES ***************************************************************/
 
-	//! Numéro d'entrée dans la BDD
+	// ! Numéro d'entrée dans la BDD
 	private Long id;
 
-	//! URL du flux RSS
+	// ! URL du flux RSS
 	private String feed;
 
-	//! Titre
+	// ! Titre
 	private String title;
 
-	//! Lien vers le site web associé
+	// ! Lien vers le site web associé
 	private String link;
 
-	//! Description
+	// ! Description
 	private String description;
 
-	//! Langue
+	// ! Langue
 	private String language;
 
-	//! Copyright
+	// ! Copyright
 	private String copyright;
 
-	//! Adresse courriel de l'éditeur
+	// ! Adresse courriel de l'éditeur
 	private String managingEditor;
 
-    //! Adresse courriel du webmestre
+	// ! Adresse courriel du webmestre
 	private String webMaster;
 
-	//! Date de dernière publication
+	// ! Date de dernière publication
 	private Long pubDate;
 
-	//! Date de dernière génération
+	// ! Date de dernière génération
 	private Long lastBuildDate;
 
-	//! Articles
+	// ! Articles
 	private List<Category> categories = new ArrayList<Category>();
 
-	//! Logiciel utilisé pour générer le flux
+	// ! Logiciel utilisé pour générer le flux
 	private String generator;
 
-	//! Documentation associée
+	// ! Documentation associée
 	private String docs;
 
-	//! Objet cloud associé
+	// ! Objet cloud associé
 	private Cloud cloud;
 
-	//! Durée (en minutes) de validité
+	// ! Durée (en minutes) de validité
 	private Integer ttl;
 
-	//! Objet Image associé
+	// ! Objet Image associé
 	private ImageRSS image;
 
-	//! Classement PICS
+	// ! Classement PICS
 	private String rating;
 
-	//! Objet text input associé
+	// ! Objet text input associé
 	private TextInput textInput;
 
-    //! Heures de non-mise à jour
-    private List<Integer> skipHours;
+	// ! Heures de non-mise à jour
+	private List<Integer> skipHours;
 
-    //! Jours de non-mise à jour
-    private List<String> skipDays;
+	// ! Jours de non-mise à jour
+	private List<String> skipDays;
 
-    //! ???
-    private Integer ownRate;
+	// ! User rate (sorte de favoris pour classer les flux selon sa
+	// propre pertinence)
+	private Integer ownRate;
 
-    //! URL de l'image associée
-    private String urlImage;
+	// ! URL de l'image associée
+	private String urlImage;
 
-	//! Articles
+	// ! Articles
 	private List<Article> articles = new ArrayList<Article>();
 
-/*** METHODS ******************************************************************/
-	
+	/*** METHODS ******************************************************************/
+
 	public Flux() {
 
 		super();
 
 		this.id = null;
-        this.articles = new ArrayList<Article>();
-        this.categories = new ArrayList<Category>();
-        this.cloud = null;
-        this.copyright = "";
-        this.description = "";
-        this.docs = "";
-        this.feed = "";
-        this.generator = "";
-        this.image = null;
-        this.lastBuildDate = Long.valueOf(0);
-        this.language = "";
-        this.link = "";
-        this.managingEditor = "";
-        this.ownRate = 0;
-        this.pubDate = Long.valueOf(0);
-        this.skipDays = new ArrayList<String>();
-        this.skipHours = new ArrayList<Integer>();
-        this.rating = "";
-        this.textInput = null;
-        this.title = "";
-        this.ttl = 0;
-        this.urlImage = "";
-        this.webMaster = "";
+		this.articles = new ArrayList<Article>();
+		this.categories = new ArrayList<Category>();
+		this.cloud = null;
+		this.copyright = "";
+		this.description = "";
+		this.docs = "";
+		this.feed = "";
+		this.generator = "";
+		this.image = null;
+		this.lastBuildDate = Long.valueOf(0);
+		this.language = "";
+		this.link = "";
+		this.managingEditor = "";
+		this.ownRate = 0;
+		this.pubDate = Long.valueOf(0);
+		this.skipDays = new ArrayList<String>();
+		this.skipHours = new ArrayList<Integer>();
+		this.rating = "";
+		this.textInput = null;
+		this.title = "";
+		this.ttl = 0;
+		this.urlImage = "";
+		this.webMaster = "";
+	}
+
+	public Flux(final String feed) {
+
+		this();
+		this.feed = feed;
 	}
 
 	public Flux(final String feed, final String title, final String link,
@@ -161,11 +172,27 @@ public class Flux {
 		this.urlImage = urlImage;
 	}
 
-	public Flux(String feed) {
+	public void addArticle(final Article article) {
+		if (article != null) {
+			article.setIdFlux(this.id);
+			this.articles.add(article);
+		}
+	}
 
-        this();
-        this.feed = feed;
-    }
+	public void addCategory(final Category category) {
+		if (category != null) {
+			category.setIdParent(this.id);
+			this.categories.add(category);
+		}
+	}
+
+	public void addSkipDay(final String day) {
+		this.skipDays.add(day);
+	}
+
+	public void addSkipHour(final int hour) {
+		this.skipHours.add(hour);
+	}
 
 	public List<Article> getArticles() {
 		return this.articles;
@@ -225,25 +252,25 @@ public class Flux {
 
 	public Integer getNumberOfArticles() {
 
-	    if (this.articles == null) {
-	        return 0;
-	    }
+		if (this.articles == null) {
+			return 0;
+		}
 
 		return this.articles.size();
 	}
 
 	public Integer getNumberOfUnreadArticles() {
 
-	    Integer nUnread = 0;
+		Integer nUnread = 0;
 
-	    for (Article article : this.articles) {
-	        if (article == null) {
-	            continue;
-	        }
-	        if (!article.getIsRead()) {
-	            nUnread++;
-	        }
-	    }
+		for (final Article article : this.articles) {
+			if (article == null) {
+				continue;
+			}
+			if (!article.getIsRead()) {
+				nUnread++;
+			}
+		}
 
 		return nUnread;
 	}
@@ -384,45 +411,235 @@ public class Flux {
 		this.webMaster = webMaster;
 	}
 
-    public void addArticle(Article article) {
-        if (article != null) {
-            article.setIdFlux(this.id);
-            this.articles.add(article);
-        }
-    }
+	public void toDetails() {
+		GroupFluxDetails group;
+		// ! URL du flux RSS
+		group = new GroupFluxDetails("Feed");
+		group.children.add(this.getFeed());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
 
-    public void addCategory(Category category) {
-        if (category != null) {
-            category.setIdParent(this.id);
-            this.categories.add(category);
-        }
-    }
+		// ! Titre
+		group = new GroupFluxDetails("Title");
+		group.children.add(this.getTitle());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
 
-    public void addSkipDay(String day) {
-        this.skipDays.add(day);
-    }
+		// ! Lien vers le site web associé
+		group = new GroupFluxDetails("Link");
+		group.children.add(this.getLink());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
 
-    public void addSkipHour(int hour) {
-        this.skipHours.add(hour);
-    }
-    
-    @Override
-    public String toString() {
-        return "Flux {Titre:" + this.title + ", " +
-                "Copyright:" + this.copyright + ", " +
-                "Description:" + this.description + ", " +
-                "Docs:" + this.docs + ", " +
-                "Flux:" + this.feed + ", " +
-                "Generateur:" + this.generator + ", " +
-                "ID:" + this.id + ", " +
-                "Langue:" + this.language + ", " +
-                "MàJ:" + this.lastBuildDate + ", " +
-                "Lien:" + this.link + ", " +
-                "Éditeur:" + this.managingEditor + ", " +
-                "Publication:" + this.pubDate + ", " +
-                "Rating:" + this.rating + ", " +
-                "TTL:" + this.ttl + ", " +
-                "Image:" + this.urlImage + ", " +
-                "Webmestre:" + this.webMaster + "}";
-    }
+		// ! Description
+		group = new GroupFluxDetails("Description");
+		group.children.add(this.getDescription());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Langue
+		group = new GroupFluxDetails("Language");
+		group.children.add(this.getLanguage());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Copyright
+		group = new GroupFluxDetails("Copyright");
+		group.children.add(this.getCopyright());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Adresse courriel de l'éditeur
+		group = new GroupFluxDetails("Managing Editor");
+		group.children.add(this.getManagingEditor());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Adresse courriel du webmestre
+		group = new GroupFluxDetails("Web Master");
+		group.children.add(this.getWebMaster());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Date de dernière publication
+		group = new GroupFluxDetails("Publication Date");
+		try {
+			group.children.add(this.getPubDate().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Date de dernière génération
+		group = new GroupFluxDetails("Last Build Date");
+		try {
+			group.children.add(this.getLastBuildDate().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Articles
+		group = new GroupFluxDetails("Categories");
+		try {
+			final Iterator<Category> itC = this.getCategories().iterator();
+			while (itC.hasNext()) {
+				try {
+					group.children.add(itC.next().getName());
+				} catch (final Exception e) {
+				}
+			}
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Logiciel utilisé pour générer le flux
+		group = new GroupFluxDetails("Generator");
+		group.children.add(this.getGenerator());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Documentation associée
+		group = new GroupFluxDetails("Documentation");
+		group.children.add(this.getDocs());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Objet cloud associé
+		group = new GroupFluxDetails("Cloud");
+		final ArrayList<String> cloud_str = new ArrayList<String>();
+		try {
+			cloud_str.add("Domain : " + this.getCloud().getDomain());
+		} catch (final Exception e) {
+		}
+		try {
+			cloud_str.add("Path : " + this.getCloud().getPath());
+		} catch (final Exception e) {
+		}
+		try {
+			cloud_str.add("Port : " + this.getCloud().getPort());
+		} catch (final Exception e) {
+		}
+		try {
+			cloud_str.add("Protocol : " + this.getCloud().getProtocol());
+		} catch (final Exception e) {
+		}
+		try {
+			cloud_str.add("Register procedure : "
+					+ this.getCloud().getRegisterProcedure());
+		} catch (final Exception e) {
+		}
+		final Iterator<String> itCloud_str = cloud_str.iterator();
+		String cloud_str_tot = "";
+		while (itCloud_str.hasNext()) {
+			cloud_str_tot += itCloud_str.next();
+			if (itCloud_str.hasNext()) {
+				cloud_str_tot += "\n";
+			}
+		}
+		group.children.add(cloud_str_tot);
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Durée (en minutes) de validité
+		group = new GroupFluxDetails("Time To Live");
+		try {
+			group.children.add(this.getTtl().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Classement PICS
+		group = new GroupFluxDetails("Rating");
+		group.children.add(this.getRating());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Objet text input associé
+		group = new GroupFluxDetails("Text Input");
+		final ArrayList<String> textInput_str = new ArrayList<String>();
+		try {
+			textInput_str.add("Name : " + this.getTextInput().getName());
+		} catch (final Exception e) {
+		}
+		try {
+			textInput_str.add("Title : " + this.getTextInput().getTitle());
+		} catch (final Exception e) {
+		}
+		try {
+			textInput_str.add("Description : "
+					+ this.getTextInput().getDescription());
+		} catch (final Exception e) {
+		}
+		try {
+			textInput_str.add("Link : " + this.getTextInput().getLink());
+		} catch (final Exception e) {
+		}
+		final Iterator<String> itTextInput_str = textInput_str.iterator();
+		String textInput_str_tot = "";
+		while (itTextInput_str.hasNext()) {
+			textInput_str_tot += itTextInput_str.next();
+			if (itTextInput_str.hasNext()) {
+				textInput_str_tot += "\n";
+			}
+		}
+		group.children.add(textInput_str_tot);
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Heures de non-mise à jour
+		group = new GroupFluxDetails("Skip Hours");
+		try {
+			final Iterator<Integer> itSH = this.getSkipHours().iterator();
+			while (itSH.hasNext()) {
+				group.children.add(itSH.next().toString());
+			}
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Jours de non-mise à jour
+		group = new GroupFluxDetails("Skip Days");
+		try {
+			final Iterator<String> itSD = this.getSkipDays().iterator();
+			while (itSD.hasNext()) {
+				group.children.add(itSD.next());
+			}
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! Classement utilisateur (favoris)
+		group = new GroupFluxDetails("User Rate");
+		try {
+			group.children.add(this.getOwnRate().toString());
+		} catch (final Exception e) {
+		}
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+
+		// ! URL de l'image associée
+		group = new GroupFluxDetails("URL Image");
+		group.children.add(this.getUrlImage());
+		Constants.groupsOfFluxDetails.append(
+				Constants.groupsOfFluxDetails.size(), group);
+	}
+
+	@Override
+	public String toString() {
+		return "Flux {Titre:" + this.title + ", " + "Copyright:"
+				+ this.copyright + ", " + "Description:" + this.description
+				+ ", " + "Docs:" + this.docs + ", " + "Flux:" + this.feed
+				+ ", " + "Generateur:" + this.generator + ", " + "ID:"
+				+ this.id + ", " + "Langue:" + this.language + ", " + "MàJ:"
+				+ this.lastBuildDate + ", " + "Lien:" + this.link + ", "
+				+ "Éditeur:" + this.managingEditor + ", " + "Publication:"
+				+ this.pubDate + ", " + "Rating:" + this.rating + ", " + "TTL:"
+				+ this.ttl + ", " + "Image:" + this.urlImage + ", "
+				+ "Webmestre:" + this.webMaster + "}";
+	}
 }

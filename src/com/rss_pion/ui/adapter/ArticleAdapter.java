@@ -9,8 +9,8 @@
  ***************************************************************************/
 package com.rss_pion.ui.adapter;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,6 +34,31 @@ import com.rss_pion.configuration.Constants;
  */
 public class ArticleAdapter extends ArrayAdapter<Article> {
 
+	/* HOLDER */
+	/**
+	 * The Class ArticleHolder.
+	 */
+	private static class ArticleHolder {
+
+		/** The user rate view. */
+		TextView userRateView;
+
+		/** The title view. */
+		TextView titleView;
+
+		/** The pub date view. */
+		TextView pubDateView;
+
+		/** The category view. */
+		TextView categoryView;
+
+		/** The author view. */
+		TextView authorView;
+
+		/** The description view. */
+		TextView descriptionView;
+	}
+
 	/** The context. */
 
 	private final Context context;
@@ -42,7 +67,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	private final int layoutResourceId;
 
 	/** The data. */
-	private LinkedList<Article> data = new LinkedList<Article>();
+	private ArrayList<Article> data = new ArrayList<Article>();
 
 	/**
 	 * Instantiates a new article adapter.
@@ -52,7 +77,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	 * @param data : The data
 	 */
 	public ArticleAdapter(final Context context, final int layoutResourceId,
-			final LinkedList<Article> data) {
+			final ArrayList<Article> data) {
 		super(context, layoutResourceId, data);
 		this.layoutResourceId = layoutResourceId;
 		this.context = context;
@@ -64,10 +89,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 	 *      android.view.ViewGroup)
 	 ***************************************************************************/
 	@Override
-	public View getView(
-	        final int position,
-	        final View convertView,
-	        final ViewGroup parent) {
+	public View getView(final int position, final View convertView,
+			final ViewGroup parent) {
 
 		View row = convertView;
 		ArticleHolder holder = null;
@@ -95,11 +118,11 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 			holder = (ArticleHolder) row.getTag();
 		}
 
-        final Article article = this.data.get(position);
-        
-        if (article == null) {
-            return row;
-        }
+		final Article article = this.data.get(position);
+
+		if (article == null) {
+			return row;
+		}
 
 		holder.userRateView.setText(article.getUserRate() + "/5");
 		final SpannableString spanTitleView = new SpannableString(
@@ -113,42 +136,16 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
 		holder.titleView.setText(spanTitleView);
 
-		if (article.getAuthor() != null && !article.getAuthor().equals("")) {
-		    holder.authorView.setText(article.getAuthor() + ", ");
+		if ((article.getAuthor() != null) && !article.getAuthor().equals("")) {
+			holder.authorView.setText(article.getAuthor() + ", ");
 		}
 
-		holder.pubDateView.setText(
-		        "le " +
-                Constants.dateFormat.format(new Date(article.getPubDate())));
+		holder.pubDateView.setText("le "
+				+ Constants.dateFormat.format(new Date(article.getPubDate())));
 
 		holder.categoryView.setText(article.getCategories().toString());
 		holder.descriptionView.setText(article.getDescription());
 
 		return row;
 	}
-
-    /* HOLDER */
-    /**
-     * The Class ArticleHolder.
-     */
-    private static class ArticleHolder {
-    
-    	/** The user rate view. */
-    	TextView userRateView;
-    
-    	/** The title view. */
-    	TextView titleView;
-    
-    	/** The pub date view. */
-    	TextView pubDateView;
-    
-    	/** The category view. */
-    	TextView categoryView;
-    
-    	/** The author view. */
-    	TextView authorView;
-    
-    	/** The description view. */
-    	TextView descriptionView;
-    }
 }

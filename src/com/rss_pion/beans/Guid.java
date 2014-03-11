@@ -1,4 +1,5 @@
-/***************************************************************************//**
+/***************************************************************************/
+/**
  * @file    Guid.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
@@ -14,18 +15,18 @@ package com.rss_pion.beans;
 
 public class Guid {
 
-/*** ATTRIBUTES ***************************************************************/
+	/*** ATTRIBUTES ***************************************************************/
 
-    //! Numéro d'entrée dans la BDD
-    private Long id;
+	// ! Numéro d'entrée dans la BDD
+	private Long id;
 
-	//! Définit si cd GUID est ou non un lien permanent
+	// ! Définit si cd GUID est ou non un lien permanent
 	private boolean isPermaLink;
 
-	//! Valeur
+	// ! Valeur
 	private String value;
 
-/*** METHODS ******************************************************************/
+	/*** METHODS ******************************************************************/
 
 	public Guid() {
 		super();
@@ -40,10 +41,10 @@ public class Guid {
 	}
 
 	public Long getId() {
-        return id;
-    }
+		return this.id;
+	}
 
-    public boolean isPermaLink() {
+	public Boolean getIsPermaLink() {
 		return this.isPermaLink;
 	}
 
@@ -51,9 +52,13 @@ public class Guid {
 		return this.value;
 	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public boolean isPermaLink() {
+		return this.isPermaLink;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
 	public void setPermaLink(final boolean isPermaLink) {
 		this.isPermaLink = isPermaLink;
@@ -63,9 +68,10 @@ public class Guid {
 		this.value = value;
 	}
 
-/***************************************************************************//**
- * @see java.lang.Object#toString()
- ******************************************************************************/
+	/***************************************************************************/
+	/**
+	 * @see java.lang.Object#toString()
+	 ******************************************************************************/
 	@Override
 	public String toString() {
 		return "Guid [isPermaLink=" + this.isPermaLink + ", value="

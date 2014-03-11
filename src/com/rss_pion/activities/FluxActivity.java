@@ -14,8 +14,6 @@ package com.rss_pion.activities;
 /*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -45,9 +43,6 @@ import android.widget.Toast;
 
 import com.rss_pion.R;
 import com.rss_pion.beans.Article;
-import com.rss_pion.beans.Category;
-import com.rss_pion.beans.Flux;
-import com.rss_pion.beans.GroupFluxDetails;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.SqlHandler;
 import com.rss_pion.database.dao.CategoryFluxDAO;
@@ -60,223 +55,6 @@ import com.rss_pion.ui.adapter.FluxDetailsExpandableListAdapter;
 /*** MAIN CLASS ***************************************************************/
 
 public class FluxActivity extends RSS_PionActivity {
-	public static void createData(final Flux flux) {
-		GroupFluxDetails group;
-		// ! URL du flux RSS
-		group = new GroupFluxDetails("Feed");
-		group.children.add(flux.getFeed());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Titre
-		group = new GroupFluxDetails("Title");
-		group.children.add(flux.getTitle());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Lien vers le site web associé
-		group = new GroupFluxDetails("Link");
-		group.children.add(flux.getLink());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Description
-		group = new GroupFluxDetails("Description");
-		group.children.add(flux.getDescription());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Langue
-		group = new GroupFluxDetails("Language");
-		group.children.add(flux.getLanguage());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Copyright
-		group = new GroupFluxDetails("Copyright");
-		group.children.add(flux.getCopyright());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Adresse courriel de l'éditeur
-		group = new GroupFluxDetails("Managing Editor");
-		group.children.add(flux.getManagingEditor());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Adresse courriel du webmestre
-		group = new GroupFluxDetails("Web Master");
-		group.children.add(flux.getWebMaster());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Date de dernière publication
-		group = new GroupFluxDetails("Publication Date");
-		try {
-			group.children.add(flux.getPubDate().toString());
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Date de dernière génération
-		group = new GroupFluxDetails("Last Build Date");
-		try {
-			group.children.add(flux.getLastBuildDate().toString());
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Articles
-		group = new GroupFluxDetails("Categories");
-		try {
-			final Iterator<Category> itC = flux.getCategories().iterator();
-			while (itC.hasNext()) {
-				try {
-					group.children.add(itC.next().getName());
-				} catch (final Exception e) {
-				}
-			}
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Logiciel utilisé pour générer le flux
-		group = new GroupFluxDetails("Generator");
-		group.children.add(flux.getGenerator());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Documentation associée
-		group = new GroupFluxDetails("Documentation");
-		group.children.add(flux.getDocs());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Objet cloud associé
-		group = new GroupFluxDetails("Cloud");
-		final ArrayList<String> cloud_str = new ArrayList<String>();
-		try {
-			cloud_str.add("Domain : " + flux.getCloud().getDomain());
-		} catch (final Exception e) {
-		}
-		try {
-			cloud_str.add("Path : " + flux.getCloud().getPath());
-		} catch (final Exception e) {
-		}
-		try {
-			cloud_str.add("Port : " + flux.getCloud().getPort());
-		} catch (final Exception e) {
-		}
-		try {
-			cloud_str.add("Protocol : " + flux.getCloud().getProtocol());
-		} catch (final Exception e) {
-		}
-		try {
-			cloud_str.add("Register procedure : "
-					+ flux.getCloud().getRegisterProcedure());
-		} catch (final Exception e) {
-		}
-		final Iterator<String> itCloud_str = cloud_str.iterator();
-		String cloud_str_tot = "";
-		while (itCloud_str.hasNext()) {
-			cloud_str_tot += itCloud_str.next();
-			if (itCloud_str.hasNext()) {
-				cloud_str_tot += "\n";
-			}
-		}
-		group.children.add(cloud_str_tot);
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Durée (en minutes) de validité
-		group = new GroupFluxDetails("Time To Live");
-		try {
-			group.children.add(flux.getTtl().toString());
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Classement PICS
-		group = new GroupFluxDetails("Rating");
-		group.children.add(flux.getRating());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Objet text input associé
-		group = new GroupFluxDetails("Text Input");
-		final ArrayList<String> textInput_str = new ArrayList<String>();
-		try {
-			textInput_str.add("Name : " + flux.getTextInput().getName());
-		} catch (final Exception e) {
-		}
-		try {
-			textInput_str.add("Title : " + flux.getTextInput().getTitle());
-		} catch (final Exception e) {
-		}
-		try {
-			textInput_str.add("Description : "
-					+ flux.getTextInput().getDescription());
-		} catch (final Exception e) {
-		}
-		try {
-			textInput_str.add("Link : " + flux.getTextInput().getLink());
-		} catch (final Exception e) {
-		}
-		final Iterator<String> itTextInput_str = textInput_str.iterator();
-		String textInput_str_tot = "";
-		while (itTextInput_str.hasNext()) {
-			textInput_str_tot += itTextInput_str.next();
-			if (itTextInput_str.hasNext()) {
-				textInput_str_tot += "\n";
-			}
-		}
-		group.children.add(textInput_str_tot);
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Heures de non-mise à jour
-		group = new GroupFluxDetails("Skip Hours");
-		try {
-			final Iterator<Integer> itSH = flux.getSkipHours().iterator();
-			while (itSH.hasNext()) {
-				group.children.add(itSH.next().toString());
-			}
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Jours de non-mise à jour
-		group = new GroupFluxDetails("Skip Days");
-		try {
-			final Iterator<String> itSD = flux.getSkipDays().iterator();
-			while (itSD.hasNext()) {
-				group.children.add(itSD.next());
-			}
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! Classement utilisateur (favoris)
-		group = new GroupFluxDetails("Own Rate");
-		try {
-			group.children.add(flux.getOwnRate().toString());
-		} catch (final Exception e) {
-		}
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-
-		// ! URL de l'image associée
-		group = new GroupFluxDetails("URL Image");
-		group.children.add(flux.getUrlImage());
-		Constants.groupsOfFluxDetails.append(
-				Constants.groupsOfFluxDetails.size(), group);
-	}
 
 	/***************************************************************************/
 	/**
@@ -337,7 +115,7 @@ public class FluxActivity extends RSS_PionActivity {
 						Constants.focusedFlux = Constants.listOfFlux.get(arg2);
 
 						// Chargement des articles du flux :
-						Constants.listOfArticles = new LinkedList<Article>(
+						Constants.listOfArticles = new ArrayList<Article>(
 								Constants.focusedFlux.getArticles());
 
 						// Ouverture de l'activité gérant les articles du flux :
@@ -380,9 +158,8 @@ public class FluxActivity extends RSS_PionActivity {
 										dialog2.setContentView(R.layout.dialog_flux_details);
 										dialog2.setTitle("Flux Details :");
 										dialog2.setCancelable(true);
-										FluxActivity
-												.createData(Constants.listOfFlux
-														.get(arg2));
+										Constants.listOfFlux.get(arg2)
+												.toDetails();
 										Constants.listViewOfFluxDetails = (ExpandableListView) dialog2
 												.findViewById(R.id.listViewFluxDetails);
 										Constants.adapterOfFluxDetails = new FluxDetailsExpandableListAdapter(
@@ -420,8 +197,6 @@ public class FluxActivity extends RSS_PionActivity {
 										FluxDAO.updateIsReadFluxFromDB(
 												Constants.listOfFlux.get(arg2),
 												0);
-										// Rafraichissement de l'affichage :
-										(new NetworkUpdateTask()).execute();
 										dialog.cancel();
 									}
 								});
@@ -435,8 +210,6 @@ public class FluxActivity extends RSS_PionActivity {
 							public void onClick(final View v) {
 								FluxDAO.deleteFluxFromDB(Constants.listOfFlux
 										.get(arg2));
-								// Rafraichissement de l'affichage :
-								(new NetworkUpdateTask()).execute();
 								dialog.cancel();
 							}
 						});

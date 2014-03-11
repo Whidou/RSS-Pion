@@ -11,7 +11,6 @@ package com.rss_pion.configuration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Locale;
 
 import android.app.Application;
@@ -21,9 +20,11 @@ import android.widget.ListView;
 
 import com.rss_pion.beans.Article;
 import com.rss_pion.beans.Flux;
+import com.rss_pion.beans.GroupArticleDetails;
 import com.rss_pion.beans.GroupFluxDetails;
 import com.rss_pion.database.SqlHandler;
 import com.rss_pion.ui.adapter.ArticleAdapter;
+import com.rss_pion.ui.adapter.ArticleDetailsExpandableListAdapter;
 import com.rss_pion.ui.adapter.FluxAdapter;
 import com.rss_pion.ui.adapter.FluxDetailsExpandableListAdapter;
 
@@ -37,7 +38,7 @@ public class Constants extends Application {
 	public static Flux focusedFlux = null;
 
 	/** The list of flux. */
-	public static LinkedList<Flux> listOfFlux = new LinkedList<Flux>();
+	public static ArrayList<Flux> listOfFlux = new ArrayList<Flux>();
 
 	/** The list view of flux. */
 	public static ListView listViewOfFlux;
@@ -46,7 +47,7 @@ public class Constants extends Application {
 	public static FluxAdapter adapterOfFlux;
 
 	/** The list of articles. */
-	public static LinkedList<Article> listOfArticles = new LinkedList<Article>();
+	public static ArrayList<Article> listOfArticles = new ArrayList<Article>();
 
 	/** The list view of articles. */
 	public static ListView listViewOfArticles;
@@ -67,5 +68,11 @@ public class Constants extends Application {
 	public static ExpandableListView listViewOfFluxDetails;
 
 	public static FluxDetailsExpandableListAdapter adapterOfFluxDetails;
+
+	public static SparseArray<GroupArticleDetails> groupsOfArticleDetails = new SparseArray<GroupArticleDetails>();
+
+	public static ExpandableListView listViewOfArticleDetails;
+
+	public static ArticleDetailsExpandableListAdapter adapterOfArticleDetails;
 
 }
