@@ -9,8 +9,12 @@
  ***************************************************************************/
 package com.rss_pion.activities;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,9 +22,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.rss_pion.R;
@@ -28,6 +35,7 @@ import com.rss_pion.beans.Article;
 import com.rss_pion.configuration.Constants;
 import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.ui.adapter.ArticleAdapter;
+import com.rss_pion.ui.adapter.ArticleDetailsExpandableListAdapter;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -78,6 +86,12 @@ public class ArticlesActivity extends RSS_PionActivity {
 						// Ouverture du navigateur
 						browserIntent = new Intent(Intent.ACTION_VIEW, Uri
 								.parse(url));
+
+						// Mise à "lu" de l'article
+						ArticleDAO.updateIsReadArticleFromDB(
+								Constants.listOfArticles.get(arg2), 1);
+
+						// Lancement du navigateur
 						ArticlesActivity.this.startActivity(browserIntent);
 					}
 				});
@@ -88,9 +102,97 @@ public class ArticlesActivity extends RSS_PionActivity {
 					@Override
 					public boolean onItemLongClick(final AdapterView<?> arg0,
 							final View arg1, final int arg2, final long arg3) {
-						// Suppression de l'article sélectionné :
-						ArticleDAO.deleteArticleFromDB(
-						        Constants.listOfArticles.get(arg2));
+						// Initialise la boite de dialogue des options des
+						// articles :
+						final Dialog dialog = new Dialog(ArticlesActivity.this);
+						dialog.setContentView(R.layout.dialog_article);
+						dialog.setTitle("Article Options");
+						dialog.setCancelable(true);
+						dialog.setOnCancelListener(new OnCancelListener() {
+							@Override
+							public void onCancel(final DialogInterface arg0) {
+								// Rafraichissement de l'affichage :
+								ArticlesActivity.this.updateListDeArticles();
+							}
+						});
+
+						// Implémente le bouton affichant les détails des
+						// articles :
+						final Button button_print_infos = (Button) dialog
+								.findViewById(R.id.diag_box_articles_print_infos);
+						button_print_infos
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+										// Initialise la boite de dialogue des
+										// options des articles :
+										final Dialog dialog2 = new Dialog(
+												ArticlesActivity.this);
+										dialog2.setContentView(R.layout.dialog_article_details);
+										dialog2.setTitle("Article Details :");
+										dialog2.setCancelable(true);
+										Constants.listOfArticles.get(arg2)
+												.toDetails();
+										Constants.listViewOfArticleDetails = (ExpandableListView) dialog2
+												.findViewById(R.id.listViewArticleDetails);
+										Constants.adapterOfArticleDetails = new ArticleDetailsExpandableListAdapter(
+												dialog2,
+												Constants.groupsOfArticleDetails);
+										Constants.listViewOfArticleDetails
+												.setAdapter(Constants.adapterOfArticleDetails);
+										dialog2.show();
+									}
+								});
+
+						// Implémente le bouton permettant de considérer
+						// l'article comme lu :
+						final Button button_articles_read = (Button) dialog
+								.findViewById(R.id.diag_box_articles_read);
+						button_articles_read
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+										ArticleDAO.updateIsReadArticleFromDB(
+												Constants.listOfArticles
+														.get(arg2), 1);
+										dialog.cancel();
+									}
+								});
+
+						// Implémente le bouton permettant de considérer
+						// l'article comme non lu :
+						final Button button_all_articles_not_read = (Button) dialog
+								.findViewById(R.id.diag_box_articles_not_read);
+						button_all_articles_not_read
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(final View v) {
+										ArticleDAO.updateIsReadArticleFromDB(
+												Constants.listOfArticles
+														.get(arg2), 0);
+										dialog.cancel();
+									}
+								});
+
+						// Implémente le bouton supprimant l'article :
+						final Button button_delete = (Button) dialog
+								.findViewById(R.id.diag_box_articles_delete);
+						button_delete.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(final View v) {
+								// Suppression de l'article sélectionné :
+								ArticleDAO
+										.deleteArticleFromDB(Constants.listOfArticles
+												.get(arg2));
+								// Rafraichissement de l'affichage :
+								ArticlesActivity.this.updateListDeArticles();
+								dialog.cancel();
+							}
+						});
+
+						// Affiche la boite de dialogue :
+						dialog.show();
+
 						// Rafraichissement de l'affichage :
 						ArticlesActivity.this.updateListDeArticles();
 						return true;
@@ -146,9 +248,8 @@ public class ArticlesActivity extends RSS_PionActivity {
 	 * Update list de articles.
 	 */
 	private void updateListDeArticles() {
-		Constants.listOfArticles =
-		        (LinkedList<Article>) ArticleDAO.getArticlesFromDB(
-		                Constants.focusedFlux.getId());
+		Constants.listOfArticles = (LinkedList<Article>) ArticleDAO
+				.getArticlesFromDB(Constants.focusedFlux.getId());
 		Constants.adapterOfArticles.notifyDataSetChanged();
 	}
 }
