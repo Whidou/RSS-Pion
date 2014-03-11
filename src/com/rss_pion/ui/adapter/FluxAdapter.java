@@ -22,7 +22,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +102,9 @@ public class FluxAdapter extends ArrayAdapter<Flux> {
 		    d = flux.getImage().getDrawable();
 		    holder.imageView.setImageDrawable(d);
 		} else {
-		    holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_flux_default));
+		    holder.imageView.setImageDrawable(
+		            context.getResources().getDrawable(
+		                    R.drawable.icon_flux_default));
 		}
 
 		holder.numberOfReadArticlesView.setText(

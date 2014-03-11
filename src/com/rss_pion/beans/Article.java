@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.rss_pion.configuration.Constants;
 
+import android.text.Html;
 import android.text.Spanned;
-import android.text.SpannedString;
 
 /*** MAIN CLASS ***************************************************************/
 
@@ -121,7 +121,7 @@ public class Article {
 	}
 
     public Spanned getHtmlDescription() {
-        return new SpannedString(this.description.replaceAll("<.*>", ""));
+        return Html.fromHtml(this.description.replaceAll("(<.*>|\n)", ""));
     }
 
 	public Enclosure getEnclosure() {
