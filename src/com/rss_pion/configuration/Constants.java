@@ -1,13 +1,16 @@
-/***************************************************************************
- * @file Constants.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    Constants.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    23 janv. 2014
+ * @version 1.0
  *
- * @brief
- ***************************************************************************/
+ * Constantes globales à toute l'application
+ ******************************************************************************/
+
 package com.rss_pion.configuration;
+
+/*** INCLUDES *****************************************************************/
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,51 +31,62 @@ import com.rss_pion.ui.adapter.ArticleDetailsExpandableListAdapter;
 import com.rss_pion.ui.adapter.FluxAdapter;
 import com.rss_pion.ui.adapter.FluxDetailsExpandableListAdapter;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class Constants.
- */
+/*** MAIN CLASS ***************************************************************/
+
 public class Constants extends Application {
 
-	/** The focused flux dao. */
+/*** ATTRIBUTES ***************************************************************/
+
+	//! Flux sélectionné
 	public static Flux focusedFlux = null;
 
-	/** The list of flux. */
+	//! Liste des flux
 	public static ArrayList<Flux> listOfFlux = new ArrayList<Flux>();
 
-	/** The list view of flux. */
+	//! Affichage des flux
 	public static ListView listViewOfFlux;
 
-	/** The adapter of flux. */
+	//! Adapteur d'affichage des flux
 	public static FluxAdapter adapterOfFlux;
 
-	/** The list of articles. */
+	//! Liste des articles
 	public static ArrayList<Article> listOfArticles = new ArrayList<Article>();
 
-	/** The list view of articles. */
+	//! Affichage des articles
 	public static ListView listViewOfArticles;
 
-	/** The adapter of articles. */
+	//! Adapteur d'affichage des articles
 	public static ArticleAdapter adapterOfArticles;
 
-	/** The sql handler. */
+	//! Gestionnaire de la BDD
 	public static SqlHandler sqlHandler;
 
+    //! Format d'affichage des dates
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd", Locale.US);
+			"yyyy-MM-dd",
+			Locale.US);
 
+    //! Liste des catégories
 	public static ArrayList<String> categoriesInDB = new ArrayList<String>();
 
-	public static SparseArray<GroupFluxDetails> groupsOfFluxDetails = new SparseArray<GroupFluxDetails>();
+    //! Détails concernant le flux courant
+	public static SparseArray<GroupFluxDetails> groupsOfFluxDetails =
+	        new SparseArray<GroupFluxDetails>();
 
+	//! Affichage des détails de flux
 	public static ExpandableListView listViewOfFluxDetails;
 
+	//! Adaptateur d'affichage des détails de flux
 	public static FluxDetailsExpandableListAdapter adapterOfFluxDetails;
 
-	public static SparseArray<GroupArticleDetails> groupsOfArticleDetails = new SparseArray<GroupArticleDetails>();
+	//! Détails concernant l'article courant
+	public static SparseArray<GroupArticleDetails> groupsOfArticleDetails =
+	        new SparseArray<GroupArticleDetails>();
 
+	//! Affichage des détails d'article
 	public static ExpandableListView listViewOfArticleDetails;
 
+    //! Adaptateur d'affichage des détails d'article
 	public static ArticleDetailsExpandableListAdapter adapterOfArticleDetails;
 
 }

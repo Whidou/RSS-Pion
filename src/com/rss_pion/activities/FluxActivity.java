@@ -1,10 +1,9 @@
-/***************************************************************************/
-/**
+/***************************************************************************//**
  * @file    FluxActivity.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-08
- * @version 0.5
+ * @version 1.0
  *
  * Activité listant les flux
  ******************************************************************************/
@@ -22,7 +21,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,10 +54,11 @@ import com.rss_pion.ui.adapter.FluxDetailsExpandableListAdapter;
 
 public class FluxActivity extends RSS_PionActivity {
 
-	/***************************************************************************/
-	/**
-	 * @see android.app.Activity#onCreate(Bundle)
-	 ******************************************************************************/
+/*** METHODS ******************************************************************/
+
+/***************************************************************************//**
+ * @see android.app.Activity#onCreate(Bundle)
+ ******************************************************************************/
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 
@@ -245,13 +244,11 @@ public class FluxActivity extends RSS_PionActivity {
                 null,
                 null,
 		        null);
-		int i = 0;
 		while ((c != null) && c.moveToFirst()) {
 			final String cat_loc = c.getString(c.getColumnIndex("name"));
 			if (!Constants.categoriesInDB.contains(cat_loc)) {
 				Constants.categoriesInDB.add(cat_loc);
 			}
-			i++;
 		}
 
 		// Initialise l'auto-complétion :
@@ -259,16 +256,12 @@ public class FluxActivity extends RSS_PionActivity {
 				R.layout.flux_action_bar, Constants.categoriesInDB);
 		fluxLinkInput.setThreshold(1);
 		fluxLinkInput.setAdapter(adapter);
-		Log.d("TEST", "i : " + i + ",   " + Constants.categoriesInDB.toString());
 
 	}
 
-	/**
-	 * On create options menu.
-	 * 
-	 * @param menu : The menu
-	 * @return true, if successful
-	 */
+/***************************************************************************//**
+ * @see android.app.Activity#onCreateOptionsMenu(Menu)
+ ******************************************************************************/
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		final MenuInflater inflater = this.getMenuInflater();
@@ -276,12 +269,9 @@ public class FluxActivity extends RSS_PionActivity {
 		return true;
 	}
 
-	/**
-	 * On options item selected.
-	 * 
-	 * @param item : The item
-	 * @return true, if successful
-	 */
+/***************************************************************************//**
+ * @see android.app.Activity#onOptionsItemSelected(MenuItem)
+ ******************************************************************************/
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
@@ -302,20 +292,17 @@ public class FluxActivity extends RSS_PionActivity {
 		}
 	}
 
-	/**
-	 * On prepare options menu.
-	 * 
-	 * @param menu : The menu
-	 * @return true, if successful
-	 */
+/***************************************************************************//**
+ * @see android.app.Activity#onPrepareOptionsMenu(Menu)
+ ******************************************************************************/
 	@Override
 	public boolean onPrepareOptionsMenu(final Menu menu) {
 		return true;
 	}
 
-	/**
-	 * On resume.
-	 */
+/***************************************************************************//**
+ * @see android.app.Activity#onResume
+ ******************************************************************************/
 	@Override
 	protected void onResume() {
 		super.onResume();

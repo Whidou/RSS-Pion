@@ -1,11 +1,11 @@
 /***************************************************************************//**
- * @file TextInput.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+ * @file    TextInput.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-01-23
+ * @version 1.0
  *
- * @brief
+ * Objet Text Input
  ******************************************************************************/
 
 package com.rss_pion.beans;

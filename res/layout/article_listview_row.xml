@@ -10,6 +10,7 @@
     <android.widget.TextView
         android:id="@+id/articleTitleView"
         android:layout_width="fill_parent"
+        android:singleLine="true"
         android:layout_height="40sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"

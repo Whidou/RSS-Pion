@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    23 janv. 2014
- * @version 0.5
+ * @version 1.0
  *
  * Classe pour les objets flux RSS
  ******************************************************************************/

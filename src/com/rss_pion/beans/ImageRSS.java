@@ -1,12 +1,12 @@
-/***************************************************************************
+/***************************************************************************//**
  * @file    ImageRSS.java
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-08
- * @version 0.1
+ * @version 1.0
  *
- * Image illustrant un flux ou un article.
- ***************************************************************************/
+ * Image illustrant un flux.
+ ******************************************************************************/
 
 package com.rss_pion.beans;
 
@@ -41,16 +41,6 @@ public class ImageRSS {
         this.path = null;
     }
 
-    public BitmapDrawable getDrawable() {
-        Context context = Constants.adapterOfFlux.getContext();
-        try {
-            return new BitmapDrawable(context.getResources(), context.openFileInput(this.path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public Long getId() {
         return id;
     }
@@ -73,5 +63,22 @@ public class ImageRSS {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+/***************************************************************************//**
+ * Retourne l'image sous forme affichable
+ * 
+ * @return  Surface d'image
+ ******************************************************************************/
+    public BitmapDrawable getDrawable() {
+        Context context = Constants.adapterOfFlux.getContext();
+        try {
+            return new BitmapDrawable(
+                    context.getResources(),
+                    context.openFileInput(this.path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

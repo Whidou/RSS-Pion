@@ -1,13 +1,16 @@
-/***************************************************************************
- * @file ArticlesActivity.java
- * @author PERROCHAUD Clément
- * @author TOMA Hadrien
- * @date 23 janv. 2014
- * @version 0.4
+/***************************************************************************//**
+ * @file    ArticlesActivity.java
+ * @author  PERROCHAUD Clément
+ * @author  TOMA Hadrien
+ * @date    2014-01-23
+ * @version 1.0
  *
- * @brief
- ***************************************************************************/
+ * Activité listant les articles d'un flux
+ ******************************************************************************/
+
 package com.rss_pion.activities;
+
+/*** INCLUDES *****************************************************************/
 
 import java.util.ArrayList;
 
@@ -36,15 +39,13 @@ import com.rss_pion.database.dao.ArticleDAO;
 import com.rss_pion.ui.adapter.ArticleAdapter;
 import com.rss_pion.ui.adapter.ArticleDetailsExpandableListAdapter;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ArticlesActivity.
- */
+/*** MAIN CLASS ***************************************************************/
+
 public class ArticlesActivity extends RSS_PionActivity {
 
-	/***************************************************************************
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.app.Activity#onCreate(android.os.Bundle)
+ ******************************************************************************/
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 
@@ -200,19 +201,19 @@ public class ArticlesActivity extends RSS_PionActivity {
 				});
 	}
 
-	/***************************************************************************
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+ ******************************************************************************/
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		final MenuInflater inflater = this.getMenuInflater();
-		inflater.inflate(R.menu.flux_menu, menu);
+		inflater.inflate(R.menu.article_menu, menu);
 		return true;
 	}
 
-	/***************************************************************************
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+ ******************************************************************************/
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
@@ -226,26 +227,26 @@ public class ArticlesActivity extends RSS_PionActivity {
 		}
 	}
 
-	/***************************************************************************
-	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+ ******************************************************************************/
 	@Override
 	public boolean onPrepareOptionsMenu(final Menu menu) {
 		return true;
 	}
 
-	/***************************************************************************
-	 * @see com.rss_pion.activities.RSS_PionActivity#onResume()
-	 ***************************************************************************/
+/***************************************************************************//**
+ * @see com.rss_pion.activities.RSS_PionActivity#onResume()
+ ******************************************************************************/
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Constants.adapterOfArticles.notifyDataSetChanged();
 	}
 
-	/**
-	 * Update list de articles.
-	 */
+/***************************************************************************//**
+ * Mise à jour de la liste des articles
+ ******************************************************************************/
 	private void updateListDeArticles() {
 		Constants.listOfArticles = (ArrayList<Article>) ArticleDAO
 				.getArticlesFromDB(Constants.focusedFlux.getId());

@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-08-02
- * @version 0.5
+ * @version 1.0
  *
  * Classe pour les objets GUID
  *****************************************************************************/
@@ -61,14 +61,5 @@ public class Guid {
 
 	public void setValue(final String value) {
 		this.value = value;
-	}
-
-/***************************************************************************//**
- * @see java.lang.Object#toString()
- ******************************************************************************/
-	@Override
-	public String toString() {
-		return "Guid [isPermaLink=" + this.isPermaLink + ", value="
-				+ this.value + "]";
 	}
 }

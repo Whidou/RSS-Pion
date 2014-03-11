@@ -44,6 +44,10 @@ public class SqlHandler {
 				null, SqlHandler.DATABASE_VERSION);
 	}
 
+/***************************************************************************//**
+ * @see android.database.sqlite.SQLiteDatabase#insert(
+ * String, String, ContentValues)
+ ******************************************************************************/
 	public Long insert(String table,
             String nullColumnHack,
             ContentValues values) {
@@ -51,6 +55,10 @@ public class SqlHandler {
         return db.insert(table, nullColumnHack, values);
     }
 
+/***************************************************************************//**
+ * @see android.database.sqlite.SQLiteDatabase#update(
+ * String, ContentValues, String, String[])
+ ******************************************************************************/
     public Integer update(String table,
             ContentValues values,
             String whereClause,
@@ -59,6 +67,10 @@ public class SqlHandler {
         return db.update(table, values, whereClause, whereArgs);
     }
 
+/***************************************************************************//**
+ * @see android.database.sqlite.SQLiteDatabase#query(
+ * String, String[], String, String[], String, String, String, String)
+ ******************************************************************************/
     public Cursor query(String table,
             String[] columns,
             String selection,
@@ -78,6 +90,9 @@ public class SqlHandler {
                 limit);
     }
 
+/***************************************************************************//**
+ * @see android.database.sqlite.SQLiteDatabase#delete(String, String, String[])
+ ******************************************************************************/
     public int delete(String table,
             String whereClause,
             String[] whereArgs) {

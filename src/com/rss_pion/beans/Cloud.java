@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    23 janv. 2014
- * @version 0.5
+ * @version 1.0
  *
  * Objet cloud
  ******************************************************************************/
@@ -104,15 +104,5 @@ public class Cloud {
 
 	public void setRegisterProcedure(final String registerProcedure) {
 		this.registerProcedure = registerProcedure;
-	}
-
-/***************************************************************************//**
- * @see java.lang.Object#toString()
- ******************************************************************************/
-	@Override
-	public String toString() {
-		return "Cloud [domain=" + this.domain + ", port=" + this.port
-				+ ", path=" + this.path + ", registerProcedure="
-				+ this.registerProcedure + ", protocol=" + this.protocol + "]";
 	}
 }

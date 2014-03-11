@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    23 janv. 2014
- * @version 0.5
+ * @version 1.0
  *
  * Classe pour les objets flux RSS
  ******************************************************************************/
@@ -138,7 +138,9 @@ public class Flux {
 			final TextInput textInput, final List<Integer> skipHours,
 			final List<String> skipDays, final Integer ownRate,
 			final List<Article> articles, final String urlImage) {
+
 		super();
+
 		this.feed = feed;
 		this.title = title;
 		this.link = link;
@@ -165,7 +167,6 @@ public class Flux {
 	}
 
 	public Flux(String feed) {
-
         this();
         this.feed = feed;
     }
@@ -410,6 +411,7 @@ public class Flux {
     }
 
 	public void toDetails() {
+
 		GroupFluxDetails group;
 		// ! URL du flux RSS
 		group = new GroupFluxDetails("Feed");
@@ -625,19 +627,5 @@ public class Flux {
 		group.children.add(this.getUrlImage());
 		Constants.groupsOfFluxDetails.append(
 				Constants.groupsOfFluxDetails.size(), group);
-	}
-
-	@Override
-	public String toString() {
-		return "Flux {Titre:" + this.title + ", " + "Copyright:"
-				+ this.copyright + ", " + "Description:" + this.description
-				+ ", " + "Docs:" + this.docs + ", " + "Flux:" + this.feed
-				+ ", " + "Generateur:" + this.generator + ", " + "ID:"
-				+ this.id + ", " + "Langue:" + this.language + ", " + "MàJ:"
-				+ this.lastBuildDate + ", " + "Lien:" + this.link + ", "
-				+ "Éditeur:" + this.managingEditor + ", " + "Publication:"
-				+ this.pubDate + ", " + "Rating:" + this.rating + ", " + "TTL:"
-				+ this.ttl + ", " + "Image:" + this.urlImage + ", "
-				+ "Webmestre:" + this.webMaster + "}";
 	}
 }

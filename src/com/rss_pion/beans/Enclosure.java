@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-08
- * @version 0.5
+ * @version 1.0
  *
  * Classe pour les pièces jointes
  ******************************************************************************/
@@ -84,14 +84,5 @@ public class Enclosure {
 
 	public void setUrl(final String url) {
 		this.url = url;
-	}
-
-/***************************************************************************//**
- * @see java.lang.Object#toString()
- ******************************************************************************/
-	@Override
-	public String toString() {
-		return "Enclosure [url=" + this.url + ", length=" + this.length
-				+ ", type=" + this.type + "]";
 	}
 }

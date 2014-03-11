@@ -3,7 +3,7 @@
  * @author  PERROCHAUD Clément
  * @author  TOMA Hadrien
  * @date    2014-02-08
- * @version 0.5
+ * @version 1.0
  *
  * Classe pour les objets articles
  ******************************************************************************/
@@ -220,6 +220,7 @@ public class Article {
     }
 
 	public void toDetails() {
+
 		GroupArticleDetails group;
 
 		// ! Auteur
